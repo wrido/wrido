@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj" />
+    <ProjectReference Include="..\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj" />
   </ItemGroup>
 
 </Project>

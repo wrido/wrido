@@ -1,12 +1,10 @@
-﻿using Wrido.Core;
-
-namespace Wrido.Messages
+﻿namespace Wrido.Messages
 {
   public class QueryReceived
   {
-    public Query Current { get; }
+    public Core.Query Current { get; }
 
-    public QueryReceived(Query query)
+    public QueryReceived(Core.Query query)
     {
       Current = query;
     }

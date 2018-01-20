@@ -8,7 +8,8 @@ using Newtonsoft.Json.Serialization;
 using Wrido.Core.Resolution;
 using Wrido.Logging;
 using Wrido.Plugin.Google;
-using Wrido.Services;
+using Wrido.Plugin.StackExchange;
+using Wrido.Query;
 
 namespace Wrido
 {
@@ -43,6 +44,7 @@ namespace Wrido
         .SingleInstance();
 
       new GooglePlugin().Register(builder);
+      new StackExchangePlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -53,9 +55,8 @@ namespace Wrido
         .UseStaticFiles()
         .UseSignalR(hub =>
           {
-            hub.MapHub<InputHub>("input");
+            hub.MapHub<QueryHub>("query");
             hub.MapHub<LoggingHub>("logging");
-            hub.MapHub<ExampleHub>("example");
           })
         .UseMvc();
     }

@@ -1,4 +1,4 @@
-﻿let connection = new signalR.HubConnection('/input');
+﻿let connection = new signalR.HubConnection('/query');
 
 // Confirmation that query has been recieved and is about to get executed.
 // Message contains a unique query id that will be present for other event
