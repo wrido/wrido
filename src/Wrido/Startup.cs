@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Wrido.Core.Resolution;
+using Wrido.Logging;
 using Wrido.Services;
 
 namespace Wrido
@@ -31,8 +32,14 @@ namespace Wrido
 
     public void ConfigureContainer(ContainerBuilder builder)
     {
-      builder.RegisterModule(new DummyQueryModule());
-      builder.RegisterType<QueryService>().AsImplementedInterfaces().SingleInstance();
+      builder
+        .RegisterModule<DummyQueryModule>()
+        .RegisterModule<LoggingModule>();
+
+      builder
+        .RegisterType<QueryService>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -41,7 +48,11 @@ namespace Wrido
         .UseDeveloperExceptionPage()
         .UseDefaultFiles()
         .UseStaticFiles()
-        .UseSignalR(hub => hub.MapHub<InputHub>("input"))
+        .UseSignalR(hub =>
+          {
+            hub.MapHub<InputHub>("input");
+            hub.MapHub<LoggingHub>("logging");
+          })
         .UseMvc();
     }
   }
