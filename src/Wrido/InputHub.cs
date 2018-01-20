@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Wrido.Core;
+using Wrido.Messages;
+using Wrido.Services;
 
 namespace Wrido
 {
   public class InputHub : Hub
   {
-    private readonly Random _random;
+    private readonly IQueryService _queryService;
 
-    public InputHub()
+    public InputHub(IQueryService queryService)
     {
-      _random = new Random();
+      _queryService = queryService;
     }
 
     public async Task QueryAsync(string rawQuery)
     {
-      var numberOfResults = _random.Next(1, 10);
-      var results = new List<string>();
-      for (var i = 0; i < numberOfResults; i++)
-      {
-        results.Add($"{rawQuery} (result {i})");
-      }
-
-      await Clients.Client(Context.ConnectionId).InvokeAsync("ResultAvailable", results);
+      var caller = Clients.Client(Context.ConnectionId);
+      await _queryService.QueryAsync(caller, rawQuery);
     }
   }
 }

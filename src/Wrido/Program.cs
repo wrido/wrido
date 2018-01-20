@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -25,8 +26,9 @@ namespace Wrido
     }
 
     public static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .Build();
+      WebHost.CreateDefaultBuilder(args)
+        .ConfigureServices(services => services.AddAutofac())
+        .UseStartup<Startup>()
+        .Build();
   }
 }

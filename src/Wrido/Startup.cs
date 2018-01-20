@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Autofac;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Wrido.Core.Resolution;
+using Wrido.Services;
 
 namespace Wrido
 {
@@ -16,8 +21,18 @@ namespace Wrido
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddSignalR();
+      services.AddSignalR(options => options.JsonSerializerSettings = new JsonSerializerSettings
+      {
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = new CamelCasePropertyNamesContractResolver()
+      });
       services.AddMvc();
+    }
+
+    public void ConfigureContainer(ContainerBuilder builder)
+    {
+      builder.RegisterModule(new DummyQueryModule());
+      builder.RegisterType<QueryService>().AsImplementedInterfaces().SingleInstance();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
