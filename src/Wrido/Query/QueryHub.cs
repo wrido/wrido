@@ -4,17 +4,16 @@ using Microsoft.AspNetCore.SignalR;
 using Serilog;
 using Wrido.Core.Logging;
 using Wrido.Logging;
-using Wrido.Services;
 using ILogger = Wrido.Core.Logging.ILogger;
 
-namespace Wrido
+namespace Wrido.Query
 {
-  public class InputHub : Hub
+  public class QueryHub : Hub
   {
     private readonly IQueryService _queryService;
-    private readonly ILogger _logger = new SerilogLogger(Log.ForContext<InputHub>());
+    private readonly ILogger _logger = new SerilogLogger(Log.ForContext<QueryHub>());
 
-    public InputHub(IQueryService queryService)
+    public QueryHub(IQueryService queryService)
     {
       _queryService = queryService;
     }

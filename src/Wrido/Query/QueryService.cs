@@ -10,7 +10,7 @@ using Wrido.Logging;
 using Wrido.Messages;
 using IQueryProvider = Wrido.Core.IQueryProvider;
 
-namespace Wrido.Services
+namespace Wrido.Query
 {
   public interface IQueryService
   {
@@ -33,7 +33,7 @@ namespace Wrido.Services
     {
       CancelOngoingQuery(out var currentCt);
 
-      var query = new Query(rawQuery);
+      var query = new Core.Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
       {
         currentCt.ThrowIfCancellationRequested();
@@ -45,15 +45,14 @@ namespace Wrido.Services
         await caller.InvokeAsync(QueryExecuting.By(providers), currentCt);
 
         // Execute query
-        var allTasks = providers
-          .Select(p => Task.Run(async () =>
+        var allTasks = Enumerable.Select(providers, p => Task.Run(async () =>
           {
             var providerName = p.GetType().Name;
             using (var operation = _logger.Timed("Query from {queryProvider}", providerName))
             {
               try
               {
-                var results = (await p.QueryAsync(query, currentCt)).ToList();
+                var results = Enumerable.ToList<QueryResult>((await p.QueryAsync(query, currentCt)));
                 currentCt.ThrowIfCancellationRequested();
                 _logger.Debug("Provider {queryProvider} executed query successfully. {resultCount} results available.", providerName, results.Count);
                 await caller.InvokeAsync(new ResultsAvailable(query.Id, results), currentCt);
@@ -88,10 +87,9 @@ namespace Wrido.Services
       }
     }
 
-    private IList<IQueryProvider> GetProviders(Query query)
+    private IList<IQueryProvider> GetProviders(Core.Query query)
     {
-      return _queryProviders
-        .Where(q => q.CanHandle(query))
+      return _queryProviders.Where(q => q.CanHandle(query))
         .ToList()
         .AsReadOnly();
     }
@@ -100,9 +98,9 @@ namespace Wrido.Services
     {
       var currentQuery = new CancellationTokenSource();
       nextToken = currentQuery.Token;
-      using (_logger.Timed(LogLevel.Debug, "Cancel ongoing query"))
+      var oldQuery = Interlocked.Exchange(ref _currentQuery, currentQuery);
+      using (TimedOperationExtensions.Timed(_logger, LogLevel.Debug, "Cancel ongoing query"))
       {
-        var oldQuery = Interlocked.Exchange(ref _currentQuery, currentQuery);
         oldQuery?.Cancel();
       }
     }
