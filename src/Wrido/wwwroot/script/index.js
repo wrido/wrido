@@ -43,7 +43,7 @@ connection.start().then(() => {
         statusElement.innerHTML = 'partial complete';
         for (let i = 0; i < msg.results.length; i++) {
             let li = document.createElement('li');
-            li.innerHTML = msg.results[i].title;
+            li.innerHTML = msg.results[i].title + ` <em>(${msg.results[i].description})</em>`;
             resultElement.appendChild(li);
         }
     });
