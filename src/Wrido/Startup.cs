@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Wrido.Core.Resolution;
 using Wrido.Logging;
+using Wrido.Plugin.Google;
 using Wrido.Services;
 
 namespace Wrido
@@ -40,6 +41,8 @@ namespace Wrido
         .RegisterType<QueryService>()
         .AsImplementedInterfaces()
         .SingleInstance();
+
+      new GooglePlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)

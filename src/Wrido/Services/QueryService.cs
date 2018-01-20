@@ -52,7 +52,7 @@ namespace Wrido.Services
             {
               try
               {
-                var results = await p.QueryAsync(query, currentCt);
+                var results = (await p.QueryAsync(query, currentCt)).ToList();
                 currentCt.ThrowIfCancellationRequested();
                 _logger.Debug("Provider {queryProvider} executed query successfully. {resultCount} results available.", providerName, results.Count);
                 await caller.InvokeAsync(new ResultsAvailable(query.Id, results), currentCt);

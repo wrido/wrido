@@ -8,6 +8,6 @@ namespace Wrido.Core
   {
     bool CanHandle(Query query);
 
-    Task<IList<QueryResult>> QueryAsync(Query query, CancellationToken ct);
+    Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct);
   }
 }

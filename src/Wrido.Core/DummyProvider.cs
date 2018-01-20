@@ -25,19 +25,21 @@ namespace Wrido.Core
       return true;
     }
 
-    public async Task<IList<QueryResult>> QueryAsync(Query query, CancellationToken ct)
+    public async Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct)
     {
       var numberOfResults = _random.Next(1, 9);
+      var duration = new TimeSpan(_random.Next((int)_minDuration.Ticks, (int)_maxDuratin.Ticks));
+
       var result = new List<QueryResult>();
       for (var i = 0; i < numberOfResults; i++)
       {
         result.Add(new QueryResult
         {
-          Title = $"[{_name}][{i}]: {query.Raw}"
+          Title = $"[{_name}][{i}]: {query.Raw}",
+          Description = $"Delayed with {duration.TotalMilliseconds} ms."
         });
       }
 
-      var duration  = new TimeSpan(_random.Next((int)_minDuration.Ticks, (int)_maxDuratin.Ticks));
       await Task.Delay(duration, ct);
 
       return result;
