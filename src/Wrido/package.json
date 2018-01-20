@@ -1,0 +1,21 @@
+{
+  "name": "wrido",
+  "version": "0.0.1",
+  "description": "wrido",
+  "main": "index.js",
+  "repository": "https://github.com/wrido/wrido",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --progress --profile"
+  },
+  "author": "Wrido Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "@aspnet/signalr-client": "^1.0.0-alpha2-final"
+  },
+  "devDependencies": {
+    "@types/webpack": "^3.8.3",
+    "awesome-typescript-loader": "^3.4.1",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
+  }
+}
