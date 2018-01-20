@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Wrido.Core;
-using Wrido.Messages;
+using Serilog;
+using Wrido.Core.Logging;
+using Wrido.Logging;
 using Wrido.Services;
+using ILogger = Wrido.Core.Logging.ILogger;
 
 namespace Wrido
 {
   public class InputHub : Hub
   {
     private readonly IQueryService _queryService;
+    private readonly ILogger _logger = new SerilogLogger(Log.ForContext<InputHub>());
 
     public InputHub(IQueryService queryService)
     {
@@ -20,8 +20,11 @@ namespace Wrido
 
     public async Task QueryAsync(string rawQuery)
     {
-      var caller = Clients.Client(Context.ConnectionId);
-      await _queryService.QueryAsync(caller, rawQuery);
+      using (_logger.Timed("Query {rawQuery}", rawQuery))
+      {
+        var caller = Clients.Client(Context.ConnectionId);
+        await _queryService.QueryAsync(caller, rawQuery);
+      }
     }
   }
 }

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
+using Serilog.Events;
+using Wrido.Logging;
 
 namespace Wrido
 {
@@ -13,22 +16,36 @@ namespace Wrido
     {
       var cts = new CancellationTokenSource();
       Console.CancelKeyPress += (sender, cancelArgs) => cts.Cancel();
-
-      MainAsync(args, cts.Token)
-        .GetAwaiter()
-        .GetResult();
+      MainAsync(args, cts.Token).GetAwaiter().GetResult();
     }
 
     public static async Task MainAsync(string[] args, CancellationToken ct)
     {
-      var host = BuildWebHost(args);
-      await host.RunAsync(ct);
-    }
+      Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(outputTemplate: LogTemplates.Console)
+        .CreateLogger();
 
-    public static IWebHost BuildWebHost(string[] args) =>
-      WebHost.CreateDefaultBuilder(args)
-        .ConfigureServices(services => services.AddAutofac())
-        .UseStartup<Startup>()
-        .Build();
+      try
+      {
+        var host = WebHost.CreateDefaultBuilder(args)
+          .ConfigureServices(services => services.AddAutofac())
+          .UseSerilog()
+          .UseStartup<Startup>()
+          .Build();
+
+        await host.RunAsync(ct);
+      }
+      catch (Exception e)
+      {
+        Log.Fatal(e, "Host terminated unexpectedly");
+      }
+      finally
+      {
+        Log.CloseAndFlush();
+      }
+    }
   }
 }
