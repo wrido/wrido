@@ -36,6 +36,7 @@ namespace Wrido.Services
       var query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
       {
+        currentCt.ThrowIfCancellationRequested();
         _logger.Verbose("Notifying frontend that query is received.");
         await caller.InvokeAsync(new QueryReceived(query), currentCt);
 
@@ -67,10 +68,23 @@ namespace Wrido.Services
           }, currentCt))
           .ToList();
 
-        Task.WaitAll(allTasks.ToArray<Task>());
-        var allResults = allTasks.Where(t => t.IsCompleted).SelectMany(t => t.Result).ToList();
-        _logger.Verbose("Query completed. Total result count is {resultCount}", allResults.Count);
-        await caller.InvokeAsync(new QueryCompleted(query.Id, allResults), currentCt);
+        // Wait for provider tasks
+        await Task.WhenAll(allTasks).ContinueWith(async _ =>
+        {
+          Task.WaitAll(allTasks.ToArray<Task>());
+          var allResults = allTasks.Where(t => t.IsCompleted).SelectMany(t => t.Result).ToList();
+
+          if (allTasks.Any(t => !t.IsCompletedSuccessfully))
+          {
+            _logger.Debug("One or more sub queries have failed.");
+            await caller.InvokeAsync(new QueryCancelled(query.Id), currentCt);
+          }
+          else
+          {
+            _logger.Verbose("Query completed. Total result count is {resultCount}", allResults.Count);
+            await caller.InvokeAsync(new QueryCompleted(query.Id, allResults), currentCt);
+          }
+        });
       }
     }
 

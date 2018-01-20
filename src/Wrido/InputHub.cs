@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
 using Wrido.Core.Logging;
@@ -22,8 +23,16 @@ namespace Wrido
     {
       using (_logger.Timed("Query {rawQuery}", rawQuery))
       {
-        var caller = Clients.Client(Context.ConnectionId);
-        await _queryService.QueryAsync(caller, rawQuery);
+        try
+        {
+          var caller = Clients.Client(Context.ConnectionId);
+          await _queryService.QueryAsync(caller, rawQuery);
+        }
+        catch (TaskCanceledException){ /* do nothing */ }
+        catch (Exception e)
+        {
+          _logger.Information(e, "An unhandled exception occured.");
+        }
       }
     }
   }

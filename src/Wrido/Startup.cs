@@ -55,6 +55,7 @@ namespace Wrido
           {
             hub.MapHub<InputHub>("input");
             hub.MapHub<LoggingHub>("logging");
+            hub.MapHub<ExampleHub>("example");
           })
         .UseMvc();
     }
