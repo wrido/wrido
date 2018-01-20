@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Wrido.Core\Wrido.Core.csproj" />
+    <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
   </ItemGroup>
 
 </Project>
