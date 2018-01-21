@@ -12,5 +12,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "proxy": {
+    "/": {
+      "target": "ws://localhost:5000",
+      "ws": true
+    }
   }
 }
