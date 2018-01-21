@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IQueryProvider = Wrido.Core.IQueryProvider;
+using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Messages
 {

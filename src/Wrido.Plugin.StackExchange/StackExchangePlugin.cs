@@ -6,12 +6,11 @@ using Autofac;
 using Autofac.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Wrido.Core;
-using Wrido.Core.Plugin;
-using Wrido.Core.QueryLanguage;
+using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.AskUbuntu;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Plugin.StackExchange.StackOverflow;
+using Wrido.Queries;
 
 namespace Wrido.Plugin.StackExchange
 {

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Wrido.Core.Queries;
+using Wrido.Queries;
+using Wrido.Resources;
 
-namespace Wrido.Core
+namespace Wrido.Plugin.Dummy
 {
   public class DummyProvider : IQueryProvider
   {
@@ -11,13 +14,20 @@ namespace Wrido.Core
     private readonly TimeSpan _maxDuratin;
     private readonly string _name;
     private readonly Random _random;
+    private readonly ImageResource _iconResource;
 
-    public DummyProvider(TimeSpan minDuration, TimeSpan maxDuratin, string name)
+    public DummyProvider(TimeSpan minDuration, TimeSpan maxDuratin, string name, Uri iconUri)
     {
       _minDuration = minDuration;
       _maxDuratin = maxDuratin;
       _name = name;
       _random = new Random();
+      _iconResource = new ImageResource
+      {
+        Alt = name,
+        Key = ResourceKeys.Icon,
+        Uri = iconUri
+      };
     }
 
     public bool CanHandle(Query query)
@@ -36,7 +46,8 @@ namespace Wrido.Core
         result.Add(new QueryResult
         {
           Title = $"[{_name}][{i}]: {query.Raw}",
-          Description = $"Delayed with {duration.TotalMilliseconds} ms."
+          Description = $"Delayed with {duration.TotalMilliseconds} ms.",
+          Resources = new []{ _iconResource }
         });
       }
 

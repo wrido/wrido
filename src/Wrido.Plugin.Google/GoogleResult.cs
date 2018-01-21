@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using Wrido.Core;
-using Wrido.Core.Resources;
+using Wrido.Core.Queries;
+using Wrido.Resources;
 
 namespace Wrido.Plugin.Google
 {

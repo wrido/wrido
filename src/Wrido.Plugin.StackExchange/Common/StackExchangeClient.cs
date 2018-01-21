@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Wrido.Core.Logging;
+using Wrido.Logging;
 
 namespace Wrido.Plugin.StackExchange.Common
 {

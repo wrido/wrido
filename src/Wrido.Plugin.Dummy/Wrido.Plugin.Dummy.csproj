@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Banana.png" />
+    <None Remove="Resources\Phone.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Banana.png" />
+    <EmbeddedResource Include="Resources\Phone.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
+  </ItemGroup>
+
+</Project>

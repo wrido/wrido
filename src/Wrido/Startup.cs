@@ -5,12 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Wrido.Core.Resolution;
-using Wrido.Core.Resources;
 using Wrido.Logging;
+using Wrido.Plugin.Dummy;
 using Wrido.Plugin.Google;
 using Wrido.Plugin.StackExchange;
-using Wrido.Query;
+using Wrido.Queries;
 
 namespace Wrido
 {
@@ -36,7 +35,6 @@ namespace Wrido
     public void ConfigureContainer(ContainerBuilder builder)
     {
       builder
-        .RegisterModule<DummyQueryModule>()
         .RegisterModule<LoggingModule>();
 
       builder
@@ -46,6 +44,7 @@ namespace Wrido
 
       new GooglePlugin().Register(builder);
       new StackExchangePlugin().Register(builder);
+      new DummyPlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)

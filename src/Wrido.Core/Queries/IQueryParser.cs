@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Wrido.Core.QueryLanguage
+namespace Wrido.Queries
 {
     public interface IQueryParser<out TOption> where TOption : new()
     {

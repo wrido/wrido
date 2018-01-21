@@ -3,15 +3,13 @@ using System.Collections.Concurrent;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
 using Serilog.Core.Enrichers;
-using Wrido.Core.Logging;
-using ILogger = Serilog.ILogger;
 
 namespace Wrido.Logging
 {
   public class LoggingHub : Hub
   {
-    private static readonly ILogger _fallbackLogger = Log.ForContext<LoggingHub>();
-    private static readonly ConcurrentStack<ILogger> _loggerStack = new ConcurrentStack<ILogger>();
+    private static readonly Serilog.ILogger _fallbackLogger = Log.ForContext<LoggingHub>();
+    private static readonly ConcurrentStack<Serilog.ILogger> _loggerStack = new ConcurrentStack<Serilog.ILogger>();
 
     public void Write(LogLevel level, string messageTemplate, object[] propertyValues)
     {

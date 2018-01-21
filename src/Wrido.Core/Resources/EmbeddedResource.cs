@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Wrido.Core.Resources
+namespace Wrido.Resources
 {
   public class EmbeddedResource
   {

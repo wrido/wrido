@@ -10,13 +10,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Core", "src\Wrido.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.Google", "src\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj", "{60512823-49BB-4009-8B05-EB874AAB24EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.StackExchange", "src\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj", "{4BD509D5-560B-4652-B8B1-58F8A1DF125B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.StackExchange", "src\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj", "{4BD509D5-560B-4652-B8B1-58F8A1DF125B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5EDA50CA-C3D6-4320-AD14-56243B7058C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.StackExchange.Tests", "src\Wrido.Plugin.StackExchange.Tests\Wrido.Plugin.StackExchange.Tests.csproj", "{B8FD5F64-8FCD-400E-8AF7-B1048AD22C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.StackExchange.Tests", "src\Wrido.Plugin.StackExchange.Tests\Wrido.Plugin.StackExchange.Tests.csproj", "{B8FD5F64-8FCD-400E-8AF7-B1048AD22C8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.TestCommon", "src\Wrido.TestCommon\Wrido.TestCommon.csproj", "{68D10318-41FB-48A7-BDCC-B1B6808A3E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.Dummy", "src\Wrido.Plugin.Dummy\Wrido.Plugin.Dummy.csproj", "{15CD30AB-7394-4D6A-B690-80EEBCD1F471}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +102,18 @@ Global
 		{68D10318-41FB-48A7-BDCC-B1B6808A3E0B}.Release|x64.Build.0 = Release|Any CPU
 		{68D10318-41FB-48A7-BDCC-B1B6808A3E0B}.Release|x86.ActiveCfg = Release|Any CPU
 		{68D10318-41FB-48A7-BDCC-B1B6808A3E0B}.Release|x86.Build.0 = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|x64.Build.0 = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Debug|x86.Build.0 = Debug|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|x64.ActiveCfg = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|x64.Build.0 = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|x86.ActiveCfg = Release|Any CPU
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +125,7 @@ Global
 		{4BD509D5-560B-4652-B8B1-58F8A1DF125B} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 		{B8FD5F64-8FCD-400E-8AF7-B1048AD22C8A} = {5EDA50CA-C3D6-4320-AD14-56243B7058C2}
 		{68D10318-41FB-48A7-BDCC-B1B6808A3E0B} = {5EDA50CA-C3D6-4320-AD14-56243B7058C2}
+		{15CD30AB-7394-4D6A-B690-80EEBCD1F471} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0371E56C-FE2E-44B5-B4F3-21B72D3612F4}

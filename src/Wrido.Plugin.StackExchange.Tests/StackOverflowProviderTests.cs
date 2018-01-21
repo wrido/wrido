@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
-using Wrido.Core;
-using Wrido.Core.QueryLanguage;
+using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Plugin.StackExchange.StackOverflow;
+using Wrido.Queries;
 using Xunit;
 
 namespace Wrido.Plugin.StackExchange.Tests

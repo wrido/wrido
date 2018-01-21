@@ -1,4 +1,4 @@
-﻿namespace Wrido.Core.QueryLanguage
+﻿namespace Wrido.Queries
 {
     public static class QueryParserExtensions
     {

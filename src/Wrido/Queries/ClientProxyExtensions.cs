@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Wrido.Query
+namespace Wrido.Queries
 {
   public static class ClientProxyExtensions
   {

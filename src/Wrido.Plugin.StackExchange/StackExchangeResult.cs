@@ -1,5 +1,5 @@
 ﻿using System;
-using Wrido.Core;
+using Wrido.Core.Queries;
 
 namespace Wrido.Plugin.StackExchange
 {

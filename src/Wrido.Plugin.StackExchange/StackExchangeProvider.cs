@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Wrido.Core;
-using Wrido.Core.QueryLanguage;
+using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
+using Wrido.Queries;
+using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin.StackExchange
 {
-  public abstract class StackExchangeProvider<TQueryResult> : Core.IQueryProvider
+  public abstract class StackExchangeProvider<TQueryResult> : Queries.IQueryProvider
       where TQueryResult : StackExchangeResult, new()
   {
     private readonly IStackExchangeClient _stackExchangeClient;

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Wrido.Core.QueryLanguage;
+using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
+using Wrido.Queries;
 using Xunit;
 
 namespace Wrido.Plugin.StackExchange.Tests

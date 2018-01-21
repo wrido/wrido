@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrido.Core;
+using Wrido.Core.Queries;
 
 namespace Wrido.Messages
 {

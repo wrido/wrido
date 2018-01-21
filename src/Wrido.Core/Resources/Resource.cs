@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Wrido.Core.Resources
+namespace Wrido.Resources
 {
   public abstract class Resource
   {

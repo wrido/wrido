@@ -1,4 +1,4 @@
-﻿namespace Wrido.Core.Resources
+﻿namespace Wrido.Resources
 {
   public class ResourceKeys
   {

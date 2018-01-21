@@ -1,4 +1,4 @@
-﻿namespace Wrido.Core.Logging
+﻿namespace Wrido.Logging
 {
   public enum LogLevel
   {

@@ -6,13 +6,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Wrido.Core;
-using Wrido.Core.Logging;
-using IQueryProvider = Wrido.Core.IQueryProvider;
+using Wrido.Core.Queries;
+using Wrido.Logging;
+using Wrido.Queries;
+using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin.Google
 {
-  public class GoogleProvider : IQueryProvider
+  public class GoogleProvider : Queries.IQueryProvider
   {
     protected const string Command = ":g";
     private readonly HttpClient _httpClient;

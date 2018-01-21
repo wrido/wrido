@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 
-namespace Wrido.Core.Resources
+namespace Wrido.Resources
 {
   public static class ModuleResourceExtension
   {

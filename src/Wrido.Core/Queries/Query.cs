@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Wrido.Core
+namespace Wrido.Queries
 {
   public class Query
   {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Wrido.Core.QueryLanguage;
+using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
+using Wrido.Queries;
 
 namespace Wrido.Plugin.StackExchange.AskUbuntu
 {

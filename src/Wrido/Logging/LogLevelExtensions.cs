@@ -1,6 +1,5 @@
 ﻿using System;
 using Serilog.Events;
-using Wrido.Core.Logging;
 
 namespace Wrido.Logging
 {

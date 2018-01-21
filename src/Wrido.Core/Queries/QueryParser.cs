@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Wrido.Core.QueryLanguage
+namespace Wrido.Queries
 {
     public class QueryParser<TOption> : IQueryParser<TOption> where TOption : new()
     {

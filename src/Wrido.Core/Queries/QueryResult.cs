@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Wrido.Core.Resources;
+using Wrido.Resources;
 
-namespace Wrido.Core
+namespace Wrido.Core.Queries
 {
   public class QueryResult
   {

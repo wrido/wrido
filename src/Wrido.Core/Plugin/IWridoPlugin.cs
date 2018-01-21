@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Wrido.Core.Plugin
+namespace Wrido.Plugin
 {
   public interface IWridoPlugin
   {

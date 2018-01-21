@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NSubstitute;
-using Wrido.Core.Logging;
+using Wrido.Logging;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.TestCommon.Fakes;
 using Wrido.TestCommon.Utilities;

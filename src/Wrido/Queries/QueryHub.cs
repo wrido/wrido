@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
-using Wrido.Core.Logging;
 using Wrido.Logging;
-using ILogger = Wrido.Core.Logging.ILogger;
+using ILogger = Wrido.Logging.ILogger;
 
-namespace Wrido.Query
+namespace Wrido.Queries
 {
   public class QueryHub : Hub
   {

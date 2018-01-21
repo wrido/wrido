@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Wrido.Core.Logging
+namespace Wrido.Logging
 {
   public class TimedOperation : IDisposable
   {

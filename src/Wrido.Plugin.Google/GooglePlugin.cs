@@ -2,8 +2,7 @@
 using System.Net.Http;
 using Autofac;
 using Autofac.Core;
-using Wrido.Core.Plugin;
-using Wrido.Core.Resources;
+using Wrido.Resources;
 
 namespace Wrido.Plugin.Google
 {

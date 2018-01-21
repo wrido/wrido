@@ -4,13 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Wrido.Core;
-using Wrido.Core.Logging;
+using Wrido.Core.Queries;
 using Wrido.Logging;
 using Wrido.Messages;
-using IQueryProvider = Wrido.Core.IQueryProvider;
+using IQueryProvider = Wrido.Queries.IQueryProvider;
 
-namespace Wrido.Query
+namespace Wrido.Queries
 {
   public interface IQueryService
   {
@@ -33,7 +32,7 @@ namespace Wrido.Query
     {
       CancelOngoingQuery(out var currentCt);
 
-      var query = new Core.Query(rawQuery);
+      var query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
       {
         currentCt.ThrowIfCancellationRequested();
@@ -87,7 +86,7 @@ namespace Wrido.Query
       }
     }
 
-    private IList<IQueryProvider> GetProviders(Core.Query query)
+    private IList<IQueryProvider> GetProviders(Query query)
     {
       return _queryProviders.Where(q => q.CanHandle(query))
         .ToList()
@@ -99,7 +98,7 @@ namespace Wrido.Query
       var currentQuery = new CancellationTokenSource();
       nextToken = currentQuery.Token;
       var oldQuery = Interlocked.Exchange(ref _currentQuery, currentQuery);
-      using (TimedOperationExtensions.Timed(_logger, LogLevel.Debug, "Cancel ongoing query"))
+      using (_logger.Timed(LogLevel.Debug, "Cancel ongoing query"))
       {
         oldQuery?.Cancel();
       }

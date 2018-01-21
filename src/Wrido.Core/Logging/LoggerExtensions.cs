@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Wrido.Core.Logging
+namespace Wrido.Logging
 {
   public static class LoggerExtensions
   {
