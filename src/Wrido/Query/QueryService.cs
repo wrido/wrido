@@ -45,20 +45,20 @@ namespace Wrido.Query
         await caller.InvokeAsync(QueryExecuting.By(providers), currentCt);
 
         // Execute query
-        var allTasks = Enumerable.Select(providers, p => Task.Run(async () =>
+        var allTasks = providers.Select(p => Task.Run(async () =>
           {
             var providerName = p.GetType().Name;
             using (var operation = _logger.Timed("Query from {queryProvider}", providerName))
             {
               try
               {
-                var results = Enumerable.ToList<QueryResult>((await p.QueryAsync(query, currentCt)));
+                var results = (await p.QueryAsync(query, currentCt)).ToList();
                 currentCt.ThrowIfCancellationRequested();
                 _logger.Debug("Provider {queryProvider} executed query successfully. {resultCount} results available.", providerName, results.Count);
                 await caller.InvokeAsync(new ResultsAvailable(query.Id, results), currentCt);
                 return results;
               }
-              catch (Exception)
+              catch (Exception e)
               {
                 operation.Cancel();
                 throw;

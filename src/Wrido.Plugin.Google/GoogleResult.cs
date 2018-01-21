@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Net;
 using Wrido.Core;
+using Wrido.Core.Resources;
 
 namespace Wrido.Plugin.Google
 {
   public class GoogleResult : QueryResult
   {
+    private static readonly ImageResource Logo = new ImageResource
+    {
+      Uri = new Uri("/resources/wrido/plugin/google/resources/google.png", UriKind.Relative),
+      Alt = "Google",
+      Key = ResourceKeys.Icon
+    };
+
     public Uri Uri { get; set; }
 
     public static GoogleResult Fallback => new GoogleResult
     {
       Title = "Open Google in browser",
       Description = "https://www.google.com",
-      Uri = new Uri("https://www.google.com")
+      Uri = new Uri("https://www.google.com"),
+      Resources = new []{ Logo }
     };
 
     public static GoogleResult SearchResult(string query)
@@ -22,7 +31,8 @@ namespace Wrido.Plugin.Google
       {
         Title = $"Search Google for '{query}'",
         Description = googleUrl.AbsoluteUri,
-        Uri = googleUrl
+        Uri = googleUrl,
+        Resources = new[] { Logo }
       };
     }
   }

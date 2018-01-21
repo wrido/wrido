@@ -43,7 +43,17 @@ connection.start().then(() => {
         statusElement.innerHTML = 'partial complete';
         for (let i = 0; i < msg.results.length; i++) {
             let li = document.createElement('li');
-            li.innerHTML = msg.results[i].title + ` <em>(${msg.results[i].description})</em>`;
+            let result = msg.results[i];
+
+            if (result.resources && result.resources.length != 0) {
+                let img = document.createElement('img');
+                img.alt = result.resources[0].alt;
+                img.src = result.resources[0].uri;
+                li.appendChild(img);
+            }
+            var span = document.createElement('span');
+            span.innerHTML = `${result.title} <em>(${result.description})</em>`;
+            li.appendChild(span);
             resultElement.appendChild(li);
         }
     });

@@ -3,6 +3,7 @@ using System.Net.Http;
 using Autofac;
 using Autofac.Core;
 using Wrido.Core.Plugin;
+using Wrido.Core.Resources;
 
 namespace Wrido.Plugin.Google
 {
@@ -10,16 +11,21 @@ namespace Wrido.Plugin.Google
   {
     public void Register(ContainerBuilder builder)
     {
+      builder.RegisterResources<GooglePlugin>();
+
       builder
         .Register(GoogleHttpClient)
-        .Named<HttpClient>(nameof(GoogleHttpClient));
+        .Named<HttpClient>(nameof(GoogleHttpClient))
+        .SingleInstance();
 
       builder
         .RegisterType<GoogleProvider>()
         .AsImplementedInterfaces()
-        .WithParameter(new ResolvedParameter(
-          (info, context) => info.ParameterType == typeof(HttpClient),
-          (info, context) => context.ResolveNamed<HttpClient>(nameof(GoogleHttpClient))))
+        .WithParameter(
+          new ResolvedParameter(
+            (info, context) => info.ParameterType == typeof(HttpClient),
+            (info, context) => context.ResolveNamed<HttpClient>(nameof(GoogleHttpClient))
+            ))
         .SingleInstance();
     }
 

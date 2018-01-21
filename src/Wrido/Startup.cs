@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Wrido.Core.Resolution;
+using Wrido.Core.Resources;
 using Wrido.Logging;
 using Wrido.Plugin.Google;
 using Wrido.Plugin.StackExchange;
@@ -58,7 +59,7 @@ namespace Wrido
             hub.MapHub<QueryHub>("query");
             hub.MapHub<LoggingHub>("logging");
           })
-        .UseMvc();
+        .UseMvcWithDefaultRoute();
     }
   }
 }
