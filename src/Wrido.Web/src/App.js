@@ -1,14 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Input from './components/Input';
 
-class App extends Component {
-  render(state) {
-    console.log(state);
-    return (
-      <div>
-        Success
-      </div>
-    );
-  }
-}
-
-export default App;
+export default props => (
+  <div>
+    <Input />
+  </div>
+)
