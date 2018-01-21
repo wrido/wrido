@@ -27,6 +27,7 @@ namespace Wrido
       services.AddSignalR(options => options.JsonSerializerSettings = new JsonSerializerSettings
       {
         NullValueHandling = NullValueHandling.Ignore,
+        TypeNameHandling = TypeNameHandling.Auto,
         ContractResolver = new CamelCasePropertyNamesContractResolver()
       });
       services.AddMvc();
@@ -35,10 +36,16 @@ namespace Wrido
     public void ConfigureContainer(ContainerBuilder builder)
     {
       builder
+        .RegisterModule<QueryModule>()
         .RegisterModule<LoggingModule>();
 
       builder
         .RegisterType<QueryService>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<ExecutionService>()
         .AsImplementedInterfaces()
         .SingleInstance();
 

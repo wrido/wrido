@@ -41,19 +41,20 @@ connection.start().then(() => {
 
     connection.on(resultsAvailable, msg => {
         statusElement.innerHTML = 'partial complete';
-        for (let i = 0; i < msg.results.length; i++) {
+        for (let i = 0; i < msg.results.$values.length; i++) {
             let li = document.createElement('li');
-            let result = msg.results[i];
+            let result = msg.results.$values[i];
 
-            if (result.resources && result.resources.length != 0) {
+            if (result.resources && result.resources.$values.length != 0) {
                 let img = document.createElement('img');
-                img.alt = result.resources[0].alt;
-                img.src = result.resources[0].uri;
+                img.alt = result.resources.$values[0].alt;
+                img.src = result.resources.$values[0].uri;
                 li.appendChild(img);
             }
             var span = document.createElement('span');
             span.innerHTML = `${result.title} <em>(${result.description})</em>`;
             li.appendChild(span);
+            span.onclick = () => connection.invoke('ExecuteAsync', result);
             resultElement.appendChild(li);
         }
     });

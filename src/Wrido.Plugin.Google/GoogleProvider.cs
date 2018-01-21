@@ -9,7 +9,6 @@ using Newtonsoft.Json.Linq;
 using Wrido.Core.Queries;
 using Wrido.Logging;
 using Wrido.Queries;
-using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin.Google
 {

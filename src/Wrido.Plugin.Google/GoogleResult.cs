@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
-using Wrido.Core.Queries;
+using Wrido.Queries;
 using Wrido.Resources;
 
 namespace Wrido.Plugin.Google
 {
-  public class GoogleResult : QueryResult
+  public class GoogleResult : WebResult
   {
     private static readonly ImageResource Logo = new ImageResource
     {
@@ -13,8 +13,6 @@ namespace Wrido.Plugin.Google
       Alt = "Google",
       Key = ResourceKeys.Icon
     };
-
-    public Uri Uri { get; set; }
 
     public static GoogleResult Fallback => new GoogleResult
     {
@@ -26,7 +24,7 @@ namespace Wrido.Plugin.Google
 
     public static GoogleResult SearchResult(string query)
     {
-      var googleUrl = new Uri($"http://www.google.com/search?q={WebUtility.UrlEncode(query)}");
+      var googleUrl = new Uri($"https://www.google.com/search?q={WebUtility.UrlEncode(query)}");
       return new GoogleResult
       {
         Title = $"Search Google for '{query}'",
