@@ -22,19 +22,19 @@ export const connect = () => {
   // be produced.
   const queryCancelled = 'QueryCancelled';
 
+  const log = name => msg => console.log(name, msg);
+  const actions = {
+    queryReceived: log(queryReceived),
+    queryExecuting: log(queryExecuting),
+    resultsAvailable: log(resultsAvailable),
+    queryCompleted: log(queryCompleted),
+    queryCancelled: log(queryCancelled),
+  }
+
   connection.start().then(() => {
-    connection.on(queryReceived, msg => {
-      console.log(queryReceived, msg);
-    });
-
-    connection.on(resultsAvailable, msg => {
-      console.log(resultsAvailable, msg);
-    });
-
-    connection.on(queryCompleted, msg => {
-      console.log(queryCompleted, msg);
-    });
-
+    Object.keys(actions)
+      .map(name => ({ name, action: actions[name] }))
+      .forEach(({ name, action }) => connection.on(name, action));
     connection.invoke('QueryAsync', 'google test');
   });
 }
