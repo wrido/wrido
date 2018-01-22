@@ -1,20 +1,17 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import { rootReducer } from './reducer'
+import { createStore, applyMiddleware } from 'redux';
+import { rootReducer } from './modules/root';
+import { createEpicMiddleware } from 'redux-observable';
+import { rootEpic } from './modules/root';
+import { connectToSignalR } from './middlewares';
 
-const initialState = {}
-const enhancers = []
 const middleware = [
-]
-
-const composedEnhancers = compose(
-  applyMiddleware(...middleware),
-  ...enhancers
-)
+  createEpicMiddleware(rootEpic),
+  connectToSignalR
+];
 
 const store = createStore(
   rootReducer,
-  initialState,
-  composedEnhancers
-)
+  applyMiddleware(...middleware)
+);
 
 export default store

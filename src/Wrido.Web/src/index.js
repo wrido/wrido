@@ -7,7 +7,8 @@ import store from './store';
 
 connect();
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root'));
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
+);

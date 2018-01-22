@@ -1,25 +1,22 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { onInputChange } from '../actionCreators'
+import { onInputChangeAction } from '../actionCreators'
 
-const Input = props => {
-  const onChange = e => props.onInputChange(e.target.value);
+const Input = ({ onInputChangeAction, input }) => {
+  const onChange = e => onInputChangeAction(e.target.value);
   return (
     <div>
-      <input value={props.value} onChange={onChange} />
+      <input value={input.value} onChange={onChange} />
     </div>
   )
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  onInputChange
+  onInputChangeAction
 }, dispatch)
 
 export default connect(
-  state => {
-    console.log(state);
-    return state.input;
-  },
+  ({ input }) => ({ input }),
   mapDispatchToProps
 )(Input)
