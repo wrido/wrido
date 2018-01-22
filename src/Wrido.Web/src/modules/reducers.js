@@ -5,6 +5,7 @@ const initialInputState = {
 };
 
 export const input = (state = initialInputState, action) => {
+  console.log(action.type, action);
   switch (action.type) {
     case onInputChange:
       return {
