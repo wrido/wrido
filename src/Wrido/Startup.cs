@@ -10,6 +10,7 @@ using Wrido.Plugin.Dummy;
 using Wrido.Plugin.Google;
 using Wrido.Plugin.StackExchange;
 using Wrido.Queries;
+using Wrido.Resources;
 
 namespace Wrido
 {
@@ -37,7 +38,8 @@ namespace Wrido
     {
       builder
         .RegisterModule<QueryModule>()
-        .RegisterModule<LoggingModule>();
+        .RegisterModule<LoggingModule>()
+        .RegisterModule<ResourceAspNetModule>();
 
       builder
         .RegisterType<QueryService>()
