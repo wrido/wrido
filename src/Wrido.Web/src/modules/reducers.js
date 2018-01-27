@@ -15,3 +15,14 @@ export const input = (state = initialInputState, action) => {
       return state;
   }
 }
+
+const initialResultState = {
+  items: []
+};
+
+export const result = (state = initialResultState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
