@@ -5,11 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Wrido.Configuration;
+using Wrido.Electron;
 using Wrido.Logging;
 using Wrido.Plugin.Dummy;
 using Wrido.Plugin.Google;
 using Wrido.Plugin.StackExchange;
 using Wrido.Queries;
+using Wrido.Resources;
 
 namespace Wrido
 {
@@ -37,7 +40,10 @@ namespace Wrido
     {
       builder
         .RegisterModule<QueryModule>()
-        .RegisterModule<LoggingModule>();
+        .RegisterModule<LoggingModule>()
+        .RegisterModule<ConfigurationModule>()
+        .RegisterModule<ResourceAspNetModule>()
+        .RegisterModule<ElectronModule>();
 
       builder
         .RegisterType<QueryService>()
