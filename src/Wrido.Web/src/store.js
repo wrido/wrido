@@ -3,10 +3,12 @@ import { rootReducer } from './modules/root';
 import { createEpicMiddleware } from 'redux-observable';
 import { rootEpic } from './modules/root';
 import { connectToSignalR } from './connectToSignalR';
+import { logger } from './logger';
 
 const middleware = [
   createEpicMiddleware(rootEpic),
-  connectToSignalR
+  connectToSignalR,
+  logger,
 ];
 
 const store = createStore(

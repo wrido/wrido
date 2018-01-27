@@ -1,5 +1,11 @@
 import { onInputChange } from './constants';
-import { queryReceivedAction, queryExecutingAction, resultsAvailableAction, queryCompletedAction, queryCancelledAction } from './actionCreators';
+import {
+  queryReceivedAction,
+  queryExecutingAction,
+  resultsAvailableAction,
+  queryCompletedAction,
+  queryCancelledAction
+} from './actionCreators';
 
 const actions = {
   queryReceived: queryReceivedAction,
@@ -14,7 +20,7 @@ export const connectToSignalR = store => next => {
   connection.start().then(() => {
     Object.keys(actions)
       .map(name => ({ name, action: actions[name] }))
-      .forEach(({ name, action }) => connection.on(name, data => next(action(data))));
+      .forEach(({ name, action }) => connection.on(name, payload => next(action(payload))));
   });
   return action => {
     if (action.type === onInputChange) {
