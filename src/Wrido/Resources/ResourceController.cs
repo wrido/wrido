@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -19,7 +18,7 @@ namespace Wrido.Resources
     }
 
     [HttpGet("resources/{*resourcePath}")]
-    public async Task<ActionResult> GetResourceAsync(string resourcePath)
+    public ActionResult GetResource(string resourcePath)
     {
       if (!_resources.ContainsKey(resourcePath))
       {
@@ -30,7 +29,7 @@ namespace Wrido.Resources
     }
 
     [HttpGet("preview/{*filePath}")]
-    public async Task<ActionResult> GetFilePreviewAsync(string filePath)
+    public ActionResult GetFilePreview(string filePath)
     {
       if (!System.IO.File.Exists(filePath))
       {
