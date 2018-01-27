@@ -15,14 +15,3 @@ export const input = (state = initialInputState, action) => {
       return state;
   }
 }
-
-const initialStatusState = 'not set';
-
-export const status = (state = initialStatusState, action) => {
-  switch (action.type) {
-    case onInputChange:
-      return 'unknown';
-    default:
-      return state;
-  }
-}
