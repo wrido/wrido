@@ -1,28 +1,31 @@
-import { onInputChange } from '../constants';
+import { queryReceived, resultsAvailable, onInputChange } from '../constants';
 
-const initialInputState = {
-  value: 'success'
-};
+const reducer = (initialState, ...configs) => (state = initialState, action) =>
+  configs
+    .filter(config => config[0] === action.type)
+    .reduce((state, config) => ({
+      ...state,
+      ...config[1](state, action)
+    }), state);
 
-export const input = (state = initialInputState, action) => {
-  switch (action.type) {
-    case onInputChange:
-      return {
-        ...state,
-        value: action.payload.value
-      }
-    default:
-      return state;
-  }
-}
+export const input = reducer(
+  { value: 'success' },
+  [onInputChange, (state, action) => ({ value: action.payload.value })]
+);
 
-const initialResultState = {
-  items: []
-};
-
-export const result = (state = initialResultState, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}
+export const result = reducer(
+  { currentQueryId: null, items: [] },
+  [
+    queryReceived,
+    (state, action) => ({
+      currentQueryId: action.payload.value.current.id,
+      items: []
+    })
+  ],
+  [
+    resultsAvailable,
+    (state, action) => ({
+      items: action.payload.value.queryId === state.currentQueryId ? action.payload.value.results.$values : state.items
+    })
+  ],
+);

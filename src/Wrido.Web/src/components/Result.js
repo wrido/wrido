@@ -1,19 +1,19 @@
-import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 
-const Result = ({ onInputChangeAction, input }) => {
+const Result = ({ items }) => {
   return (
     <div>
-      Success
+      {
+        items.map((item, i) => (
+          <div key={i}>{item.title}</div>
+        ))
+      }
     </div>
-  )
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-}, dispatch)
+  );
+};
 
 export default connect(
-  ({ result }) => ({ result }),
-  mapDispatchToProps
-)(Result)
+  ({ result }) => result,
+  {}
+)(Result);
