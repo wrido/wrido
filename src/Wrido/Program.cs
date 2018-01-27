@@ -2,10 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
+using ElectronNET.API;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using Wrido.Electron;
 using Wrido.Logging;
 
 namespace Wrido
@@ -28,15 +31,27 @@ namespace Wrido
         .WriteTo.Console(outputTemplate: LogTemplates.Console)
         .CreateLogger();
 
+      Log.Information("Application started with {applicationArgs}", args);
+
       try
       {
-        var host = WebHost.CreateDefaultBuilder(args)
+        var webHost = WebHost.CreateDefaultBuilder(args)
           .ConfigureServices(services => services.AddAutofac())
           .UseSerilog()
+          .UseElectron(args)
           .UseStartup<Startup>()
           .Build();
 
-        await host.RunAsync(ct);
+        await webHost.StartAsync(ct);
+        
+        var electronHost = webHost.Services.GetService<IElectronHost>();
+        await electronHost.StartAsync(ct);
+
+        var appLifeTime = webHost.Services.GetService<IApplicationLifetime>();
+        var tsc = new TaskCompletionSource<int>();
+        appLifeTime.ApplicationStopped.Register(() => tsc.TrySetResult(1));
+        ct.Register(() => appLifeTime.StopApplication());
+        await tsc.Task;
       }
       catch (Exception e)
       {
