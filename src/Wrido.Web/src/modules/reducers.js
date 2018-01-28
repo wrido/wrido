@@ -2,7 +2,7 @@ import { onInputChangeAction, queryReceivedAction, resultsAvailableAction } from
 import { reducer } from '../reduxUtils';
 
 export const input = reducer(
-  { value: 'success' },
+  { value: '' },
   [onInputChangeAction, (state, action) => ({ value: action.payload.value })]
 );
 
