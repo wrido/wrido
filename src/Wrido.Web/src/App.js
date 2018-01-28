@@ -5,6 +5,12 @@ import Result from './components/Result';
 
 export default props => (
   <div>
+    <style>
+      {`
+        .listItem{background-color: #eee}
+        .listItem:hover{background-color: #ddd}
+      `}
+    </style>
     <Input />
     <Result />
   </div>
