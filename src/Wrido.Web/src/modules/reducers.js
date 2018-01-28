@@ -25,7 +25,9 @@ export const result = reducer(
   [
     resultsAvailable,
     (state, action) => ({
-      items: action.payload.value.queryId === state.currentQueryId ? action.payload.value.results.$values : state.items
+      items: action.payload.value.queryId === state.currentQueryId ?
+        state.items.concat(action.payload.value.results.$values) :
+        state.items
     })
   ],
 );

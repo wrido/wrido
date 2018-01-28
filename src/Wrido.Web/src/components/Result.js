@@ -6,7 +6,11 @@ const Result = ({ items }) => {
     <div>
       {
         items.map((item, i) => (
-          <div key={i}>{item.title}</div>
+          <div key={i}>
+            <img src={item.resources.$values[0].uri} alt={item.resources.$values[0].alt} />
+            {item.title}
+            <em>({item.description})</em>
+          </div>
         ))
       }
     </div>
