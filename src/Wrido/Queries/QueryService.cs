@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Wrido.Core.Queries;
 using Wrido.Logging;
 using Wrido.Messages;
-using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Queries
 {
@@ -57,7 +55,7 @@ namespace Wrido.Queries
                 await caller.InvokeAsync(new ResultsAvailable(query.Id, results), currentCt);
                 return results;
               }
-              catch (Exception e)
+              catch (Exception)
               {
                 operation.Cancel();
                 throw;

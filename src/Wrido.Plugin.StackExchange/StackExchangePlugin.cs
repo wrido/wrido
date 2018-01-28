@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Wrido.Configuration;
 using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.AskUbuntu;
 using Wrido.Plugin.StackExchange.Common;

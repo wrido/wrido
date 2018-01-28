@@ -5,7 +5,7 @@
     string HotKey { get; }
   }
 
-  public class AppConfiguration : IAppConfiguration
+  internal class AppConfiguration : IAppConfiguration
   {
     public string HotKey { get; set; }
   }

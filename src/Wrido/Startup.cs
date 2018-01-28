@@ -8,9 +8,7 @@ using Newtonsoft.Json.Serialization;
 using Wrido.Configuration;
 using Wrido.Electron;
 using Wrido.Logging;
-using Wrido.Plugin.Dummy;
-using Wrido.Plugin.Google;
-using Wrido.Plugin.StackExchange;
+using Wrido.Plugin;
 using Wrido.Queries;
 using Wrido.Resources;
 
@@ -43,6 +41,7 @@ namespace Wrido
         .RegisterModule<LoggingModule>()
         .RegisterModule<ConfigurationModule>()
         .RegisterModule<ResourceAspNetModule>()
+        .RegisterModule<PluginModule>()
         .RegisterModule<ElectronModule>();
 
       builder
@@ -54,10 +53,6 @@ namespace Wrido
         .RegisterType<ExecutionService>()
         .AsImplementedInterfaces()
         .SingleInstance();
-
-      new GooglePlugin().Register(builder);
-      new StackExchangePlugin().Register(builder);
-      new DummyPlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)

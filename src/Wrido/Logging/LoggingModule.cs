@@ -2,7 +2,6 @@
 using Autofac;
 using Autofac.Core;
 using Serilog;
-using ILogger = Wrido.Logging.ILogger;
 
 namespace Wrido.Logging
 {
