@@ -36,6 +36,7 @@
     <ProjectReference Include="..\Wrido.Plugin.Dummy\Wrido.Plugin.Dummy.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj" />
+    <ProjectReference Include="..\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">
