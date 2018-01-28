@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
 </Project>

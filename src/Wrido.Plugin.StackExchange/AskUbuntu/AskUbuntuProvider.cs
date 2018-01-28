@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
 
