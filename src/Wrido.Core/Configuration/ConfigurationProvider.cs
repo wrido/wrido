@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Wrido.Logging;
 
@@ -30,7 +31,6 @@ namespace Wrido.Configuration
       _logger = logger;
       _wridoFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\.wrido";
       _wridoCfgFile = $"{_wridoFolder}\\wrido.json";
-      _plugins = new Dictionary<string, JToken>();
 
       LoadConfiguration();
     }
@@ -52,10 +52,11 @@ namespace Wrido.Configuration
         {
           HotKey = "CommandOrControl+X"
         };
-        _plugins = new Dictionary<string, JToken>
+        _plugins = new Dictionary<string, JToken>(StringComparer.InvariantCultureIgnoreCase)
         {
           {"Wrido.Plugin.StackExchange", new JValue("Wrido.Plugin.StackExchange")},
           {"Wrido.Plugin.Google", new JValue("Wrido.Plugin.Google")},
+          {"Wrido.Plugin.Wikipedia", new JValue("Wrido.Plugin.Wikipedia")},
           {"Wrido.Plugin.Dummy", new JValue("Wrido.Plugin.Dummy")}
         };
         cfgOperation.Cancel();
@@ -81,7 +82,7 @@ namespace Wrido.Configuration
           return;
         }
         var pluginsArray = plugins as JArray;
-        _plugins = new Dictionary<string, JToken>();
+        _plugins = new Dictionary<string, JToken>(StringComparer.InvariantCultureIgnoreCase);
         _logger.Information("{pluginCount} plugin entries in configuration", pluginsArray?.Count ?? 0);
         foreach (var plugin in pluginsArray ?? Enumerable.Empty<JToken>())
         {
@@ -104,7 +105,7 @@ namespace Wrido.Configuration
               _logger.Warning("Expected plugin name to be a string, but got {tokenType}", nameToken.Type);
               continue;
             }
-            _plugins.Add(nameToken.Value<string>(), nameToken);
+            _plugins.Add(nameToken.Value<string>(), pluginObj);
           }
           _logger.Warning("Unidentified plugin of type {tokenType}", plugin.Type);
         }
@@ -128,7 +129,7 @@ namespace Wrido.Configuration
       }
       try
       {
-        pluginConfig = _plugins[pluginName].Value<TPlugin>();
+        pluginConfig = _plugins[pluginName].ToObject<TPlugin>();
         return true;
       }
       catch (Exception e)
