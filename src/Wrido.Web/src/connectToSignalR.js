@@ -1,11 +1,12 @@
-import { onInputChange } from './constants';
 import {
   queryReceivedAction,
   queryExecutingAction,
   resultsAvailableAction,
   queryCompletedAction,
-  queryCancelledAction
+  queryCancelledAction,
+  onInputChangeAction
 } from './actionCreators';
+import { isSameActionType } from './reduxUtils';
 
 const actions = {
   queryReceived: queryReceivedAction,
@@ -23,7 +24,7 @@ export const connectToSignalR = store => next => {
       .forEach(({ name, action }) => connection.on(name, payload => next(action(payload))));
   });
   return action => {
-    if (action.type === onInputChange) {
+    if (isSameActionType(action, onInputChangeAction)) {
       connection.invoke('QueryAsync', action.payload.value)
     }
     return next(action);

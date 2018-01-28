@@ -1,29 +1,22 @@
-import { queryReceived, resultsAvailable, onInputChange } from '../constants';
-
-const reducer = (initialState, ...configs) => (state = initialState, action) =>
-  configs
-    .filter(config => config[0] === action.type)
-    .reduce((state, config) => ({
-      ...state,
-      ...config[1](state, action)
-    }), state);
+import { onInputChangeAction, queryReceivedAction, resultsAvailableAction } from '../actionCreators';
+import { reducer } from '../reduxUtils';
 
 export const input = reducer(
   { value: 'success' },
-  [onInputChange, (state, action) => ({ value: action.payload.value })]
+  [onInputChangeAction, (state, action) => ({ value: action.payload.value })]
 );
 
 export const result = reducer(
   { currentQueryId: null, items: [] },
   [
-    queryReceived,
+    queryReceivedAction,
     (state, action) => ({
       currentQueryId: action.payload.value.current.id,
       items: []
     })
   ],
   [
-    resultsAvailable,
+    resultsAvailableAction,
     (state, action) => ({
       items: action.payload.value.queryId === state.currentQueryId ?
         state.items.concat(action.payload.value.results.$values) :
