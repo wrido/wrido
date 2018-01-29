@@ -1,5 +1,4 @@
-﻿using Wrido.Core.Queries;
-using Wrido.Queries;
+﻿using Wrido.Queries;
 
 namespace Wrido.Messages
 {

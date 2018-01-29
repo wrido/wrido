@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
 
@@ -23,8 +22,6 @@ namespace Wrido.Plugin.StackExchange.StackOverflow
                 Title = $"Search StackOverflow for '{query.InTitle}'",
                 Uri = url,
                 Description = url.ToString(),
-                Distance = 0,
-                Score = 0
             };
         }
     }

@@ -1,12 +1,9 @@
 ﻿using System;
-using Wrido.Core.Queries;
+using Wrido.Queries;
 
 namespace Wrido.Plugin.StackExchange
 {
-  public abstract class StackExchangeResult : QueryResult
+  public abstract class StackExchangeResult : WebResult
   {
-    public Uri Uri { get; internal set; }
-    public float Distance { get; internal set; }
-    public float Score { get; internal set; }
   }
 }

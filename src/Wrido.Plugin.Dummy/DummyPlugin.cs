@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Wrido.Core.Queries;
 using Wrido.Queries;
 using Wrido.Resources;
 

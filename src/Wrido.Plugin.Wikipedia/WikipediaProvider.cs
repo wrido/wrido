@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Wrido.Configuration;
-using Wrido.Core.Queries;
 using Wrido.Logging;
 using Wrido.Queries;
 using IQueryProvider = Wrido.Queries.IQueryProvider;

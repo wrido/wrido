@@ -45,10 +45,10 @@ connection.start().then(() => {
             let li = document.createElement('li');
             let result = msg.results.$values[i];
 
-            if (result.resources && result.resources.$values.length != 0) {
+            if (result.image) {
                 let img = document.createElement('img');
-                img.alt = result.resources.$values[0].alt;
-                img.src = result.resources.$values[0].uri;
+                img.alt = result.image.alt;
+                img.src = result.image.uri;
                 li.appendChild(img);
             }
             var span = document.createElement('span');

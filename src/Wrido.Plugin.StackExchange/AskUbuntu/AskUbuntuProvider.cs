@@ -21,8 +21,6 @@ namespace Wrido.Plugin.StackExchange.AskUbuntu
         Title = $"Search Ask Ubuntu for '{query.InTitle}'",
         Uri = url,
         Description = url.ToString(),
-        Distance = 0,
-        Score = 0
       };
     }
   }

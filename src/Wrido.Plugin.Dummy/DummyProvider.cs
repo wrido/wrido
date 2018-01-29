@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Wrido.Core.Queries;
 using Wrido.Queries;
 using Wrido.Resources;
 
@@ -47,7 +46,7 @@ namespace Wrido.Plugin.Dummy
         {
           Title = $"[{_name}][{i}]: {query.Raw}",
           Description = $"Delayed with {duration.TotalMilliseconds} ms.",
-          Resources = new []{ _iconResource }
+          Image = _iconResource
         });
       }
 

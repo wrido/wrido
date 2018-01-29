@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
-using Wrido.Core.Queries;
 using Wrido.Logging;
 using ILogger = Wrido.Logging.ILogger;
 
