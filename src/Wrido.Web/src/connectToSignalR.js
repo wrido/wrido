@@ -7,6 +7,7 @@ import {
   onInputChangeAction
 } from './actionCreators';
 import { isSameActionType } from './reduxUtils';
+import { HubConnection } from '@aspnet/signalr-client';
 
 const actions = {
   queryReceived: queryReceivedAction,
@@ -17,7 +18,7 @@ const actions = {
 }
 
 export const connectToSignalR = store => next => {
-  const connection = new window.signalR.HubConnection('/query');
+  const connection = new HubConnection('/query');
   connection.start().then(() => {
     Object.keys(actions)
       .map(name => ({ name, action: actions[name] }))
