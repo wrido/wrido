@@ -25,7 +25,13 @@ namespace Wrido.Resources
         return NotFound();
       }
       var resource = _resources[resourcePath];
-      return File(resource.Data, resource.ContentType);
+
+      if (_contentTypeProvider.TryGetContentType(resourcePath, out var contentType))
+      {
+        return File(resource.Data, contentType);
+      }
+
+      return File(resource.Data, "text/plain");
     }
 
     [HttpGet("preview/{*filePath}")]
