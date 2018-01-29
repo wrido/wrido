@@ -1,0 +1,28 @@
+{
+  "name": "wrido",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aspnet/signalr-client": "^1.0.0-alpha2-final",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.1.0",
+    "redux": "^3.7.2",
+    "redux-observable": "^0.17.0",
+    "reset-css": "^2.2.1",
+    "rxjs": "^5.5.6"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": {
+    "/": {
+      "target": "ws://localhost:5000",
+      "ws": true
+    }
+  }
+}
