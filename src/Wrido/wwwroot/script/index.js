@@ -32,14 +32,13 @@ connection.start().then(() => {
         connection.invoke('QueryAsync', ev.target.value);
     };
 
-    connection.on(queryReceived, msg => {
-        console.log(queryReceived, msg);
+    let onQueryReceived = msg => {
         queryIdElement.innerHTML = msg.current.id;
         statusElement.innerHTML = 'ongoing';
         resultElement.innerHTML = '';
-    });
+    }
 
-    connection.on(resultsAvailable, msg => {
+    let onResultsAvailable = msg => {
         statusElement.innerHTML = 'partial complete';
         for (let i = 0; i < msg.results.$values.length; i++) {
             let li = document.createElement('li');
@@ -51,18 +50,34 @@ connection.start().then(() => {
                 img.src = result.icon.uri;
                 li.appendChild(img);
             }
-            if (result.renderer) {
-                console.log('Recieved renderer', result.renderer);
-            }
             var span = document.createElement('span');
             span.innerHTML = `${result.title} <em>(${result.description})</em>`;
             li.appendChild(span);
             span.onclick = () => connection.invoke('ExecuteAsync', result);
             resultElement.appendChild(li);
         }
-    });
+    };
 
-    connection.on(queryCompleted, msg => {
+    let onQueryComplete = msg => {
         statusElement.innerHTML = 'completed';
+    };
+
+    connection.on('event', msg => {
+        switch (msg.type) {
+            case queryReceived:
+                onQueryReceived(msg);
+                break;
+            case queryExecuting:
+                console.debug('query executing');
+                break;
+            case resultsAvailable:
+                onResultsAvailable(msg);
+                break;
+            case queryCompleted:
+                onQueryComplete(msg);
+                break;
+            default:
+                console.log('message not handled', msg);
+        }
     });
 });

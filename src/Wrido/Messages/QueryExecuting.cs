@@ -4,7 +4,7 @@ using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Messages
 {
-  public class QueryExecuting
+  public class QueryExecuting : MessageBase
   {
     public IList<string> Providers { get; set; }
 

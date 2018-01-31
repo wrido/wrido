@@ -5,7 +5,7 @@ using Wrido.Queries;
 
 namespace Wrido.Messages
 {
-  public sealed class QueryCompleted
+  public sealed class QueryCompleted : MessageBase
   {
     public QueryCompleted(Guid queryId, IEnumerable<QueryResult> results)
     {

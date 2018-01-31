@@ -2,7 +2,7 @@
 
 namespace Wrido.Messages
 {
-  public class QueryCancelled
+  public class QueryCancelled : MessageBase
   {
     public QueryCancelled(Guid queryId)
     {
