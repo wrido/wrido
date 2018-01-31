@@ -11,16 +11,9 @@ namespace Wrido.Queries
 
     public static Task InvokeAsync<TMessage>(this IClientProxy client, TMessage message, CancellationToken ct = default) where TMessage : MessageBase
     {
-      if (message == null)
-      {
-        return Task.FromCanceled(ct);
-      }
-      return Task.WhenAll(
-        client.InvokeAsync(_eventMethod, message),
-
-        // TODO: remove this call when front end uses on 'event'
-        client.InvokeAsync(typeof(TMessage).Name, message)
-      );
+      return message == null
+        ? Task.FromCanceled(ct)
+        : client.InvokeAsync(_eventMethod, message);
     }
   }
 }
