@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using Autofac;
 using Newtonsoft.Json;
-using Wrido.Logging;
 using Wrido.Resources;
 
 namespace Wrido.Plugin.Wikipedia
@@ -18,9 +17,6 @@ namespace Wrido.Plugin.Wikipedia
         .RegisterType<WikipediaProvider>()
         .AsImplementedInterfaces()
         .SingleInstance();
-
-      builder
-        .RegisterResources<WikipediaPlugin>();
 
       builder
         .RegisterType<WikipediaResponseConverter>()

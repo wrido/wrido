@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using Wrido.Configuration;
 using Wrido.Logging;
+using Wrido.Resources;
 
 namespace Wrido.Plugin
 {
@@ -58,6 +59,7 @@ namespace Wrido.Plugin
               _pluginScopes.Add(_rootPluginContainer.BeginLifetimeScope(pluginName, b =>
               {
                 plugin.Register(b);
+                b.RegisterResources(plugin);
                 b.RegisterModule<LoggingModule>();
               }));
               break;

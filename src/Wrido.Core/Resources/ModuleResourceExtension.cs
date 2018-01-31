@@ -13,6 +13,11 @@ namespace Wrido.Resources
       return builder.RegisterResources(typeof(TAssemblyType).Assembly);
     }
 
+    public static ContainerBuilder RegisterResources(this ContainerBuilder builder, object instanceFromAssembly)
+    {
+      return builder.RegisterResources(instanceFromAssembly.GetType().Assembly);
+    }
+
     public static ContainerBuilder RegisterResources(this ContainerBuilder builder, Assembly assembly)
     {
       var allResoures = assembly.GetManifestResourceNames();
@@ -21,12 +26,12 @@ namespace Wrido.Resources
       {
         var resourcePath = CreateResourcePath(resourceName);
 
-        using (var imageStream = assembly.GetManifestResourceStream(resourceName))
+        using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
         using (var memoryStream = new MemoryStream())
         {
           try
           {
-            imageStream.CopyTo(memoryStream);
+            resourceStream.CopyTo(memoryStream);
             var resource = new EmbeddedResource(resourcePath, memoryStream.GetBuffer());
             builder
               .Register(c => resource)

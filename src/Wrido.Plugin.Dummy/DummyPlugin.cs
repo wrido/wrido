@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Wrido.Queries;
-using Wrido.Resources;
 
 namespace Wrido.Plugin.Dummy
 {
@@ -21,12 +20,9 @@ namespace Wrido.Plugin.Dummy
         "Fast Provider",
         new Uri("/resources/wrido/plugin/dummy/resources/phone.png", UriKind.Relative));
 
-      builder.RegisterResources<DummyPlugin>();
-
       builder
         .RegisterInstance(slowProvider)
         .As<IQueryProvider>();
-
 
       builder
         .RegisterInstance(fastProvider)

@@ -8,11 +8,10 @@ namespace Wrido.Plugin.Wikipedia
 {
   public class WikipediaResult : WebResult
   {
-    private static readonly ImageResource wikiLogo = new ImageResource
+    private static readonly Image wikiLogo = new Image
     {
       Uri = new Uri("/resources/wrido/plugin/wikipedia/resources/wikipedia.png", UriKind.Relative),
       Alt = "Google",
-      Key = ResourceKeys.Icon
     };
 
     public static IEnumerable<WikipediaResult> Create(WikipediaResponse response)
@@ -24,7 +23,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = suggestion.Title,
           Description = suggestion.Description,
           Uri = suggestion.Uri,
-          Image = wikiLogo
+          Icon = wikiLogo
         };
       }
     }
@@ -37,7 +36,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = "Open Wikipedia in browser",
           Description = url,
           Uri = new Uri(url),
-          Image = wikiLogo
+          Icon = wikiLogo
         });
     }
 
@@ -49,7 +48,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = $"Search Wikipedia for '{term}'.",
           Description = $"{url}/wiki/{term}",
           Uri = new Uri(url),
-          Image = wikiLogo
+          Icon = wikiLogo
         });
     }
   }
