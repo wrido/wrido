@@ -1,4 +1,4 @@
-export const createActionCreator = (type, payloader) => Object.assign(payload => ({ type, payload: payloader(payload) }), { type });
+export const createActionCreator = (type, payloader) => Object.assign(payload => ({ type, ...payloader(payload) }), { type });
 
 export const reducer = (initialState, ...configs) => (state = initialState, action) =>
   configs

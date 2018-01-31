@@ -29,7 +29,7 @@ const Result = ({ items }) => {
         items.map((item, i) => (
           <div key={i} style={style.item} className={'listItem'}>
             <span>
-              <img src={item.resources.$values[0].uri} alt={item.resources.$values[0].alt} />
+              <img src={item.icon.uri} alt={item.icon.alt} />
             </span>
             <span style={style.title}>{item.title}</span>
             <span style={style.description}>({item.description})</span>
