@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Quobject.EngineIoClientDotNet.Modules;
 
 namespace Wrido.Resources
 {
@@ -20,6 +18,24 @@ namespace Wrido.Resources
       _resources = resources.ToDictionary(r => r.ResourcePath, r => r, StringComparer.OrdinalIgnoreCase);
     }
 
+    [HttpGet("resources")]
+    public ActionResult GetResources([FromQuery] string type = null)
+    {
+      IEnumerable<string> resourcesPaths;
+      if (string.IsNullOrEmpty(type))
+      {
+        resourcesPaths = _resources.Values.Select(v => v.ResourcePath);
+      }
+      else
+      {
+        resourcesPaths = _resources.Values
+          .Where(v => v.ResourcePath.EndsWith(type, StringComparison.InvariantCultureIgnoreCase))
+          .Select(v => v.ResourcePath);
+      }
+
+      return Ok(new { _links = resourcesPaths.ToList()});
+    }
+
     [HttpGet("resources/{*resourcePath}")]
     public ActionResult GetResource(string resourcePath)
     {
@@ -31,7 +47,6 @@ namespace Wrido.Resources
 
       if (_contentTypeProvider.TryGetContentType(resourcePath, out var contentType))
       {
-
         // temp fix to remove null character
         if (contentType.EndsWith("script"))
         {
