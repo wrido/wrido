@@ -1,6 +1,6 @@
 ﻿namespace Wrido.Messages
 {
-    public class ExecutionCompleted
+    public class ExecutionCompleted : MessageBase
     {
     }
 }

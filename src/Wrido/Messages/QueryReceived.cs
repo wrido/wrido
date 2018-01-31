@@ -2,7 +2,7 @@
 
 namespace Wrido.Messages
 {
-  public class QueryReceived
+  public class QueryReceived : MessageBase
   {
     public Query Current { get; }
 
