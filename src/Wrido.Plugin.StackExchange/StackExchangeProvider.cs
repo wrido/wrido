@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
 using IQueryProvider = Wrido.Queries.IQueryProvider;

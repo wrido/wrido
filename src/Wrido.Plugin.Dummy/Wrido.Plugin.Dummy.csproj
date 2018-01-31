@@ -7,11 +7,13 @@
   <ItemGroup>
     <None Remove="Resources\Banana.png" />
     <None Remove="Resources\Phone.png" />
+    <None Remove="Resources\render.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Banana.png" />
     <EmbeddedResource Include="Resources\Phone.png" />
+    <EmbeddedResource Include="Resources\render.js" />
   </ItemGroup>
 
   <ItemGroup>

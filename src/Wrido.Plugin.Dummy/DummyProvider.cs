@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Wrido.Core.Queries;
 using Wrido.Queries;
 using Wrido.Resources;
 
@@ -14,7 +13,7 @@ namespace Wrido.Plugin.Dummy
     private readonly TimeSpan _maxDuratin;
     private readonly string _name;
     private readonly Random _random;
-    private readonly ImageResource _iconResource;
+    private readonly Image _iconResource;
 
     public DummyProvider(TimeSpan minDuration, TimeSpan maxDuratin, string name, Uri iconUri)
     {
@@ -22,10 +21,9 @@ namespace Wrido.Plugin.Dummy
       _maxDuratin = maxDuratin;
       _name = name;
       _random = new Random();
-      _iconResource = new ImageResource
+      _iconResource = new Image
       {
         Alt = name,
-        Key = ResourceKeys.Icon,
         Uri = iconUri
       };
     }
@@ -47,7 +45,8 @@ namespace Wrido.Plugin.Dummy
         {
           Title = $"[{_name}][{i}]: {query.Raw}",
           Description = $"Delayed with {duration.TotalMilliseconds} ms.",
-          Resources = new []{ _iconResource }
+          Icon = _iconResource,
+          Renderer = new Script("/resources/wrido/plugin/dummy/resources/render.js")
         });
       }
 

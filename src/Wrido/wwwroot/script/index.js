@@ -45,11 +45,14 @@ connection.start().then(() => {
             let li = document.createElement('li');
             let result = msg.results.$values[i];
 
-            if (result.resources && result.resources.$values.length != 0) {
+            if (result.icon) {
                 let img = document.createElement('img');
-                img.alt = result.resources.$values[0].alt;
-                img.src = result.resources.$values[0].uri;
+                img.alt = result.icon.alt;
+                img.src = result.icon.uri;
                 li.appendChild(img);
+            }
+            if (result.renderer) {
+                console.log('Recieved renderer', result.renderer);
             }
             var span = document.createElement('span');
             span.innerHTML = `${result.title} <em>(${result.description})</em>`;

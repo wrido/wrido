@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
-using Wrido.Core.Queries;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Plugin.StackExchange.StackOverflow;
 using Wrido.Queries;

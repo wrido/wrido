@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Binary;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Quobject.EngineIoClientDotNet.Modules;
 
 namespace Wrido.Resources
 {
@@ -25,7 +28,22 @@ namespace Wrido.Resources
         return NotFound();
       }
       var resource = _resources[resourcePath];
-      return File(resource.Data, resource.ContentType);
+
+      if (_contentTypeProvider.TryGetContentType(resourcePath, out var contentType))
+      {
+
+        // temp fix to remove null character
+        if (contentType.EndsWith("script"))
+        {
+          var dataAsString = Encoding.UTF8.GetString(resource.Data).Replace("\0", string.Empty);
+          var dataAsBytes = Encoding.UTF8.GetBytes(dataAsString);
+          return File(dataAsBytes, contentType);
+        }
+
+        return File(resource.Data, contentType);
+      }
+
+      return File(resource.Data, "text/plain");
     }
 
     [HttpGet("preview/{*filePath}")]

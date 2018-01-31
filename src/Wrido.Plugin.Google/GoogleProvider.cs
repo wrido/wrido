@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Wrido.Core.Queries;
 using Wrido.Logging;
 using Wrido.Queries;
 

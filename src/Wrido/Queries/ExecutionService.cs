@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Wrido.Core.Queries;
 using Wrido.Messages;
 
 namespace Wrido.Queries

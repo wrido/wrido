@@ -7,11 +7,10 @@ namespace Wrido.Plugin.Google
 {
   public class GoogleResult : WebResult
   {
-    private static readonly ImageResource Logo = new ImageResource
+    private static readonly Image googleLogo = new Image
     {
       Uri = new Uri("/resources/wrido/plugin/google/resources/google.png", UriKind.Relative),
       Alt = "Google",
-      Key = ResourceKeys.Icon
     };
 
     public static GoogleResult Fallback => new GoogleResult
@@ -19,7 +18,7 @@ namespace Wrido.Plugin.Google
       Title = "Open Google in browser",
       Description = "https://www.google.com",
       Uri = new Uri("https://www.google.com"),
-      Resources = new []{ Logo }
+      Icon = googleLogo
     };
 
     public static GoogleResult SearchResult(string query)
@@ -30,7 +29,7 @@ namespace Wrido.Plugin.Google
         Title = $"Search Google for '{query}'",
         Description = googleUrl.AbsoluteUri,
         Uri = googleUrl,
-        Resources = new[] { Logo }
+        Icon = googleLogo
       };
     }
   }
