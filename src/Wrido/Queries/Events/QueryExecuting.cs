@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IQueryProvider = Wrido.Queries.IQueryProvider;
 
-namespace Wrido.Messages
+namespace Wrido.Queries.Events
 {
-  public class QueryExecuting : MessageBase
+  public class QueryExecuting : QueryEvent
   {
     public IList<string> Providers { get; set; }
 

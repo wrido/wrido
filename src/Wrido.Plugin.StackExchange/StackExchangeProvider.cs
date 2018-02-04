@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
-using IQueryProvider = Wrido.Queries.IQueryProvider;
+using Wrido.Queries.Events;
 
 namespace Wrido.Plugin.StackExchange
 {
@@ -27,18 +26,12 @@ namespace Wrido.Plugin.StackExchange
       _descriptionFactory = descriptionFactory;
     }
 
-    protected Task ExecuteAsync(TQueryResult result)
-    {
-      Process.Start(result.Uri.AbsoluteUri);
-      return Task.CompletedTask;
-    }
-
     public bool CanHandle(Query query)
     {
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct)
+    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       var searchQuery = _queryParser.Bind(query.Argument, out var freeText);
       searchQuery.Site = Site;
@@ -49,9 +42,16 @@ namespace Wrido.Plugin.StackExchange
       var questions = await _stackExchangeClient.SearchAsync(searchQuery, ct);
       if (!questions.Any())
       {
-        return CreateFallbackResult(searchQuery);
+        foreach (var queryResult in CreateFallbackResult(searchQuery))
+        {
+          observer.OnNext(new ResultAvailable(queryResult));
+        }
+        return;
       }
-      return questions.Select(question => ConvertQuestion(question, query));
+      foreach (var queryResult in questions.Select(q=> ConvertQuestion(q, query)))
+      {
+        observer.OnNext(new ResultAvailable(queryResult));
+      }
     }
 
     protected abstract IEnumerable<TQueryResult> CreateFallbackResult(SearchQuery query);

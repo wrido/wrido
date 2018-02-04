@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Wrido.Queries;
+using Wrido.Queries.Events;
 using Wrido.Resources;
 
 namespace Wrido.Plugin.Dummy
@@ -33,26 +33,30 @@ namespace Wrido.Plugin.Dummy
       return true;
     }
 
-    public async Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct)
+    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       var numberOfResults = _random.Next(1, 9);
-      var duration = new TimeSpan(_random.Next((int)_minDuration.Ticks, (int)_maxDuratin.Ticks));
-
-      var result = new List<QueryResult>();
       for (var i = 0; i < numberOfResults; i++)
       {
-        result.Add(new QueryResult
+        var duration = new TimeSpan(_random.Next((int)_minDuration.Ticks / numberOfResults, (int)_maxDuratin.Ticks / numberOfResults));
+        await Task.Delay(duration, ct);
+        var result = new QueryResult
         {
           Title = $"[{_name}][{i}]: {query.Raw}",
           Description = $"Delayed with {duration.TotalMilliseconds} ms.",
           Icon = _iconResource,
           Renderer = new Script("/resources/wrido/plugin/dummy/resources/render.js")
-        });
+        };
+        observer.OnNext(new ResultAvailable(result));
+
+        if (_random.NextDouble() > 0.5)
+        {
+          await Task.Delay(duration, ct);
+          result.Title = $"{result.Title} - UPDATED!";
+
+          observer.OnNext(new ResultUpdated(result));
+        }
       }
-
-      await Task.Delay(duration, ct);
-
-      return result;
     }
   }
 }

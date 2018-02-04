@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrido.Queries;
 
-namespace Wrido.Messages
+namespace Wrido.Queries.Events
 {
-  public sealed class QueryCompleted : MessageBase
+  public sealed class QueryCompleted : QueryEvent
   {
     public QueryCompleted(Guid queryId, IEnumerable<QueryResult> results)
     {
       QueryId = queryId;
-      Results = results.ToList().AsReadOnly();
+      Results = results?.ToList().AsReadOnly();
     }
 
     public Guid QueryId { get; }

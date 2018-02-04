@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Wrido.Messages
+namespace Wrido.Queries.Events
 {
-  public class ExecutionFailed : MessageBase
+  public class ExecutionFailed : QueryEvent
   {
     public Guid Id { get; set; }
     public string Reason { get; set; }

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Wrido.Configuration;
 using Wrido.Logging;
 using Wrido.Queries;
+using Wrido.Queries.Events;
 using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin.Wikipedia
@@ -35,27 +36,34 @@ namespace Wrido.Plugin.Wikipedia
       return string.Equals(query.Command, _config.Keyword, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    public async Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct)
+    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       if (string.IsNullOrWhiteSpace(query.Argument))
       {
-        return WikipediaResult.CreateFallback(_config.BaseUrls);
+        foreach (var fallback in WikipediaResult.CreateFallback(_config.BaseUrls))
+        {
+          observer.OnNext(new ResultAvailable(fallback));
+        }
+        return;
       }
 
-      var queryTasks = new List<Task<IEnumerable<QueryResult>>>();
-      foreach (var url in _config.BaseUrls)
-      {
-        var searchTask = QueryWikipediaAsync(url, query.Argument, ct);
-        queryTasks.Add(searchTask);
-      }
+      var queryTasks = _config.BaseUrls
+        .Select(url => QueryWikipediaAsync(url, query.Argument, ct))
+        .ToList();
       await Task.WhenAll(queryTasks);
 
       var results = queryTasks.SelectMany(q => q.Result).ToList();
       if (!results.Any())
       {
-        return WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls);
+        foreach (var searchResult in WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls))
+        {
+          observer.OnNext(new ResultAvailable(searchResult));
+        }
       }
-      return results;
+      foreach (var queryResult in results)
+      {
+        observer.OnNext(new ResultAvailable(queryResult));
+      }
     }
 
     private async Task<IEnumerable<QueryResult>> QueryWikipediaAsync(string baseUrl, string searchTerm, CancellationToken ct)

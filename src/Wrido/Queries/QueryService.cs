@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using Wrido.Logging;
-using Wrido.Messages;
+using Wrido.Queries.Events;
 
 namespace Wrido.Queries
 {
   public interface IQueryService
   {
-    Task QueryAsync(IClientProxy caller, string rawQuery);
+    IObservable<QueryEvent> StreamQueryEvents(string rawQuery);
   }
 
   public class QueryService : IQueryService
@@ -26,63 +27,46 @@ namespace Wrido.Queries
       _logger = logger;
     }
 
-    public async Task QueryAsync(IClientProxy caller, string rawQuery)
-    {
-      CancelOngoingQuery(out var currentCt);
-
-      var query = new Query(rawQuery);
-      using (_logger.BeginScope(LogProperties.QueryId, query.Id))
+    public IObservable<QueryEvent> StreamQueryEvents(string rawQuery) =>
+      Observable.Create<QueryEvent>(async (observer, externalCt) =>
       {
-        currentCt.ThrowIfCancellationRequested();
-        _logger.Verbose("Notifying frontend that query is received.");
-        await caller.InvokeAsync(new QueryReceived(query), currentCt);
+        var query = new Query(rawQuery);
+        using (_logger.BeginScope(LogProperties.QueryId, query.Id))
+        using (_logger.Timed("Query {rawQuery}", rawQuery))
+        {
+          CancelOngoingQuery(externalCt, out var currentCt);
+          currentCt.Register(() => observer.OnNext(new QueryCancelled(query.Id)));
 
-        var providers = GetProviders(query);
-        _logger.Verbose("Notifying frontend that query will be handled by {providerCount} providers.", providers.Count);
-        await caller.InvokeAsync(QueryExecuting.By(providers), currentCt);
+          _logger.Verbose("Notifying observers that query is received.");
+          observer.OnNext(new QueryReceived(query));
+          var providers = GetProviders(query);
+          _logger.Verbose("Notifying observers that query will be handled by {providerCount} providers.", providers.Count);
+          observer.OnNext(QueryExecuting.By(providers));
 
-        // Execute query
-        var allTasks = providers.Select(p => Task.Run(async () =>
-          {
-            var providerName = p.GetType().Name;
-            using (var operation = _logger.Timed("Query from {queryProvider}", providerName))
+          var providerTasks = providers
+            .Select(async provider =>
             {
+              var operation = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
+              var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, operation.Cancel, operation.Complete);
               try
               {
-                var results = (await p.QueryAsync(query, currentCt)).ToList();
-                currentCt.ThrowIfCancellationRequested();
-                _logger.Debug("Provider {queryProvider} executed query successfully. {resultCount} results available.", providerName, results.Count);
-                await caller.InvokeAsync(new ResultsAvailable(query.Id, results), currentCt);
-                return results;
+                await provider.QueryAsync(query, providerObserver, currentCt);
               }
-              catch (Exception)
+              catch (OperationCanceledException) { /* Cancellation is OK */ }
+              catch (Exception e)
               {
-                operation.Cancel();
-                throw;
+                _logger.Information(e, "An unhandle exception was thrown.");
               }
-            }
-          }, currentCt))
-          .ToList();
-
-        // Wait for provider tasks
-        await Task.WhenAll(allTasks).ContinueWith(async _ =>
-        {
-          Task.WaitAll(allTasks.ToArray<Task>());
-          var allResults = allTasks.Where(t => t.IsCompleted).SelectMany(t => t.Result).ToList();
-
-          if (allTasks.Any(t => !t.IsCompletedSuccessfully))
-          {
-            _logger.Debug("One or more sub queries have failed.");
-            await caller.InvokeAsync(new QueryCancelled(query.Id), currentCt);
-          }
-          else
-          {
-            _logger.Verbose("Query completed. Total result count is {resultCount}", allResults.Count);
-            await caller.InvokeAsync(new QueryCompleted(query.Id, allResults), currentCt);
-          }
-        });
-      }
-    }
+              finally
+              {
+                providerObserver.OnCompleted();
+              }
+            })
+            .ToArray();
+          await Task.WhenAll(providerTasks);
+          observer.OnNext(new QueryCompleted(query.Id, null));
+        }
+      });
 
     private IList<IQueryProvider> GetProviders(Query query)
     {
@@ -91,10 +75,12 @@ namespace Wrido.Queries
         .AsReadOnly();
     }
 
-    private void CancelOngoingQuery(out CancellationToken nextToken)
+    private void CancelOngoingQuery(CancellationToken streamToken, out CancellationToken nextToken)
     {
-      var currentQuery = new CancellationTokenSource();
+      nextToken = new CancellationToken();
+      var currentQuery = CancellationTokenSource.CreateLinkedTokenSource(streamToken, nextToken);
       nextToken = currentQuery.Token;
+
       var oldQuery = Interlocked.Exchange(ref _currentQuery, currentQuery);
       using (_logger.Timed(LogLevel.Debug, "Cancel ongoing query"))
       {

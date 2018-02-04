@@ -1,8 +1,6 @@
-﻿using Wrido.Queries;
-
-namespace Wrido.Messages
+﻿namespace Wrido.Queries.Events
 {
-  public class QueryReceived : MessageBase
+  public class QueryReceived : QueryEvent
   {
     public Query Current { get; }
 
