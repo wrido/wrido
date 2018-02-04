@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Wrido.Plugin.Wikipedia.Common;
 using Wrido.Queries;
 using Wrido.Resources;
 
@@ -8,22 +9,26 @@ namespace Wrido.Plugin.Wikipedia
 {
   public class WikipediaResult : WebResult
   {
-    private static readonly Image wikiLogo = new Image
+    private static readonly Image _wikiLogo = new Image
     {
       Uri = new Uri("/resources/wrido/plugin/wikipedia/resources/wikipedia.png", UriKind.Relative),
-      Alt = "Google",
+      Alt = "Wikipedia"
     };
 
-    public static IEnumerable<WikipediaResult> Create(WikipediaResponse response)
+    public string Extract { get; set; }
+    public Image PageImage { get; set; }
+    public long Views { get; set; }
+
+    public static IEnumerable<WikipediaResult> Create(SearchResult result)
     {
-      foreach (var suggestion in response.Suggestions)
+      foreach (var suggestion in result.Suggestions)
       {
         yield return new WikipediaResult
         {
           Title = suggestion.Title,
           Description = suggestion.Description,
           Uri = suggestion.Uri,
-          Icon = wikiLogo
+          Icon = _wikiLogo
         };
       }
     }
@@ -36,7 +41,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = "Open Wikipedia in browser",
           Description = url,
           Uri = new Uri(url),
-          Icon = wikiLogo
+          Icon = _wikiLogo
         });
     }
 
@@ -48,7 +53,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = $"Search Wikipedia for '{term}'.",
           Description = $"{url}/wiki/{term}",
           Uri = new Uri(url),
-          Icon = wikiLogo
+          Icon = _wikiLogo
         });
     }
   }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Wrido.Plugin.Wikipedia
+namespace Wrido.Plugin.Wikipedia.Common
 {
-  public class WikipediaResponse
+  public class SearchResult
   {
     public string Term { get; set; }
     public List<WikipediaSuggestion> Suggestions { get; set; }
 
-    public WikipediaResponse()
+    public SearchResult()
     {
       Suggestions = new List<WikipediaSuggestion>();
     }

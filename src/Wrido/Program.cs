@@ -30,6 +30,7 @@ namespace Wrido
         .Enrich.FromLogContext()
         .WriteTo.Console(outputTemplate: LogTemplates.Console)
         .CreateLogger();
+      LogManager.LoggerFactory = type => new SerilogLogger(Log.ForContext(type));
 
       Log.Information("Application started with {applicationArgs}", args);
 

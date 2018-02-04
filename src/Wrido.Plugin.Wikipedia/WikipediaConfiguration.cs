@@ -3,12 +3,12 @@ using Wrido.Configuration;
 
 namespace Wrido.Plugin.Wikipedia
 {
-  public class WikipediaPluginConfiguration : IPluginConfiguration
+  public class WikipediaConfiguration : IPluginConfiguration
   {
     public IList<string> BaseUrls { get; set; }
     public string Keyword { get; set; }
 
-    public static WikipediaPluginConfiguration Fallback = new WikipediaPluginConfiguration
+    public static WikipediaConfiguration Fallback = new WikipediaConfiguration
     {
       Keyword = ":wiki",
       BaseUrls = new List<string>

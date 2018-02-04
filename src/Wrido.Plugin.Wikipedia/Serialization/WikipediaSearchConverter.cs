@@ -3,15 +3,16 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Wrido.Logging;
+using Wrido.Plugin.Wikipedia.Common;
 
-namespace Wrido.Plugin.Wikipedia
+namespace Wrido.Plugin.Wikipedia.Serialization
 {
-  public class WikipediaResponseConverter : JsonConverter
+  public class WikipediaSearchConverter : JsonConverter
   {
     private readonly ILogger _logger;
-    private static readonly Type WikiResponseType = typeof(WikipediaResponse);
+    private static readonly Type WikiResponseType = typeof(SearchResult);
 
-    public WikipediaResponseConverter(ILogger logger)
+    public WikipediaSearchConverter(ILogger logger)
     {
       _logger = logger;
     }
@@ -29,19 +30,19 @@ namespace Wrido.Plugin.Wikipedia
         var termToken = jArray?[0];
         if (termToken?.Type != JTokenType.String)
         {
-          _logger.Verbose("Expected term to be string, got {tokenType}", termToken?.Type);
+          LoggerExtensions.Verbose(_logger, "Expected term to be string, got {tokenType}", termToken?.Type);
           return null;
         }
-        var result = new WikipediaResponse
+        var result = new SearchResult
         {
           Term = termToken.Value<string>()
         };
-        _logger.Verbose("Preparing response for search term {searchTerm}", result.Term);
+        LoggerExtensions.Verbose(_logger, "Preparing response for search term {searchTerm}", result.Term);
 
         var titleArray = jArray[1];
         foreach (var titleToken in titleArray)
         {
-          result.Suggestions.Add(new WikipediaResponse.WikipediaSuggestion
+          result.Suggestions.Add(new SearchResult.WikipediaSuggestion
           {
             Title = titleToken.Value<string>()
           });
@@ -61,7 +62,7 @@ namespace Wrido.Plugin.Wikipedia
       }
       catch (Exception e)
       {
-        _logger.Warning(e, "An exception was thrown when creating the WikipediaResponse");
+        LoggerExtensions.Warning(_logger, e, "An exception was thrown when creating the SearchResult");
         return null;
       }
     }
