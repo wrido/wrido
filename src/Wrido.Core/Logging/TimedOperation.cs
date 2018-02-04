@@ -12,6 +12,7 @@ namespace Wrido.Logging
     private readonly long _startTime;
     private long _stopTime;
     private readonly IDisposable _operationScope;
+    private Exception _capturedException;
 
     public bool IsCompleted { get; private set; }
     public bool IsCancelled { get; private set; }
@@ -32,8 +33,9 @@ namespace Wrido.Logging
       _startTime = Stopwatch.GetTimestamp();
     }
 
-    public void Cancel()
+    public void Cancel(Exception e = default)
     {
+      _capturedException = e;
       IsCancelled = true;
       Stop();
     }
@@ -78,7 +80,7 @@ namespace Wrido.Logging
       var finalPropertyValues = _propertyValues
         .Concat(new object[] { outcome, Elapsed.TotalMilliseconds })
         .ToArray();
-      _logger.Write(logLevel, null, finalMsgTempalte, finalPropertyValues);
+      _logger.Write(logLevel, _capturedException, finalMsgTempalte, finalPropertyValues);
     }
   }
 }
