@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Wrido.Messages
+namespace Wrido.Queries.Events
 {
-  public class QueryCancelled : MessageBase
+  public class QueryCancelled : QueryEvent
   {
     public QueryCancelled(Guid queryId)
     {

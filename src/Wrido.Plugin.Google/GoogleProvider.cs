@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Wrido.Logging;
 using Wrido.Queries;
+using Wrido.Queries.Events;
 
 namespace Wrido.Plugin.Google
 {
@@ -28,30 +28,37 @@ namespace Wrido.Plugin.Google
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<IEnumerable<QueryResult>> QueryAsync(Query query, CancellationToken ct)
+    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {
         _logger.Verbose("No search term entered, returning fallback result.");
-        return new QueryResult[] { GoogleResult.Fallback };
+        observer.OnNext(new ResultAvailable(GoogleResult.Fallback));
+        return;
       }
 
-      var result = await _httpClient.GetAsync($"?output=chrome&q={WebUtility.UrlEncode(query.Argument)}", ct);
+      var response = await _httpClient.GetAsync($"?output=chrome&q={WebUtility.UrlEncode(query.Argument)}", ct);
       ct.ThrowIfCancellationRequested();
 
-      if (!result.IsSuccessStatusCode)
+      if (!response.IsSuccessStatusCode)
       {
-        return Enumerable.Empty<QueryResult>();
+        return;
       }
 
-      var data = await result.Content.ReadAsStringAsync();
-      var queryResults = JArray.Parse(data)[1]
+      var data = await response.Content.ReadAsStringAsync();
+      var suggestions = JArray.Parse(data)[1]
         .Where(x => x.Type == JTokenType.String).Select(x => x.Value<string>())
         .ToList();
 
-      return queryResults.Any()
-        ? queryResults.Select(GoogleResult.SearchResult)
-        : new[] { GoogleResult.SearchResult(query.Argument)};
+      if (!suggestions.Any())
+      {
+        return;
+      }
+
+      foreach (var suggestion in suggestions)
+      {
+        observer.OnNext(new ResultAvailable(GoogleResult.SearchResult(suggestion)));
+      }
     }
   }
 }
