@@ -33,7 +33,7 @@ namespace Wrido.Plugin.Google
       if (string.IsNullOrEmpty(query.Argument))
       {
         _logger.Verbose("No search term entered, returning fallback result.");
-        observer.OnNext(new ResultAvailable(GoogleResult.Fallback));
+        observer.ResultAvailable(GoogleResult.Fallback, query.Id);
         return;
       }
 
@@ -57,7 +57,7 @@ namespace Wrido.Plugin.Google
 
       foreach (var suggestion in suggestions)
       {
-        observer.OnNext(new ResultAvailable(GoogleResult.SearchResult(suggestion)));
+        observer.ResultAvailable(GoogleResult.SearchResult(suggestion), query.Id);
       }
     }
   }
