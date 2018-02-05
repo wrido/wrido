@@ -65,6 +65,7 @@ namespace Wrido
           {
             hub.MapHub<QueryHub>("query");
             hub.MapHub<LoggingHub>("logging");
+            hub.MapHub<ElectronHub>("electron");
           })
         .UseMvcWithDefaultRoute();
     }
