@@ -49,10 +49,18 @@ namespace Wrido.Electron
         {
           var mainWindow = _windows[MainWindow.WindowName];
           _logger.Information("Registering {hotKey} as application hot key", _appConfig.HotKey);
-          _shortcuts.Register(_appConfig.HotKey, () =>
+          _shortcuts.Register(_appConfig.HotKey, async () =>
           {
             _logger.Debug("The application hot key is pressed");
-            mainWindow.Window.Show();
+            var visible = await mainWindow.Window.IsVisibleAsync();
+            if (visible)
+            {
+              mainWindow.Window.Hide();
+            }
+            else
+            {
+              mainWindow.Window.Show();
+            }
           });
         }
       }
