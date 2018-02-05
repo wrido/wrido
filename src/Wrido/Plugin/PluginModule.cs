@@ -10,6 +10,11 @@ namespace Wrido.Plugin
     {
       builder
         .RegisterType<AssemblyPluginLoader>()
+        .AsSelf()
+        .SingleInstance();
+
+      builder
+        .RegisterType<NugetPluginLoader>()
         .AsImplementedInterfaces()
         .SingleInstance();
 

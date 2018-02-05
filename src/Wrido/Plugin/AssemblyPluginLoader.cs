@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Wrido.Configuration;
 using Wrido.Logging;
 
 namespace Wrido.Plugin
@@ -13,13 +14,13 @@ namespace Wrido.Plugin
 
   public class AssemblyPluginLoader : IPluginLoader
   {
-    private readonly string _currentDirectory;
     private readonly ILogger _logger;
+    private readonly IAppConfiguration _config;
 
-    public AssemblyPluginLoader(ILogger logger)
+    public AssemblyPluginLoader(ILogger logger, IAppConfiguration config)
     {
       _logger = logger;
-      _currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+      _config = config;
     }
 
     public bool TryLoad(string pluginName, out IWridoPlugin plugin)
@@ -27,7 +28,7 @@ namespace Wrido.Plugin
       plugin = default;
 
       var assemblyFiles = Directory
-        .GetFiles(_currentDirectory)
+        .GetFiles(_config.InstallDirectory)
         .Where(f => f.EndsWith(".dll", StringComparison.OrdinalIgnoreCase));
 
       var exactMatch = assemblyFiles.FirstOrDefault(f => f.EndsWith($"{pluginName}.dll", StringComparison.InvariantCultureIgnoreCase));

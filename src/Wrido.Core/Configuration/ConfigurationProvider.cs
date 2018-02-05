@@ -106,6 +106,7 @@ namespace Wrido.Configuration
               continue;
             }
             _plugins.Add(nameToken.Value<string>(), pluginObj);
+            continue;
           }
           _logger.Warning("Unidentified plugin of type {tokenType}", plugin.Type);
         }
