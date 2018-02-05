@@ -37,13 +37,13 @@ namespace Wrido.Plugin.Wikipedia
       {
         foreach (var fallback in WikipediaResult.CreateFallback(_config.BaseUrls))
         {
-          observer.ResultAvailable(fallback);
+          observer.ResultAvailable(fallback, query.Id);
         }
         return;
       }
 
       var queryTasks = _clients
-        .Select(client => QueryWikipediaAsync(client, query.Argument, observer, ct))
+        .Select(client => QueryWikipediaAsync(client, query, observer, ct))
         .ToList();
       await Task.WhenAll(queryTasks);
 
@@ -52,21 +52,21 @@ namespace Wrido.Plugin.Wikipedia
       {
         foreach (var searchResult in WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls))
         {
-          observer.ResultAvailable(searchResult);
+          observer.ResultAvailable(searchResult, query.Id);
         }
       }
     }
 
-    private async Task<SearchResult> QueryWikipediaAsync(IWikipediaClient client, string searchTerm, IObserver<QueryEvent> observer, CancellationToken ct)
+    private async Task<SearchResult> QueryWikipediaAsync(IWikipediaClient client, Query query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
-      var searchResult = await client.SearchAsync(searchTerm, ct);
+      var searchResult = await client.SearchAsync(query.Argument, ct);
       _logger.Information("The search phrase {term} resulted in {suggestionCount} suggestions.", searchResult.Term, searchResult.Suggestions.Count);
       var results = WikipediaResult.Create(searchResult).ToList();
 
       foreach (var result in results)
       {
         _logger.Verbose("Wikipedia result {title} available", result.Title);
-        observer.ResultAvailable(result);
+        observer.ResultAvailable(result, query.Id);
       }
 
       var pageTitles = results.Select(r => r.Title);

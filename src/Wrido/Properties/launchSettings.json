@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ELECTRON": "false"
       },
-      "applicationUrl": "http://localhost:50206/"
+      "applicationUrl": "http://localhost:5000/"
     },
 
     "Electron": {

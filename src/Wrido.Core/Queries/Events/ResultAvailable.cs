@@ -1,11 +1,16 @@
-﻿namespace Wrido.Queries.Events
+﻿using System;
+
+namespace Wrido.Queries.Events
 {
   public class ResultAvailable : QueryEvent
   {
-    public ResultAvailable(QueryResult result)
+    public QueryResult Result { get; set; }
+    public Guid QueryId { get; set; }
+
+    public ResultAvailable(QueryResult result, Guid queryId)
     {
       Result = result;
+      QueryId = queryId;
     }
-    public QueryResult Result { get; set; }
   }
 }

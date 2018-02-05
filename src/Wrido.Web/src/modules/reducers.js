@@ -1,4 +1,4 @@
-import { onInputChangeAction, queryReceivedAction, resultsAvailableAction } from '../actionCreators';
+import { onInputChangeAction, queryReceivedAction, resultAvailableAction } from '../actionCreators';
 import { reducer } from '../reduxUtils';
 
 export const input = reducer(
@@ -16,10 +16,10 @@ export const result = reducer(
     })
   ],
   [
-    resultsAvailableAction,
+    resultAvailableAction,
     (state, action) => ({
       items: action.queryId === state.currentQueryId ?
-        state.items.concat(action.results.$values) :
+        state.items.concat([action.result]) :
         state.items
     })
   ],

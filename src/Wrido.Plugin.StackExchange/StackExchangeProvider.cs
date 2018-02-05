@@ -44,13 +44,13 @@ namespace Wrido.Plugin.StackExchange
       {
         foreach (var queryResult in CreateFallbackResult(searchQuery))
         {
-          observer.OnNext(new ResultAvailable(queryResult));
+          observer.ResultAvailable(queryResult, query.Id);
         }
         return;
       }
       foreach (var queryResult in questions.Select(q=> ConvertQuestion(q, query)))
       {
-        observer.OnNext(new ResultAvailable(queryResult));
+        observer.ResultAvailable(queryResult, query.Id);
       }
     }
 

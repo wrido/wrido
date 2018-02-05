@@ -30,7 +30,7 @@ namespace Wrido.Plugin.Dummy
 
     public bool CanHandle(Query query)
     {
-      return true;
+      return !query.Command.StartsWith(":");
     }
 
     public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
@@ -47,14 +47,14 @@ namespace Wrido.Plugin.Dummy
           Icon = _iconResource,
           Renderer = new Script("/resources/wrido/plugin/dummy/resources/render.js")
         };
-        observer.OnNext(new ResultAvailable(result));
+        observer.ResultAvailable(result, query.Id);
 
         if (_random.NextDouble() > 0.5)
         {
           await Task.Delay(duration, ct);
           result.Title = $"{result.Title} - UPDATED!";
 
-          observer.OnNext(new ResultUpdated(result));
+          observer.ResultUpdated(result);
         }
       }
     }
