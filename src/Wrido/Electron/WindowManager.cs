@@ -43,7 +43,7 @@ namespace Wrido.Electron
 
         if (!_windows.ContainsKey(MainWindow.WindowName))
         {
-          _logger.Warning("No window named {windowName} found. Can not register shortcut");
+          _logger.Warning("No window named {windowName} found. Can not register shortcut", MainWindow.WindowName);
         }
         else
         {
