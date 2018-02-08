@@ -49,7 +49,11 @@ namespace Wrido.Queries
             {
               await provider.QueryAsync(query, providerObserver, currentCt);
             }
-            catch (OperationCanceledException) { /* Cancellation is OK */ }
+            catch (OperationCanceledException)
+            {
+              _logger.Information("Query {rawQuery} has been cancelled for {queryProvider}", rawQuery, providerObserver.GetType().Name);
+               /* Cancellation is OK */
+            }
             catch (Exception e)
             {
               _logger.Information(e, "An unhandle exception was thrown.");
