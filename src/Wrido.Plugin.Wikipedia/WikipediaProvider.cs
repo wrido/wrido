@@ -7,67 +7,57 @@ using System.Threading.Tasks;
 using Wrido.Logging;
 using Wrido.Plugin.Wikipedia.Common;
 using Wrido.Queries;
-using Wrido.Queries.Events;
 using Wrido.Resources;
-using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin.Wikipedia
 {
-  public class WikipediaProvider : IQueryProvider
+  public class WikipediaProvider : QueryProvider
   {
     private readonly IEnumerable<IWikipediaClient> _clients;
-    private readonly ILogger _logger;
     private readonly WikipediaConfiguration _config;
+    private readonly ILogger _logger;
 
     public WikipediaProvider(IEnumerable<IWikipediaClient> clients, WikipediaConfiguration config, ILogger logger)
     {
       _clients = clients;
-      _logger = logger;
       _config = config;
+      _logger = logger;
     }
 
-    public bool CanHandle(Query query)
+    public override bool CanHandle(Query query)
     {
       return string.Equals(query.Command, _config.Keyword, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
+
+    protected override async Task QueryAsync(Query query, CancellationToken ct)
     {
       if (string.IsNullOrWhiteSpace(query.Argument))
       {
-        foreach (var fallback in WikipediaResult.CreateFallback(_config.BaseUrls))
-        {
-          observer.ResultAvailable(fallback);
-        }
+        var fallbacks = WikipediaResult.CreateFallback(_config.BaseUrls);
+        Available(fallbacks);
         return;
       }
 
       var queryTasks = _clients
-        .Select(client => QueryWikipediaAsync(client, query.Argument, observer, ct))
+        .Select(client => QueryWikipediaAsync(client, query.Argument, ct))
         .ToList();
       await Task.WhenAll(queryTasks);
 
       var results = queryTasks.SelectMany(q => q.Result.Suggestions).ToList();
       if (!results.Any())
       {
-        foreach (var searchResult in WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls))
-        {
-          observer.ResultAvailable(searchResult);
-        }
+        var searchResults = WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls);
+        Available(searchResults);
       }
     }
 
-    private async Task<SearchResult> QueryWikipediaAsync(IWikipediaClient client, string searchTerm, IObserver<QueryEvent> observer, CancellationToken ct)
+    private async Task<SearchResult> QueryWikipediaAsync(IWikipediaClient client, string searchTerm, CancellationToken ct)
     {
       var searchResult = await client.SearchAsync(searchTerm, ct);
       _logger.Information("The search phrase {term} resulted in {suggestionCount} suggestions.", searchResult.Term, searchResult.Suggestions.Count);
       var results = WikipediaResult.Create(searchResult).ToList();
-
-      foreach (var result in results)
-      {
-        _logger.Verbose("Wikipedia result {title} available", result.Title);
-        observer.ResultAvailable(result);
-      }
+      Available(results);
 
       var pageTitles = results.Select(r => r.Title);
       var pages = await client.GetAsync(pageTitles, ct);
@@ -82,9 +72,9 @@ namespace Wrido.Plugin.Wikipedia
         _logger.Verbose("Page {pageTitle} found. Enriching result", result.Title);
         var pageResult = pagesByTitle[result.Title];
         result.Extract = pageResult.Extract;
-        result.PageImage = new Image { Uri = pageResult.Original?.Source, Alt = result.Title};
+        result.PageImage = new Image { Uri = pageResult.Original?.Source, Alt = result.Title };
         result.Views = pageResult.PageViews.Values.FirstOrDefault() ?? 0;
-        observer.ResultUpdated(result);
+        Updated(result);
       }
       return searchResult;
     }

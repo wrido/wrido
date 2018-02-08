@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Wrido.Logging;
 using Wrido.Queries;
-using Wrido.Queries.Events;
 
 namespace Wrido.Plugin.Google
 {
-  public class GoogleProvider : Queries.IQueryProvider
+  public class GoogleProvider : QueryProvider
   {
     protected const string Command = ":g";
     private readonly HttpClient _httpClient;
@@ -23,17 +22,17 @@ namespace Wrido.Plugin.Google
       _logger = logger;
     }
 
-    public bool CanHandle(Query query)
+    public override bool CanHandle(Query query)
     {
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
+    protected override async Task QueryAsync(Query query, CancellationToken ct)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {
         _logger.Verbose("No search term entered, returning fallback result.");
-        observer.OnNext(new ResultAvailable(GoogleResult.Fallback));
+        Available(GoogleResult.Fallback);
         return;
       }
 
@@ -55,10 +54,8 @@ namespace Wrido.Plugin.Google
         return;
       }
 
-      foreach (var suggestion in suggestions)
-      {
-        observer.OnNext(new ResultAvailable(GoogleResult.SearchResult(suggestion)));
-      }
+      var googleSuggestions = suggestions.Select(GoogleResult.SearchResult);
+      Available(googleSuggestions);
     }
   }
 }

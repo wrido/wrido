@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Wrido.Queries;
 
 namespace Wrido.Plugin.Dummy
 {
@@ -8,25 +7,23 @@ namespace Wrido.Plugin.Dummy
   {
     public void Register(ContainerBuilder builder)
     {
-      var slowProvider = new DummyProvider(
-        TimeSpan.FromMilliseconds(100),
-        TimeSpan.FromSeconds(2),
-        "Slow Provider",
-        new Uri("/resources/wrido/plugin/dummy/resources/banana.png", UriKind.Relative));
-
-      var fastProvider = new DummyProvider(
-        TimeSpan.FromMilliseconds(100),
-        TimeSpan.FromMilliseconds(400),
-        "Fast Provider",
-        new Uri("/resources/wrido/plugin/dummy/resources/phone.png", UriKind.Relative));
+      builder
+        .Register(c => new DummyProvider(
+          TimeSpan.FromMilliseconds(100),
+          TimeSpan.FromSeconds(2),
+          "Slow Provider",
+          new Uri("/resources/wrido/plugin/dummy/resources/banana.png", UriKind.Relative)))
+        .AsImplementedInterfaces()
+        .InstancePerDependency();
 
       builder
-        .RegisterInstance(slowProvider)
-        .As<IQueryProvider>();
-
-      builder
-        .RegisterInstance(fastProvider)
-        .As<IQueryProvider>();
+        .Register(c => new DummyProvider(
+          TimeSpan.FromMilliseconds(100),
+          TimeSpan.FromMilliseconds(400),
+          "Fast Provider",
+          new Uri("/resources/wrido/plugin/dummy/resources/phone.png", UriKind.Relative)))
+        .AsImplementedInterfaces()
+        .InstancePerDependency();
     }
   }
 }

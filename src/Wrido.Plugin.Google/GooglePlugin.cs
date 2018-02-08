@@ -22,7 +22,7 @@ namespace Wrido.Plugin.Google
             (info, context) => info.ParameterType == typeof(HttpClient),
             (info, context) => context.ResolveNamed<HttpClient>(nameof(GoogleHttpClient))
             ))
-        .SingleInstance();
+        .InstancePerDependency();
     }
 
     private static HttpClient GoogleHttpClient(IComponentContext context)

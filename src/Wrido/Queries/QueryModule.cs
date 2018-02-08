@@ -7,6 +7,11 @@ namespace Wrido.Queries
     protected override void Load(ContainerBuilder builder)
     {
       builder
+        .RegisterType<ClientStreamRepository>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
         .RegisterType<WebResultExecuter>()
         .AsImplementedInterfaces()
         .SingleInstance();
