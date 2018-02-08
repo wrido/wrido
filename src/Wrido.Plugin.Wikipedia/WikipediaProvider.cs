@@ -42,6 +42,7 @@ namespace Wrido.Plugin.Wikipedia
         .Select(client => QueryWikipediaAsync(client, query.Argument, ct))
         .ToList();
       await Task.WhenAll(queryTasks);
+      ct.ThrowIfCancellationRequested();
 
       var results = queryTasks.SelectMany(q => q.Result.Suggestions).ToList();
       if (!results.Any())

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Autofac;
 using Newtonsoft.Json;
+using Wrido.Cache;
 using Wrido.Configuration;
 using Wrido.Plugin.Wikipedia.Common;
 using Wrido.Plugin.Wikipedia.Serialization;
@@ -18,9 +19,7 @@ namespace Wrido.Plugin.Wikipedia
         .SingleInstance();
 
       builder
-        .RegisterType<WikipediaProvider>()
-        .AsImplementedInterfaces()
-        .InstancePerDependency();
+        .AddCaching<WikipediaProvider>(TimeSpan.FromHours(2));
 
       builder
         .RegisterType<WikipediaSearchConverter>()
