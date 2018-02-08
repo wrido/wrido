@@ -20,7 +20,7 @@ namespace Wrido.Plugin.Wikipedia
       builder
         .RegisterType<WikipediaProvider>()
         .AsImplementedInterfaces()
-        .SingleInstance();
+        .InstancePerDependency();
 
       builder
         .RegisterType<WikipediaSearchConverter>()

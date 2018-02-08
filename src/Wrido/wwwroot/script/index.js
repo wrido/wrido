@@ -96,22 +96,24 @@ connection.start().then(() => {
         }
     }
 
-    inputStreamElement.oninput = ev => {
-        statusElement.innerHTML = 'unknown';
-        connection.stream('StreamQueryEvents', ev.target.value).subscribe({
-            close: false,
-            next: msg => dispatchEvent(msg),
-            error: function (err) {
-                console.log(err);
-            },
-            complete: onQueryComplete
-        });
-    };
+    connection.stream('CreateResponseStream').subscribe({
+        close: false,
+        next: msg => dispatchEvent(msg),
+        error: function (err) {
+            console.log(err);
+        },
+        complete: onQueryComplete
+    });
 
-    inputElement.oninput = ev => {
+    connection.on('event', msg => dispatchEvent(msg));
+
+    inputStreamElement.oninput = ev => {
         statusElement.innerHTML = 'unknown';
         connection.invoke('QueryAsync', ev.target.value);
     };
 
-    connection.on('event', msg => dispatchEvent(msg));
+    inputElement.oninput = ev => {
+        statusElement.innerHTML = 'unknown';
+        connection.invoke('EventBasedQueryAsync', ev.target.value);
+    };
 });

@@ -56,12 +56,12 @@ namespace Wrido.Plugin.StackExchange
       builder
         .RegisterType<StackOverflowProvider>()
         .As<IQueryProvider>()
-        .SingleInstance();
+        .InstancePerDependency();
 
       builder
         .RegisterType<AskUbuntuProvider>()
         .As<IQueryProvider>()
-        .SingleInstance();
+        .InstancePerDependency();
     }
 
     private static HttpClient StackExchangeHttpClient(IComponentContext context)

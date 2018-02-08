@@ -9,6 +9,7 @@ using Wrido.Configuration;
 using Wrido.Electron;
 using Wrido.Logging;
 using Wrido.Plugin;
+using Wrido.Plugin.Wikipedia;
 using Wrido.Queries;
 using Wrido.Resources;
 
