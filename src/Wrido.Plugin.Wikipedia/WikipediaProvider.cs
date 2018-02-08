@@ -29,7 +29,6 @@ namespace Wrido.Plugin.Wikipedia
       return string.Equals(query.Command, _config.Keyword, StringComparison.InvariantCultureIgnoreCase);
     }
 
-
     protected override async Task QueryAsync(Query query, CancellationToken ct)
     {
       if (string.IsNullOrWhiteSpace(query.Argument))

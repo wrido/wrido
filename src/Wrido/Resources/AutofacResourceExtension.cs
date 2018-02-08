@@ -6,7 +6,7 @@ using Autofac;
 
 namespace Wrido.Resources
 {
-  public static class ModuleResourceExtension
+  public static class AutofacResourceExtension
   {
     public static ContainerBuilder RegisterResources<TAssemblyType>(this ContainerBuilder builder)
     {
