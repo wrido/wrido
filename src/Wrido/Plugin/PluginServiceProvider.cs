@@ -24,6 +24,7 @@ namespace Wrido.Plugin
       _pluginLoaders = pluginLoaders.ToList();
       _rootPluginContainer = CreatePluginContainer();
       CreatePluginLifetimeScopes();
+      configurationProvider.ConfigurationUpdated += (sender, args) => CreatePluginLifetimeScopes();
     }
 
     public IContainer CreatePluginContainer()
@@ -32,7 +33,8 @@ namespace Wrido.Plugin
       var builder = new ContainerBuilder();
 
       builder
-        .RegisterModule<ConfigurationModule>();
+        .Register(context => _configurationProvider)
+        .ExternallyOwned();
 
       return builder.Build();
     }
@@ -41,10 +43,11 @@ namespace Wrido.Plugin
     {
       using (_logger.Timed("Creating lifetime scopes for plugins"))
       {
-        foreach (var pluginScope in _pluginScopes)
+        foreach (var pluginScope in _pluginScopes.ToList())
         {
           _logger.Verbose("Disposing lifetime scope for {pluginName}", pluginScope.Tag);
           pluginScope.Dispose();
+          _pluginScopes.Remove(pluginScope);
         }
 
         var pluginNames = _configurationProvider.GetPluginNames();

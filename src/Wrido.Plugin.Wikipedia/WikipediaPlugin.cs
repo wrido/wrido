@@ -36,24 +36,26 @@ namespace Wrido.Plugin.Wikipedia
           .Resolve<IConfigurationProvider>()
           .GetConfiguration<WikipediaConfiguration>() ?? WikipediaConfiguration.Fallback)
         .AsSelf()
-        .SingleInstance();
+        .InstancePerDependency();
 
       builder
         .Register(c =>
-        {
-          var pluginConfig = c.Resolve<WikipediaConfiguration>();
-          var clients = new List<IWikipediaClient>();
-          foreach (var baseUrl in pluginConfig.BaseUrls)
           {
-            var httpClient = new HttpClient
+            var pluginConfig = c.Resolve<WikipediaConfiguration>();
+            var clients = new List<IWikipediaClient>();
+            foreach (var baseUrl in pluginConfig.BaseUrls)
             {
-              BaseAddress = new Uri(baseUrl)
-            };
-            var client = new WikipediaClient(httpClient, c.Resolve<JsonSerializer>());
-            clients.Add(client);
-          }
-          return clients;
-        }).As<IEnumerable<IWikipediaClient>>().SingleInstance();
+              var httpClient = new HttpClient
+              {
+                BaseAddress = new Uri(baseUrl)
+              };
+              var client = new WikipediaClient(httpClient, c.Resolve<JsonSerializer>());
+              clients.Add(client);
+            }
+            return clients;
+          })
+        .As<IEnumerable<IWikipediaClient>>()
+        .SingleInstance();
     }
   }
 }

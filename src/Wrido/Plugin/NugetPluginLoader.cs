@@ -115,7 +115,7 @@ namespace Wrido.Plugin
 
     private string CreateWorkingDirectory()
     {
-      var workingDir = Path.Combine(_config.ConfigurationDirectory, Guid.NewGuid().ToString());
+      var workingDir = Path.Combine(_config.InstallDirectory, Guid.NewGuid().ToString());
       Directory.CreateDirectory(workingDir);
       _logger.Debug("Working directory {workingDirectory} created.", workingDir);
       return workingDir;

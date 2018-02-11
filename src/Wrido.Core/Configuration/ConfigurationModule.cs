@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 
 namespace Wrido.Configuration
 {
@@ -8,6 +10,11 @@ namespace Wrido.Configuration
     {
       builder
         .RegisterType<ConfigurationProvider>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<ConfigurationFileWatcher>()
         .AsImplementedInterfaces()
         .SingleInstance();
 
