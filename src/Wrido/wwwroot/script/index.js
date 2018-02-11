@@ -33,7 +33,6 @@ const queryCancelled = 'QueryCancelled';
 connection.start().then(() => {
     let inputElement = document.getElementById('wrido-text');
     let inputStreamElement = document.getElementById('wrido-text-streamed');
-    let inputLegacyElement = document.getElementById('wrido-text-legacy');
     let resultElement = document.getElementById('wrido-result');
     let queryIdElement = document.getElementById('wrido-queryid');
     let statusElement = document.getElementById('wrido-status');

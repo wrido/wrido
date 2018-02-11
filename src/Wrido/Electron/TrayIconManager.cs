@@ -1,32 +1,25 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Hosting;
-using Wrido.Electron.Windows;
 using Wrido.Logging;
 
 namespace Wrido.Electron
 {
-  public interface ITrayIconManager
-  {
-    Task InitAsync(CancellationToken ct = default);
-  }
-
-  public class TrayIconManager : ITrayIconManager, IDisposable
+  public class TrayIconManager : IElectronService, IDisposable
   {
     private readonly ILogger _logger;
     private readonly IApplicationLifetime _lifetime;
-    private readonly IWindowManager _windowManager;
+    private readonly IWindowsServices _windowsServices;
     private readonly Tray _tray;
 
-    public TrayIconManager(ILogger logger, IApplicationLifetime lifetime, IWindowManager windowManager)
+    public TrayIconManager(ILogger logger, IApplicationLifetime lifetime, IWindowsServices windowsServices)
     {
       _logger = logger;
       _lifetime = lifetime;
-      _windowManager = windowManager;
+      _windowsServices = windowsServices;
       _tray = ElectronNET.API.Electron.Tray;
     }
 
@@ -42,8 +35,8 @@ namespace Wrido.Electron
         });
         _tray.Show("./Electron/wrido-64x64.png", new[]
         {
-          new MenuItem { Label = "Show...", Click = () => _windowManager.ShowAsync(MainWindow.WindowName, ct)},
-          new MenuItem { Label = "About Wrido", Click = () => _windowManager.ShowAsync(AboutWindow.WindowName, ct)},
+          new MenuItem { Label = "Show...", Click = () => _windowsServices.ShowShellAsync(ct)},
+          new MenuItem { Label = "About Wrido", Click = () => _windowsServices.ShowAboutAsync(ct)},
           new MenuItem { Label = "Exit", Click = () => _lifetime.StopApplication()}
         });
 

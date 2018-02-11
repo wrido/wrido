@@ -7,7 +7,7 @@ namespace Wrido.Queries
 {
   public interface IClientStreamRepository
   {
-    IObservable<QueryEvent> GetOrAddObservable(string connectionId);
+    IObservable<QueryEvent> GetOrAdd(string connectionId);
     bool TryGetObserver(string connectionId, out IObserver<QueryEvent> obsever);
   }
 
@@ -20,7 +20,7 @@ namespace Wrido.Queries
       _subjects = new ConcurrentDictionary<string, ISubject<QueryEvent>>();
     }
 
-    public IObservable<QueryEvent> GetOrAddObservable(string connectionId)
+    public IObservable<QueryEvent> GetOrAdd(string connectionId)
       => _subjects.GetOrAdd(connectionId, id => new Subject<QueryEvent>());
     
 

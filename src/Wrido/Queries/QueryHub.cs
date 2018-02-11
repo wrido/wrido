@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reactive;
-using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
+using Wrido.Electron;
+using Wrido.Electron.Windows;
 using Wrido.Logging;
-using Wrido.Plugin.Wikipedia;
 using Wrido.Queries.Events;
 using ILogger = Wrido.Logging.ILogger;
 
@@ -18,37 +15,41 @@ namespace Wrido.Queries
   {
     private readonly IQueryService _queryService;
     private readonly IExecutionService _executionService;
+    private readonly IWindowsServices _windowServices;
     private readonly IClientStreamRepository _streamRepo;
     private readonly ILogger _logger = new SerilogLogger(Log.ForContext<QueryHub>());
 
-    public QueryHub(IQueryService queryService, IExecutionService executionService, IClientStreamRepository streamRepo)
+    public QueryHub(IQueryService queryService, IExecutionService executionService, IWindowsServices windowServices, IClientStreamRepository streamRepo)
     {
       _queryService = queryService;
       _executionService = executionService;
+      _windowServices = windowServices;
       _streamRepo = streamRepo;
     }
 
-    public IObservable<QueryEvent> CreateResponseStream() =>_streamRepo.GetOrAddObservable(Context.ConnectionId);
+    public IObservable<QueryEvent> CreateResponseStream() =>_streamRepo.GetOrAdd(Context.ConnectionId);
 
     public async Task QueryAsync(string rawQuery)
     {
+      if (string.IsNullOrEmpty(rawQuery))
+      {
+        await _windowServices.ResizeShellAsync(ShellSize.InputFieldOnly);
+      }
+      else
+      {
+        await _windowServices.ResizeShellAsync(ShellSize.InputAndResults);
+      }
+
       if (!_streamRepo.TryGetObserver(Context.ConnectionId, out var observer))
       {
-        throw new Exception();
+        var client = Clients.Client(Context.ConnectionId);
+        observer = Observer.Create<QueryEvent>(e => client.InvokeAsync(e).GetAwaiter().GetResult());
       }
 
       await _queryService.QueryAsync(rawQuery, observer);
     }
 
-    public async Task EventBasedQueryAsync(string rawQuery)
-    {
-      var client = Clients.Client(Context.ConnectionId);
-      var observer = Observer.Create<QueryEvent>(@event =>
-      {
-        client.InvokeAsync(@event).GetAwaiter().GetResult();
-      });
-      await _queryService.QueryAsync(rawQuery, observer);
-    }
+    public Task HideShellAsync() => _windowServices.HideShellAsync();
 
     public async Task ExecuteAsync(QueryResult result)
     {

@@ -5,7 +5,7 @@ using Wrido.Logging;
 
 namespace Wrido.Configuration
 {
-  internal interface IConfigurationFileWatcher
+  public interface IConfigurationFileWatcher
   {
     event FileSystemEventHandler Updated;
   }

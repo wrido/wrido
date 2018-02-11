@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using Serilog;
+using Wrido.Electron.Windows;
 
 namespace Wrido.Electron
 {
@@ -19,7 +20,7 @@ namespace Wrido.Electron
         .SingleInstance();
 
       builder
-        .RegisterType<FakeWindowManager>()
+        .RegisterType<FakeWindowsServices>()
         .AsImplementedInterfaces()
         .SingleInstance();
     }
@@ -30,10 +31,13 @@ namespace Wrido.Electron
     public Task StartAsync(CancellationToken ct = default) => Task.CompletedTask;
   }
 
-  public class FakeWindowManager : IWindowManager
+  public class FakeWindowsServices : IWindowsServices
   {
-    public Task InitAsync(CancellationToken ct = default) => Task.CompletedTask;
-    public Task ShowAsync(string windowName, CancellationToken ct = default) => Task.CompletedTask;
-    public Task HideAsync(string windowName, CancellationToken ct = default) => Task.CompletedTask;
+    public Task ShowAboutAsync(CancellationToken ct = default) => Task.CompletedTask;
+    public Task HideAboutAsync(CancellationToken ct = default) => Task.CompletedTask;
+    public Task ShowShellAsync(CancellationToken ct = default) => Task.CompletedTask;
+    public Task HideShellAsync(CancellationToken ct = default) => Task.CompletedTask;
+    public Task ToggleShellVisibilityAsync(CancellationToken ct = default) => Task.CompletedTask;
+    public Task ResizeShellAsync(ShellSize size, CancellationToken ct = default) => Task.CompletedTask;
   }
 }
