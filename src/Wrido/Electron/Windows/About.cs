@@ -5,7 +5,7 @@ using ElectronNET.API.Entities;
 
 namespace Wrido.Electron.Windows
 {
-  public class AboutWindow : WindowBase
+  public class About : WindowBase
   {
     public const string WindowName = "About";
 

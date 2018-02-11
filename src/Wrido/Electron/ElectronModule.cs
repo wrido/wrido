@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ElectronNET.API;
 using Wrido.Electron.Windows;
+using Shell = Wrido.Electron.Windows.Shell;
 
 namespace Wrido.Electron
 {
@@ -20,7 +21,7 @@ namespace Wrido.Electron
         .SingleInstance();
 
       builder
-        .RegisterType<WindowManager>()
+        .RegisterType<WindowsServices>()
         .AsImplementedInterfaces()
         .SingleInstance();
 
@@ -30,17 +31,18 @@ namespace Wrido.Electron
         .SingleInstance();
 
       builder
-        .Register(context => ElectronNET.API.Electron.WindowManager)
-        .As<ElectronNET.API.WindowManager>();
-
-      builder
-        .RegisterType<MainWindow>()
-        .As<WindowBase>()
+        .RegisterType<ShortcutManager>()
+        .AsImplementedInterfaces()
         .SingleInstance();
 
       builder
-        .RegisterType<AboutWindow>()
-        .As<WindowBase>()
+        .RegisterType<Shell>()
+        .AsSelf()
+        .SingleInstance();
+
+      builder
+        .RegisterType<About>()
+        .AsSelf()
         .SingleInstance();
     }
   }

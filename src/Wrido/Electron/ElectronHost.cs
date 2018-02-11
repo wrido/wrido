@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,34 +15,36 @@ namespace Wrido.Electron
 
   public class ElectronHost : IElectronHost
   {
-    private readonly IWindowManager _windowManager;
-    private readonly ITrayIconManager _trayManager;
     private readonly IApplicationLifetime _appLifetime;
     private readonly ILogger _logger;
+    private readonly List<IElectronService> _electronServices;
 
-    public ElectronHost(IWindowManager windowManager, ITrayIconManager trayManager, IApplicationLifetime appLifetime, ILogger logger)
+    public ElectronHost(IEnumerable<IElectronService> electronServices, IApplicationLifetime appLifetime, ILogger logger)
     {
-      _windowManager = windowManager;
-      _trayManager = trayManager;
       _appLifetime = appLifetime;
       _logger = logger;
+      _electronServices = electronServices.ToList();
     }
 
     public async Task StartAsync(CancellationToken ct = default)
     {
       _logger.Verbose("Starting electron host");
-      var windowTask = _windowManager.InitAsync(ct);
-      var trayTask = _trayManager.InitAsync(ct);
+
+      var initTasks = _electronServices
+        .Select(s => s.InitAsync(ct))
+        .ToArray();
 
       _appLifetime.ApplicationStopping.Register(() =>
       {
         _logger.Information("Application is stopping.");
-        (_windowManager as IDisposable)?.Dispose();
-        (_trayManager as IDisposable)?.Dispose();
+        foreach (var electronService in _electronServices)
+        {
+          (electronService as IDisposable)?.Dispose();
+        }
         ElectronNET.API.Electron.App.Quit();
       });
 
-      await Task.WhenAll(windowTask, trayTask);
+      await Task.WhenAll(initTasks);
     }
   }
 }
