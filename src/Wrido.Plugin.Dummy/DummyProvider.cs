@@ -29,6 +29,10 @@ namespace Wrido.Plugin.Dummy
 
     public override bool CanHandle(Query query)
     {
+      if (string.IsNullOrEmpty(query?.Raw))
+      {
+        return false;
+      }
       return !query?.Command?.StartsWith(":") ?? true;
     }
 

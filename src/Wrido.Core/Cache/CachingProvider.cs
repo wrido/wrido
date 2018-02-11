@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Wrido.Configuration;
 using Wrido.Logging;
 using Wrido.Queries;
 using Wrido.Queries.Events;
@@ -16,11 +17,12 @@ namespace Wrido.Cache
     private readonly ILogger _logger = LogManager.GetLogger<CachingQueryProvider>();
     private static ConcurrentDictionary<string, List<QueryEvent>> _eventCache = new ConcurrentDictionary<string, List<QueryEvent>>();
 
-    public CachingQueryProvider(IQueryProvider actualProvider, TimeSpan expires, IEqualityComparer<string> comparer = default)
+    public CachingQueryProvider(IQueryProvider actualProvider, IConfigurationProvider configProvider, TimeSpan expires, IEqualityComparer<string> comparer = default)
     {
       comparer = comparer ?? StringComparer.InvariantCultureIgnoreCase;
       _actualProvider = actualProvider;
       _expires = expires;
+      configProvider.ConfigurationUpdated += (sender, args) => _eventCache.Clear();
     }
 
     public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)

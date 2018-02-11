@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Wrido.Configuration;
 using Wrido.Logging;
 using Wrido.Plugin.Wikipedia.Common;
 using Wrido.Queries;

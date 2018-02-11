@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Reflection;
 
 namespace Wrido.Configuration
 {
   public interface IAppConfiguration
   {
     string HotKey { get; }
-    string ConfigurationDirectory { get; }
+    string ConfigurationFilePath { get; }
     string InstallDirectory { get; }
   }
 
@@ -14,7 +13,13 @@ namespace Wrido.Configuration
   {
     public string HotKey { get; set; }
 
-    public string ConfigurationDirectory => $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\.wrido\\";
-    public string InstallDirectory => AppDomain.CurrentDomain.BaseDirectory;
+    public string ConfigurationFilePath => ReadOnlyAppConfiguration.ConfigurationFilePath;
+    public string InstallDirectory => ReadOnlyAppConfiguration.InstallDirectory;
+  }
+
+  internal static class ReadOnlyAppConfiguration
+  {
+    public static string ConfigurationFilePath => $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\herehere.json";
+    public static string InstallDirectory => AppDomain.CurrentDomain.BaseDirectory;
   }
 }

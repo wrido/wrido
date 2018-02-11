@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Wrido.Logging;
 
@@ -12,33 +9,27 @@ namespace Wrido.Configuration
 {
   public interface IConfigurationProvider
   {
-    Task ReloadAsync(CancellationToken ct = default);
     IAppConfiguration GetAppConfiguration();
     bool TryGetConfiguration<TPlugin>(string pluginName, out TPlugin pluginConfig) where TPlugin : IPluginConfiguration;
     IEnumerable<string> GetPluginNames();
+    event EventHandler ConfigurationUpdated;
   }
 
-  public class ConfigurationProvider : IConfigurationProvider
+  internal class ConfigurationProvider : IConfigurationProvider
   {
     private readonly ILogger _logger;
-    private readonly string _wridoFolder;
     private readonly string _wridoCfgFile;
     private AppConfiguration _appConfig;
     private IDictionary<string, JToken> _plugins;
+    public event EventHandler ConfigurationUpdated;
 
-    public ConfigurationProvider(ILogger logger)
+    public ConfigurationProvider(ILogger logger, IConfigurationFileWatcher configWatcher)
     {
       _logger = logger;
-      _wridoFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\.wrido";
-      _wridoCfgFile = $"{_wridoFolder}\\wrido.json";
+      _wridoCfgFile = ReadOnlyAppConfiguration.ConfigurationFilePath;
 
+      configWatcher.Updated += (sender, args) => LoadConfiguration();
       LoadConfiguration();
-    }
-
-    public Task ReloadAsync(CancellationToken ct = default)
-    {
-      LoadConfiguration();
-      return Task.CompletedTask;
     }
 
     private void LoadConfiguration()
@@ -110,6 +101,7 @@ namespace Wrido.Configuration
           }
           _logger.Warning("Unidentified plugin of type {tokenType}", plugin.Type);
         }
+        ConfigurationUpdated?.Invoke(this, EventArgs.Empty);
         cfgOperation.Complete();
       }
       catch (Exception e)
