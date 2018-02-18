@@ -12,7 +12,7 @@ export const queryExecutingAction = createActionCreator('QueryExecuting', value 
 
 // Triggered each time a query provider has completed its execution.
 // This event marks a partial completion of the query
-export const resultsAvailableAction = createActionCreator('ResultsAvailable', value => ({ value }));
+export const resultAvailableAction = createActionCreator('ResultAvailable', value => ({ value }));
 
 // Triggered when all applicable Query Providers have produced result.
 export const queryCompletedAction = createActionCreator('QueryCompleted', value => ({ value }));
