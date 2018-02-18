@@ -43,7 +43,7 @@ namespace Wrido.Queries
       if (!_streamRepo.TryGetObserver(Context.ConnectionId, out var observer))
       {
         var client = Clients.Client(Context.ConnectionId);
-        observer = Observer.Create<QueryEvent>(e => client.InvokeAsync(e).GetAwaiter().GetResult());
+        observer = Observer.Create<QueryEvent>(e => client.SendAsync(e).GetAwaiter().GetResult());
       }
 
       await _queryService.QueryAsync(rawQuery, observer);

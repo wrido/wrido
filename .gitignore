@@ -11,7 +11,7 @@ docs/*build*/
 *.sln.docstates
 
 #VS Code
-.vscode/**
+**/.vscode/**
 
 #Rider
 .idea/**

@@ -15,7 +15,7 @@ namespace Wrido.Electron.Windows
     private readonly ILogger _logger = Log.ForContext<Shell>();
     private ShellSize _size;
     private const int _windowWidth = 700;
-    private const int _inputWindowHeight = 200;
+    private const int _inputWindowHeight = 42;
     private const int _inputAndResultWindowHeight = 450;
 
     public Shell()

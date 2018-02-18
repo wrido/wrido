@@ -1,6 +1,6 @@
 import { onInputChangeAction } from './actionCreators';
 import { isSameActionType } from './reduxUtils';
-import { HubConnection } from '@aspnet/signalr-client';
+import { HubConnection } from '@aspnet/signalr';
 
 export const connectToSignalR = store => next => {
   const connection = new HubConnection('/query');
