@@ -26,11 +26,11 @@ namespace Wrido.Queries
       var executor = _executors.FirstOrDefault(e => e.CanExecute(result));
       if (executor == null)
       {
-        await client.InvokeAsync(new ExecutionFailed { Reason = "Can not execute"});
+        await client.SendAsync(new ExecutionFailed { Reason = "Can not execute"});
         return;
       }
       await executor.ExecuteAsync(result);
-      await client.InvokeAsync(new ExecutionCompleted());
+      await client.SendAsync(new ExecutionCompleted());
     }
   }
 }

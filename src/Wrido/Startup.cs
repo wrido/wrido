@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Wrido.Configuration;
 using Wrido.Electron;
 using Wrido.Logging;
@@ -25,12 +23,7 @@ namespace Wrido
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddSignalR(options => options.JsonSerializerSettings = new JsonSerializerSettings
-      {
-        NullValueHandling = NullValueHandling.Ignore,
-        TypeNameHandling = TypeNameHandling.Auto,
-        ContractResolver = new CamelCasePropertyNamesContractResolver()
-      });
+      services.AddSignalR();
       services.AddMvc();
     }
 
@@ -63,8 +56,8 @@ namespace Wrido
         .UseStaticFiles()
         .UseSignalR(hub =>
           {
-            hub.MapHub<QueryHub>("query");
-            hub.MapHub<LoggingHub>("logging");
+            hub.MapHub<QueryHub>("/query");
+            hub.MapHub<LoggingHub>("/logging");
           })
         .UseMvcWithDefaultRoute();
     }
