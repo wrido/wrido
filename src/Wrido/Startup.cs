@@ -53,13 +53,13 @@ namespace Wrido
     {
       app
         .UseDeveloperExceptionPage()
-        .UseCreateReactiveApp(useReactDevServer: env.IsDevelopment())
         .UseSignalR(hub =>
-          {
-            hub.MapHub<QueryHub>("/query");
-            hub.MapHub<LoggingHub>("/logging");
-          })
-        .UseMvcWithDefaultRoute();
+        {
+          hub.MapHub<QueryHub>("/query");
+          hub.MapHub<LoggingHub>("/logging");
+        })
+        .UseMvc()
+        .UseCreateReactiveApp(useReactDevServer: env.IsDevelopment());
     }
   }
 }
