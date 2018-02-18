@@ -25,6 +25,7 @@ namespace Wrido
     {
       services.AddSignalR();
       services.AddMvc();
+      services.AddCreateReactAppFiles();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
@@ -52,8 +53,7 @@ namespace Wrido
     {
       app
         .UseDeveloperExceptionPage()
-        .UseDefaultFiles()
-        .UseStaticFiles()
+        .UseCreateReactiveApp(useReactDevServer: env.IsDevelopment())
         .UseSignalR(hub =>
           {
             hub.MapHub<QueryHub>("/query");
