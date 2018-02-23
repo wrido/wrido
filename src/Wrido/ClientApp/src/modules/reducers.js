@@ -1,4 +1,4 @@
-import { onInputChangeAction, queryReceivedAction, resultAvailableAction } from '../actionCreators';
+import { onInputChangeAction, queryReceivedAction, resultAvailableAction, resultUpdated } from '../actionCreators';
 import { reducer } from '../reduxUtils';
 
 export const input = reducer(
@@ -21,4 +21,8 @@ export const result = reducer(
       items: state.items.concat(action.result)
     })
   ],
+  [
+    resultUpdated,
+    (state, action) => ({items : state.items.map(i => i.id === action.result.id ? action.result : i)})
+  ]
 );

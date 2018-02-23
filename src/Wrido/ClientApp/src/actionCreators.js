@@ -22,3 +22,6 @@ export const queryCompletedAction = createActionCreator('QueryCompleted', value 
 export const queryCancelledAction = createActionCreator('QueryCancelled', value => ({ value }));
 
 export const onInputChangeAction = createActionCreator('OnInputChange', value => ({ value }));
+
+// Indicates that a previously available result has been updated with more information
+export const resultUpdated = createActionCreator('ResultUpdated', value => ({ value }));
