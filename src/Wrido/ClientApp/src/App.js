@@ -8,7 +8,6 @@ export default props => (
     <style>
       {`
         .listItem{background-color: #eee}
-        .listItem:hover{background-color: #ddd}
       `}
     </style>
     <Input />

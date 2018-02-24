@@ -1,5 +1,7 @@
-import { onInputChange } from '../constants';
+import {handleKeyPress} from "../actionCreators";
 
-export const inputEpic = (action$) => action$
-  .filter(a => a.type === onInputChange)
-  .map();
+export searchTermEpic = action$ => {
+  action$
+    .ofType(handleKeyPress.type)
+    .map(action => action.event.foo)
+}
