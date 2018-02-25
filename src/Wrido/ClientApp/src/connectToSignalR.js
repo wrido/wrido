@@ -1,4 +1,4 @@
-import { onInputChangeAction, clearQuery, hideShell } from './actionCreators';
+import { onInputChangeAction, clearQuery, hideShell, executeResult } from './actionCreators';
 import { isSameActionType } from './reduxUtils';
 import { HubConnection } from '@aspnet/signalr';
 
@@ -25,6 +25,9 @@ export const connectToSignalR = store => next => {
     }
     else if(isSameActionType(action, hideShell)){
       connection.invoke('HideShellAsync');
+    }
+    else if(isSameActionType(action, executeResult)){
+      connection.invoke('ExecuteAsync', action.result)
     }
     return next(action);
   }

@@ -23,7 +23,7 @@ namespace Wrido
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddSignalR();
+      services.AddConfiguredSignalR();
       services.AddMvc();
       services.AddCreateReactAppFiles();
     }

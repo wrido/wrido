@@ -37,3 +37,6 @@ export const clearQuery =  createActionCreator('ClearQuery', () => ({}));
 
 // Instructs the application to hide the shell
 export const hideShell =  createActionCreator('HideShell', () => ({}));
+
+// Instructs the application to execute the currently selected result
+export const executeResult =  createActionCreator('ExecuteResult', result => ({ result }));

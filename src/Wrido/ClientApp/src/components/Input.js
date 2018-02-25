@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell} from '../actionCreators';
+import {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell, executeResult} from '../actionCreators';
 
 const style = {
   input: {
@@ -20,7 +20,8 @@ const style = {
 const keyMap = {
   nextItem: 'ArrowDown',
   previousItem: 'ArrowUp',
-  clearOrHide: 'Escape'
+  clearOrHide: 'Escape',
+  executeResult: 'Enter'
 }
 
 class Input extends React.Component {
@@ -53,6 +54,11 @@ class Input extends React.Component {
         this.props.hideShell();
       }
     }
+    if (event.key === keyMap.executeResult) {
+      if(this.props.active){
+        this.props.executeResult(this.props.active);
+      }
+    }
   };
 
   render() {
@@ -70,6 +76,6 @@ class Input extends React.Component {
 }
 
 export default connect(
-  ({input}) => input,
-  {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell}
+  (state) => ({active: state.result.active, ...state.input}),
+  {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell, executeResult}
 )(Input);
