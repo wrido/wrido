@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell, executeResult} from '../actionCreators';
+import {onInputChangeAction, handleKeyPress} from '../actionCreators';
 
 const style = {
   input: {
@@ -16,20 +16,9 @@ const style = {
   }
 }
 
-// TODO: Resolve from config?
-const keyMap = {
-  nextItem: 'ArrowDown',
-  previousItem: 'ArrowUp',
-  clearOrHide: 'Escape',
-  executeResult: 'Enter'
-}
+const preventDefaultKeys = ['ArrowDown', 'ArrowUp'];
 
 class Input extends React.Component {
-
-  constructor() {
-    super();
-    this.handleKeyDown.bind(this);
-  }
 
   componentDidMount() {
     // force focus on the input element
@@ -37,29 +26,12 @@ class Input extends React.Component {
     this.domElement.onblur = () => this.domElement.focus();
   }
 
-  handleKeyDown = (event) => {
-    if (event.key === keyMap.nextItem) {
-      this.props.selectNextResult();
+  dispatchKeyDownAction = (event) => {
+    this.props.handleKeyPress(event.key);
+    if(preventDefaultKeys.some(k => event.key === k)){
       event.preventDefault();
     }
-    if (event.key === keyMap.previousItem) {
-      this.props.selectPreviousResult();
-      event.preventDefault();
-    }
-    if (event.key === keyMap.clearOrHide) {
-      if(this.props.value){
-        this.props.clearQuery();
-      }
-      else {
-        this.props.hideShell();
-      }
-    }
-    if (event.key === keyMap.executeResult) {
-      if(this.props.active){
-        this.props.executeResult(this.props.active);
-      }
-    }
-  };
+  }
 
   render() {
     return (
@@ -68,7 +40,7 @@ class Input extends React.Component {
           ref={elem => this.domElement = elem}
           value={this.props.value}
           onChange={e => this.props.onInputChangeAction(e.target.value)}
-          onKeyDown={this.handleKeyDown}
+          onKeyDown={e => this.dispatchKeyDownAction(e)}
           style={style.input}/>
       </div>
     )
@@ -76,6 +48,6 @@ class Input extends React.Component {
 }
 
 export default connect(
-  (state) => ({active: state.result.active, ...state.input}),
-  {onInputChangeAction, selectNextResult, selectPreviousResult, clearQuery, hideShell, executeResult}
+  ({input}) => input,
+  {onInputChangeAction, handleKeyPress}
 )(Input);

@@ -40,3 +40,5 @@ export const hideShell =  createActionCreator('HideShell', () => ({}));
 
 // Instructs the application to execute the currently selected result
 export const executeResult =  createActionCreator('ExecuteResult', result => ({ result }));
+
+export const handleKeyPress =  createActionCreator('HandleKeyPress', key => ({ key }));
