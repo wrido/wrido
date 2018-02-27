@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Wrido
 {
@@ -27,6 +29,22 @@ namespace Wrido
         }
       });
       return app;
+    }
+
+    public static IServiceCollection AddConfiguredSignalR(this IServiceCollection collection)
+    {
+      var setting = new JsonSerializerSettings
+      {
+        TypeNameHandling = TypeNameHandling.Auto,
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = new CamelCasePropertyNamesContractResolver()
+      };
+
+      collection
+        .AddSignalR()
+        .AddJsonProtocol(o => o.PayloadSerializerSettings = setting);
+
+      return collection;
     }
   }
 }

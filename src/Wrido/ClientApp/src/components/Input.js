@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { onInputChangeAction } from '../actionCreators';
+import {connect} from 'react-redux';
+import {onInputChangeAction, handleKeyPress} from '../actionCreators';
 
 const style = {
   input: {
@@ -9,20 +9,45 @@ const style = {
     backgroundColor: '#eee',
     outline: 'none',
     border: 'none',
-    },
+  },
   div: {
-      backgroundColor: '#eee',
-      padding: '5px 15px'
+    backgroundColor: '#eee',
+    padding: '5px 15px'
   }
 }
 
-const Input = ({ onInputChangeAction, value }) => (
-  <div style={style.div}>
-    <input value={value} onChange={e => onInputChangeAction(e.target.value)} style={style.input} />
-  </div>
-);
+const preventDefaultKeys = ['ArrowDown', 'ArrowUp'];
+
+class Input extends React.Component {
+
+  componentDidMount() {
+    // force focus on the input element
+    this.domElement.focus();
+    this.domElement.onblur = () => this.domElement.focus();
+  }
+
+  dispatchKeyDownAction = (event) => {
+    this.props.handleKeyPress(event.key);
+    if(preventDefaultKeys.some(k => event.key === k)){
+      event.preventDefault();
+    }
+  }
+
+  render() {
+    return (
+      <div style={style.div}>
+        <input
+          ref={elem => this.domElement = elem}
+          value={this.props.value}
+          onChange={e => this.props.onInputChangeAction(e.target.value)}
+          onKeyDown={e => this.dispatchKeyDownAction(e)}
+          style={style.input}/>
+      </div>
+    )
+  }
+}
 
 export default connect(
-  ({ input }) => input,
-  { onInputChangeAction }
+  ({input}) => input,
+  {onInputChangeAction, handleKeyPress}
 )(Input);

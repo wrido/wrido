@@ -13,8 +13,8 @@ docs/*build*/
 #VS Code
 **/.vscode/**
 
-#Rider
-.idea/**
+#Rider/WebStorm
+**/.idea/**
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

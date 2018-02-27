@@ -25,3 +25,20 @@ export const onInputChangeAction = createActionCreator('OnInputChange', value =>
 
 // Indicates that a previously available result has been updated with more information
 export const resultUpdated = createActionCreator('ResultUpdated', value => ({ value }));
+
+// Instructs the application to select the next result, if available
+export const selectNextResult =  createActionCreator('SelectNextResult', () => ({}));
+
+// Instructs the application to select the previous result, if applicable
+export const selectPreviousResult =  createActionCreator('SelectPreviousResult', () => ({}));
+
+// Instructs the application to select the previous result, if applicable
+export const clearQuery =  createActionCreator('ClearQuery', () => ({}));
+
+// Instructs the application to hide the shell
+export const hideShell =  createActionCreator('HideShell', () => ({}));
+
+// Instructs the application to execute the currently selected result
+export const executeResult =  createActionCreator('ExecuteResult', result => ({ result }));
+
+export const handleKeyPress =  createActionCreator('HandleKeyPress', key => ({ key }));

@@ -22,12 +22,12 @@ const style = {
   }
 }
 
-const Result = ({ items }) => {
+const Result = ({ items, active }) => {
   return (
     <div style={style.list}>
       {
         items.map((item, i) => (
-          <div key={i} style={style.item} className={'listItem'}>
+          <div key={i} style={{...style.item, 'backgroundColor' : (active && item.id === active.id) ? '#ddd' : null}} className={'listItem'}>
             <span>
               <img src={item.icon.uri} alt={item.icon.alt} />
             </span>
