@@ -1,10 +1,11 @@
 import { combineEpics } from 'redux-observable';
 import { combineReducers } from 'redux';
 import { input, result } from './reducers';
-import { keyPressEpic} from './epics';
+import { keyPressEpic, webSocketEpic} from './epics';
 
 export const rootEpic = combineEpics(
-  keyPressEpic
+  keyPressEpic,
+  webSocketEpic,
 );
 
 export const rootReducer = combineReducers({
