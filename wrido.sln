@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1B248AFD-69BC-4290-BB94-F63EA4A49513}"
 EndProject
@@ -22,7 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.Dummy", "src\W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Core.Tests", "src\Wrido.Core.Tests\Wrido.Core.Tests.csproj", "{0C9C442D-0855-41D8-8E9B-31C15DA7C4B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.Wikipedia", "src\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj", "{62B363EE-6DB2-405B-85AF-DBED02AB99F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.Wikipedia", "src\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj", "{62B363EE-6DB2-405B-85AF-DBED02AB99F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.ServerSide", "src\Wrido.ServerSide\Wrido.ServerSide.csproj", "{F73A086E-6190-4BF2-A868-A33C40ED1817}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.Spotify", "src\Wrido.Plugin.Spotify\Wrido.Plugin.Spotify.csproj", "{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,6 +146,30 @@ Global
 		{62B363EE-6DB2-405B-85AF-DBED02AB99F1}.Release|x64.Build.0 = Release|Any CPU
 		{62B363EE-6DB2-405B-85AF-DBED02AB99F1}.Release|x86.ActiveCfg = Release|Any CPU
 		{62B363EE-6DB2-405B-85AF-DBED02AB99F1}.Release|x86.Build.0 = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|x64.Build.0 = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Debug|x86.Build.0 = Debug|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|x64.ActiveCfg = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|x64.Build.0 = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|x86.ActiveCfg = Release|Any CPU
+		{F73A086E-6190-4BF2-A868-A33C40ED1817}.Release|x86.Build.0 = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|x64.Build.0 = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Debug|x86.Build.0 = Debug|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x64.Build.0 = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x86.ActiveCfg = Release|Any CPU
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +184,8 @@ Global
 		{15CD30AB-7394-4D6A-B690-80EEBCD1F471} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 		{0C9C442D-0855-41D8-8E9B-31C15DA7C4B7} = {5EDA50CA-C3D6-4320-AD14-56243B7058C2}
 		{62B363EE-6DB2-405B-85AF-DBED02AB99F1} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
+		{F73A086E-6190-4BF2-A868-A33C40ED1817} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
+		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0371E56C-FE2E-44B5-B4F3-21B72D3612F4}

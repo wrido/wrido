@@ -30,6 +30,10 @@ namespace Wrido.Plugin
       builder
         .Register(c => c.ResolvePluginServices<EmbeddedResource>())
         .InstancePerDependency();
+
+      builder
+        .Register(c => c.ResolvePluginServices<IResultExecuter>())
+        .InstancePerDependency();
     }
   }
 }

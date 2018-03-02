@@ -48,6 +48,7 @@ namespace Wrido.Configuration
           {"Wrido.Plugin.StackExchange", new JValue("Wrido.Plugin.StackExchange")},
           {"Wrido.Plugin.Google", new JValue("Wrido.Plugin.Google")},
           {"Wrido.Plugin.Wikipedia", new JValue("Wrido.Plugin.Wikipedia")},
+          {"Wrido.Plugin.Spotify", new JValue("Wrido.Plugin.Spotify")},
           {"Wrido.Plugin.Dummy", new JValue("Wrido.Plugin.Dummy")}
         };
         cfgOperation.Cancel();
@@ -59,6 +60,7 @@ namespace Wrido.Configuration
         var cfgJson = File.ReadAllText(_wridoCfgFile);
         var dynamicConfig = JObject.Parse(cfgJson);
         _appConfig = dynamicConfig.ToObject<AppConfiguration>();
+        _plugins = new Dictionary<string, JToken>(StringComparer.InvariantCultureIgnoreCase);
 
         var plugins = dynamicConfig.GetValue("plugins", StringComparison.OrdinalIgnoreCase);
         if (plugins == null)
@@ -73,7 +75,6 @@ namespace Wrido.Configuration
           return;
         }
         var pluginsArray = plugins as JArray;
-        _plugins = new Dictionary<string, JToken>(StringComparer.InvariantCultureIgnoreCase);
         _logger.Information("{pluginCount} plugin entries in configuration", pluginsArray?.Count ?? 0);
         foreach (var plugin in pluginsArray ?? Enumerable.Empty<JToken>())
         {

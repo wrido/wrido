@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <LangVersion>7.1</LangVersion>
     <SpaRoot>ClientApp\</SpaRoot>
+    <UserSecretsId>7339b112-12f2-4ec9-87ff-25b2272c0dad</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Electron\wrido-64x64.png">
@@ -10,10 +11,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
-    <PackageReference Include="electronnet.api" Version="0.0.7" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
+    <PackageReference Include="electronnet.api" Version="0.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.0.0-rc2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-preview2-30131" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
@@ -27,6 +28,7 @@
     <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Dummy\Wrido.Plugin.Dummy.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj" />
+    <ProjectReference Include="..\Wrido.Plugin.Spotify\Wrido.Plugin.Spotify.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj" />
   </ItemGroup>

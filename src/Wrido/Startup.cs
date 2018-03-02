@@ -7,6 +7,7 @@ using Wrido.Configuration;
 using Wrido.Electron;
 using Wrido.Logging;
 using Wrido.Plugin;
+using Wrido.Plugin.Spotify;
 using Wrido.Queries;
 using Wrido.Resources;
 
@@ -47,6 +48,8 @@ namespace Wrido
         .RegisterType<ExecutionService>()
         .AsImplementedInterfaces()
         .SingleInstance();
+
+      new SpotifyPlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
