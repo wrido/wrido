@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -19,7 +18,6 @@ namespace Wrido.ServerSide.Spotify
     private readonly IHubContext<SpotifyHub> _hubContext;
     private readonly HttpClient _httpClient;
     private readonly JsonSerializer _serializer;
-    private const string SpotifyAuthorizeUrl = "https://accounts.spotify.com/authorize";
 
     public SpotifyController(SpotifyOptions options, IHubContext<SpotifyHub> hubContext)
     {
@@ -31,15 +29,6 @@ namespace Wrido.ServerSide.Spotify
         ContractResolver = new CamelCasePropertyNamesContractResolver {NamingStrategy = new SnakeCaseNamingStrategy()}
       };
       _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}")));
-    }
-
-    [HttpGet("spotify/auth")]
-    public IActionResult RedirectToSpotifyAccount()
-    {
-      var scopes = $"{Scopes.UserReadRecentlyPlayed} {Scopes.PlaylistReadPrivate} {Scopes.PlaylistReadCollaborative} {Scopes.UserModifyPlaybackState}";
-      var callback = WebUtility.UrlEncode("http://localhost:5001/spotify/callback");
-      var url = $"{SpotifyAuthorizeUrl}?client_id={_options.ClientId}&response_type=code&redirect_uri={callback}&scope={scopes}";
-      return Redirect(url);
     }
 
     [HttpGet("spotify/callback")]
@@ -93,6 +82,40 @@ namespace Wrido.ServerSide.Spotify
       }
 
       await caller.SendAccessObjectAsync(access);
+      return Json(access);
+    }
+
+    [HttpGet("spotify/refresh")]
+    public async Task<IActionResult> RefreshAccessTokenAsync([FromQuery] string token)
+    {
+      var body = new Dictionary<string, string>
+      {
+        {"grant_type", "refresh_token"},
+        {"refresh_token", token},
+        {"redirect_uri", _options.AuthorizeRedirectUrl.ToString()}
+      };
+      var response = await _httpClient.PostAsync(_options.AccessTokenUrl, new FormUrlEncodedContent(body));
+      var responseBody = await response.Content.ReadAsStringAsync();
+
+      if (!response.IsSuccessStatusCode)
+      {
+        return Ok($"Authorization failed: {responseBody}");
+      }
+
+      SpotifyAccess access;
+      using (var stringReader = new StringReader(responseBody))
+      using (var jsonReader = new JsonTextReader(stringReader))
+      {
+        try
+        {
+          access = _serializer.Deserialize<SpotifyAccess>(jsonReader);
+        }
+        catch (Exception e)
+        {
+          return Ok($"Serialization failed: {e.Message}");
+        }
+      }
+
       return Json(access);
     }
   }

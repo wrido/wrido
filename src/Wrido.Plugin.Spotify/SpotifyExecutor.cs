@@ -18,6 +18,7 @@ namespace Wrido.Plugin.Spotify
   {
     private readonly IAppConfiguration _config;
     private readonly ILogger _logger;
+    private readonly HttpClient _httpClient;
     private const string authorizeCallback = "authorizeUrlAvailable";
     private const string authorizeFailed = "authorizeFailed";
     private const string authorizeSucceeded = "authorizeSucceeded";
@@ -27,6 +28,7 @@ namespace Wrido.Plugin.Spotify
     {
       _config = config.GetAppConfiguration();
       _logger = logger;
+      _httpClient = new HttpClient();
     }
 
     public bool CanExecute(QueryResult result)
@@ -51,6 +53,9 @@ namespace Wrido.Plugin.Spotify
           await connection.SendAsync(startAuthorization);
           await authorizeCompletion.Task;
           authOperation.Complete();
+
+          var response = await _httpClient.GetAsync($"{_config.ServerUrl}spotify/refresh?token={authorizeCompletion.Task.Result.RefreshToken}");
+          var responseBody = await response.Content.ReadAsStringAsync();
         }
         catch (Exception e)
         {

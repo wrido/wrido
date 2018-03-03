@@ -1,6 +1,9 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using Wrido.Queries;
 using Wrido.Resources;
+using IQueryProvider = Wrido.Queries.IQueryProvider;
 
 namespace Wrido.Plugin
 {
@@ -32,7 +35,9 @@ namespace Wrido.Plugin
         .InstancePerDependency();
 
       builder
-        .Register(c => c.ResolvePluginServices<IResultExecuter>())
+        .Register(c => Enumerable.Concat(
+          c.ResolvePluginServices<IResultExecuter>(),
+          new IResultExecuter[]{ c.Resolve<WebResultExecuter>() }))
         .InstancePerDependency();
     }
   }

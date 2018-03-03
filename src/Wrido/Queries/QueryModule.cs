@@ -13,7 +13,7 @@ namespace Wrido.Queries
 
       builder
         .RegisterType<WebResultExecuter>()
-        .AsImplementedInterfaces()
+        .AsSelf()
         .SingleInstance();
     }
   }
