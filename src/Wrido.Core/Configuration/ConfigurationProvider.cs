@@ -123,6 +123,11 @@ namespace Wrido.Configuration
       }
       try
       {
+        var pluginValue = _plugins[pluginName];
+        if (pluginValue.Type == JTokenType.String)
+        {
+          return false;
+        }
         pluginConfig = _plugins[pluginName].ToObject<TPlugin>();
         return true;
       }
