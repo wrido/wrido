@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Wrido.Plugin.StackExchange.Common
+namespace Wrido.Plugin.Spotify.Common.Utils
 {
   internal static class EpochDateTimeExtensions
   {

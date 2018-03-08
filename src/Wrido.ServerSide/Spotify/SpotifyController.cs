@@ -102,21 +102,7 @@ namespace Wrido.ServerSide.Spotify
         return Ok($"Authorization failed: {responseBody}");
       }
 
-      SpotifyAccess access;
-      using (var stringReader = new StringReader(responseBody))
-      using (var jsonReader = new JsonTextReader(stringReader))
-      {
-        try
-        {
-          access = _serializer.Deserialize<SpotifyAccess>(jsonReader);
-        }
-        catch (Exception e)
-        {
-          return Ok($"Serialization failed: {e.Message}");
-        }
-      }
-
-      return Json(access);
+      return Ok(responseBody);
     }
   }
 }

@@ -1,4 +1,4 @@
-﻿namespace Wrido.Plugin.Spotify.Authorization
+﻿namespace Wrido.Plugin.Spotify.Common.Authorization
 {
   public class SpotifyAccess
   {

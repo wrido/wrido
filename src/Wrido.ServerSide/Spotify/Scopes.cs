@@ -46,6 +46,12 @@
     public const string UserReadCurrentlyPlaying = "user-read-currently-playing";
 
     /// <summary>
+    /// Read access to a user's playback state.
+    /// Prompt shown to user: "Read your currently playing track and Spotify Connect devices information"
+    /// </summary>
+    public const string UserReadPlaybackState = "user-read-playback-state";
+
+    /// <summary>
     /// Read access to a user's recently played items.
     /// Prompt shown to user: "Access your recently played items"
     /// </summary>

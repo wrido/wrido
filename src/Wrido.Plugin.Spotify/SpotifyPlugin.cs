@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Net.Http;
 using Autofac;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Sockets;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Wrido.Configuration;
+using Wrido.Plugin.Spotify.Authorization;
 using Wrido.Plugin.Spotify.Common;
+using Wrido.Plugin.Spotify.Common.Authorization;
+using Wrido.Plugin.Spotify.Common.Search;
+using Wrido.Plugin.Spotify.Playback;
 
 namespace Wrido.Plugin.Spotify
 {
@@ -19,8 +24,7 @@ namespace Wrido.Plugin.Spotify
 
           var spotifyCfg = cfgProvider.GetConfiguration<SpotifyConfiguration>() ?? SpotifyConfiguration.Default;
           spotifyCfg.Keyword = spotifyCfg.Keyword ?? ":s";
-          spotifyCfg.GivePermissionUri = new Uri($"{appCfg.ServerUrl}spotify/auth");
-          spotifyCfg.AccessTokenUri = new Uri($"{appCfg.ServerUrl}spotify/auth/result");
+          spotifyCfg.RefreshAccessUri = new Uri($"{appCfg.ServerUrl}spotify/refresh");
           return spotifyCfg;
         })
         .InstancePerDependency();
@@ -36,7 +40,45 @@ namespace Wrido.Plugin.Spotify
         .SingleInstance();
 
       builder
-        .RegisterType<SpotifyExecutor>()
+        .RegisterType<WridoAccessTokenProvider>()
+        .AsSelf()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<QueryParameterBuilder>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<HttpClient>()
+        .AsSelf()
+        .SingleInstance();
+
+      builder
+        .Register(c => new JsonSerializer
+        {
+          NullValueHandling = NullValueHandling.Ignore,
+          ContractResolver = new CamelCasePropertyNamesContractResolver
+          {
+            NamingStrategy = new SnakeCaseNamingStrategy()
+          }
+        })
+        .AsSelf()
+        .SingleInstance();
+
+      builder
+        .RegisterType<AuthorizationExecutor>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<ChangeSongExecuter>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+
+      builder
+        .RegisterType<PlayPauseExecutor>()
         .AsImplementedInterfaces()
         .SingleInstance();
     }

@@ -48,8 +48,6 @@ namespace Wrido
         .RegisterType<ExecutionService>()
         .AsImplementedInterfaces()
         .SingleInstance();
-
-      new SpotifyPlugin().Register(builder);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)

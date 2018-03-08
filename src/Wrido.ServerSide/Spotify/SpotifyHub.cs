@@ -23,6 +23,7 @@ namespace Wrido.ServerSide.Spotify
         Scopes.UserReadRecentlyPlayed,
         Scopes.PlaylistReadPrivate,
         Scopes.PlaylistReadCollaborative,
+        Scopes.UserReadPlaybackState,
         Scopes.UserModifyPlaybackState
       }.Join("%20");
       var authorizeUrl =$"{_options.AuthorizeUrl}?client_id={clientId}&scope={scope}&state={state}&redirect_uri={redirectUri}&response_type=code";
