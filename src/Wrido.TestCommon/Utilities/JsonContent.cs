@@ -5,27 +5,27 @@ using Newtonsoft.Json;
 
 namespace Wrido.TestCommon.Utilities
 {
-    public class JsonContent : StringContent
+  public class JsonContent : StringContent
+  {
+    private const string ApplicationJson = "application/json";
+
+    public JsonContent(object content, JsonSerializer serializer = null)
+        : base(Serialize(content, serializer), Encoding.UTF8, ApplicationJson) { }
+
+    private static string Serialize(object content, JsonSerializer serializer)
     {
-        private const string ApplicationJson = "application/json";
+      if (serializer == null)
+      {
+        return JsonConvert.SerializeObject(content);
+      }
 
-        public JsonContent(object content, JsonSerializer serializer = null)
-            : base(Serialize(content, serializer), Encoding.UTF8, ApplicationJson) { }
-
-        private static string Serialize(object content, JsonSerializer serializer)
-        {
-            if (serializer == null)
-            {
-                return JsonConvert.SerializeObject(content);
-            }
-
-            using (var stringWriter = new StringWriter())
-            using (var jsonWriter = new JsonTextWriter(stringWriter))
-            {
-                serializer.Serialize(jsonWriter, content);
-                stringWriter.Flush();
-                return stringWriter.ToString();
-            }
-        }
+      using (var stringWriter = new StringWriter())
+      using (var jsonWriter = new JsonTextWriter(stringWriter))
+      {
+        serializer.Serialize(jsonWriter, content);
+        stringWriter.Flush();
+        return stringWriter.ToString();
+      }
     }
+  }
 }

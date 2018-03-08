@@ -13,7 +13,7 @@ const keyMap = {
 export const keyPressEpic = (action$, store) => action$
   .ofType(actions.handleKeyPress.type)
   .map(keyPress => {
-    let state = store.getState();
+    const state = store.getState();
 
     switch (keyPress.key) {
       case keyMap.nextItem:
@@ -35,7 +35,7 @@ export const keyPressEpic = (action$, store) => action$
 export const webSocketEpic = (action$) => {
 
   const recursiveConnect = (observer) => {
-    let connection = new HubConnection('/query');
+    const connection = new HubConnection('/query');
     connection
       .start()
       .then(() => observer.next(connection));
@@ -45,7 +45,7 @@ export const webSocketEpic = (action$) => {
   return Observable
     .create(o => recursiveConnect(o))
     .switchMap(connection => {
-      var invokeSignalR = action$
+      const invokeSignalR = action$
         .do(action => {
           switch (action.type) {
             case (actions.onInputChangeAction.type):
@@ -54,10 +54,10 @@ export const webSocketEpic = (action$) => {
             case (actions.clearQuery.type):
               connection.invoke('QueryAsync', '');
               break;
-            case (actions.hideShell):
+            case (actions.hideShell.type):
               connection.invoke('HideShellAsync');
               break;
-            case (actions.executeResult):
+            case (actions.executeResult.type):
               connection.invoke('ExecuteAsync', action.result);
               break;
             default:
@@ -66,8 +66,8 @@ export const webSocketEpic = (action$) => {
         })
         .filter(() => false);
 
-      let backendEvent$ = connection.stream('CreateResponseStream');
-      let receiveSignalR = Observable.create(o => backendEvent$.subscribe(o));
+      const backendEvent$ = connection.stream('CreateResponseStream');
+      const receiveSignalR = Observable.create(o => backendEvent$.subscribe(o));
 
       return Observable.merge(invokeSignalR, receiveSignalR);
     });

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using Wrido.Configuration;
 using Wrido.Logging;
 
@@ -39,7 +40,7 @@ namespace Wrido.Plugin
 
       try
       {
-        var pluginAssembly = Assembly.LoadFile(exactMatch);
+        var pluginAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(exactMatch);
         var pluginTypes = pluginAssembly.DefinedTypes
           .Where(t => t.ImplementedInterfaces.Contains(typeof(IWridoPlugin)))
           .Where(t => t.GetConstructors().Any(c => !c.GetParameters().Any()))

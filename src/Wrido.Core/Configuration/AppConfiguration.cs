@@ -7,12 +7,13 @@ namespace Wrido.Configuration
     string HotKey { get; }
     string ConfigurationFilePath { get; }
     string InstallDirectory { get; }
+    Uri ServerUrl { get; }
   }
 
   internal class AppConfiguration : IAppConfiguration
   {
     public string HotKey { get; set; }
-
+    public Uri ServerUrl { set; get; }
     public string ConfigurationFilePath => ReadOnlyAppConfiguration.ConfigurationFilePath;
     public string InstallDirectory => ReadOnlyAppConfiguration.InstallDirectory;
   }

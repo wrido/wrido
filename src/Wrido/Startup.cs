@@ -7,6 +7,7 @@ using Wrido.Configuration;
 using Wrido.Electron;
 using Wrido.Logging;
 using Wrido.Plugin;
+using Wrido.Plugin.Spotify;
 using Wrido.Queries;
 using Wrido.Resources;
 
