@@ -2,14 +2,6 @@
 
 namespace Wrido.Configuration
 {
-  public interface IAppConfiguration
-  {
-    string HotKey { get; }
-    string ConfigurationFilePath { get; }
-    string InstallDirectory { get; }
-    Uri ServerUrl { get; }
-  }
-
   internal class AppConfiguration : IAppConfiguration
   {
     public string HotKey { get; set; }
@@ -18,9 +10,10 @@ namespace Wrido.Configuration
     public string InstallDirectory => ReadOnlyAppConfiguration.InstallDirectory;
   }
 
-  internal static class ReadOnlyAppConfiguration
+  public static class ReadOnlyAppConfiguration
   {
     public static string ConfigurationFilePath => $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\herehere.json";
+    public static string ConfigurationLocalFilePath => $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\herehere.local.json";
     public static string InstallDirectory => AppDomain.CurrentDomain.BaseDirectory;
   }
 }
