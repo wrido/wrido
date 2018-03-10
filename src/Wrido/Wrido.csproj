@@ -33,6 +33,9 @@
     <ProjectReference Include="..\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="electron.manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
