@@ -1,15 +1,16 @@
 ﻿using System.Threading.Tasks;
+using Wrido.Execution;
 using Wrido.Plugin.Spotify.Common;
 using Wrido.Plugin.Spotify.Common.Playback;
 using Wrido.Queries;
 
 namespace Wrido.Plugin.Spotify.Playback
 {
-  public class ChangeSongExecuter : IResultExecuter
+  public class ChangeTrackExecuter : IResultExecuter
   {
     private readonly ISpotifyClient _spotifyClient;
 
-    public ChangeSongExecuter(ISpotifyClient spotifyClient)
+    public ChangeTrackExecuter(ISpotifyClient spotifyClient)
     {
       _spotifyClient = spotifyClient;
     }

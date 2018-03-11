@@ -115,11 +115,13 @@ namespace Wrido.Plugin.Spotify.Common
       }
 
       var response = await _httpClient.GetAsync(queryUrl, ct);
+      ct.ThrowIfCancellationRequested();
 
       if (response.StatusCode == HttpStatusCode.Unauthorized)
       {
         await UpdateAuthorizationHeaderAsync();
         response = await _httpClient.GetAsync(queryUrl, ct);
+        ct.ThrowIfCancellationRequested();
         if (!response.IsSuccessStatusCode)
         {
           var error = await DeserializeBodyAsync<UnsuccessfulOperation>(response);
@@ -133,6 +135,7 @@ namespace Wrido.Plugin.Spotify.Common
         throw new SpotifyException("Request to Spotify's API was not successful", error.Error);
       }
 
+      ct.ThrowIfCancellationRequested();
       var result = await DeserializeBodyAsync<TSpotifyResource>(response);
       return result;
     }

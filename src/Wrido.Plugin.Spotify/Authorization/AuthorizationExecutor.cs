@@ -39,17 +39,17 @@ namespace Wrido.Plugin.Spotify.Authorization
     {
       if (result is AuthorizationRequiredResult)
       {
-        var authOperation = TimedOperationExtensions.Timed(_logger, "Spotify authentication");
+        var authOperation = _logger.Timed("Spotify authentication");
         var connection = GetConnectionToSignalR();
 
         try
         {
           var authorizeCompletion = new TaskCompletionSource<SpotifyAccess>();
           await connection.StartAsync();
-          HubConnectionExtensions.On<string>(connection, authorizeCallback, OpenInBrowser.Url);
-          HubConnectionExtensions.On<string>(connection, authorizeFailed, s => authorizeCompletion.TrySetException(new Exception($"Spotify authorization failed: {s}")));
-          HubConnectionExtensions.On<SpotifyAccess>(connection, authorizeSucceeded, access => authorizeCompletion.TrySetResult(access));
-          await HubConnectionExtensions.SendAsync(connection, startAuthorization);
+          connection.On<string>(authorizeCallback, OpenInBrowser.Url);
+          connection.On<string>(authorizeFailed, s => authorizeCompletion.TrySetException(new Exception($"Spotify authorization failed: {s}")));
+          connection.On<SpotifyAccess>(authorizeSucceeded, access => authorizeCompletion.TrySetResult(access));
+          await connection.SendAsync(startAuthorization);
           await authorizeCompletion.Task;
           authOperation.Complete();
           _tokenProvider.Initialize(authorizeCompletion.Task.Result);
