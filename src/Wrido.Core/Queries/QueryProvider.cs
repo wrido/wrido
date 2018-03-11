@@ -32,6 +32,12 @@ namespace Wrido.Queries
       NotifyObservers(results.Select(r => new ResultUpdated(r)));
     }
 
+    protected void Expired(IEnumerable<QueryResult> results) => Expired(results.ToArray());
+    protected void Expired(params QueryResult[] results)
+    {
+      NotifyObservers(results.Select(r => new ResultExpired{ResultId = r.Id}));
+    }
+
     private void NotifyObservers(IEnumerable<QueryEvent> events)
     {
       foreach (var @event in events)

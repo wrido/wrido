@@ -27,6 +27,10 @@ export const result = reducer(
     (state, action) => ({items: state.items.map(i => i.id === action.result.id ? action.result : i)})
   ],
   [
+    action.resultExpired,
+    (state, action) => ({items: state.items.filter(i => i.id !== action.resultId)})
+  ],
+  [
     action.selectNextResult,
     (state) => {
       if (!state.items)

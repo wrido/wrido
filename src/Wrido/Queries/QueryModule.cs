@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Wrido.Execution;
 
 namespace Wrido.Queries
 {

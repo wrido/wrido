@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Wrido.Execution;
 using Wrido.Queries.Events;
 
 namespace Wrido.Queries

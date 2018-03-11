@@ -15,11 +15,13 @@ namespace Wrido.Plugin.Spotify
   {
     private readonly SpotifyConfiguration _config;
     private readonly ISpotifyClient _client;
+    private readonly WridoAccessTokenProvider _accessTokenProvider;
 
-    public SpotifyProvider(SpotifyConfiguration config, ISpotifyClient client)
+    public SpotifyProvider(SpotifyConfiguration config, ISpotifyClient client, WridoAccessTokenProvider accessTokenProvider)
     {
       _config = config;
       _client = client;
+      _accessTokenProvider = accessTokenProvider;
     }
 
     public override bool CanHandle(Query query)
@@ -33,69 +35,90 @@ namespace Wrido.Plugin.Spotify
 
     protected override async Task QueryAsync(Query query, CancellationToken ct)
     {
-      if (!_client.CanAuthenticate)
+      if (!_accessTokenProvider.IsReady)
       {
-        Available(new AuthorizationRequiredResult
-        {
-          Title = "Authentication required",
-          Description = "You need to give Wrido right to access you account"
-        });
-        return;
+        await PromptForAuthorizationAsync(ct);
       }
 
       if (string.IsNullOrWhiteSpace(query.Argument))
       {
-        var currentPlayback = new SpotifyTogglePlaybackResult
-        {
-          Title = "Loading current play state..."
-        };
-        Available(currentPlayback);
-
-        var foreverTask = Task.Run(async () =>
-        {
-          while (true)
-          {
-            var playback = await _client.GetCurrentPlaybackAsync(ct);
-            if (playback == null)
-            {
-              currentPlayback.Title = "Nothing playing";
-            }
-            else
-            {
-              var duration = TimeSpan.FromMilliseconds(playback.ProgressMs ?? 0);
-              var action = playback.IsPlaying ? "Pause" : "Play";
-              currentPlayback.IsPlaying = playback.IsPlaying;
-              currentPlayback.Title = $"{action} '{playback.Item.Name}' on {playback.Device?.Name}";
-              currentPlayback.Description = $"{duration:mm\\:ss}";
-            }
-
-            Updated(currentPlayback);
-            await Task.Delay(TimeSpan.FromSeconds(1), ct);
-          }
-        }, ct);
-
-        var recentlyPlayed = await _client.GetRecentlyPlayedAsync(RecentlyPlayedQuery.Default, ct);
-        foreach (var played in recentlyPlayed.Items)
-        {
-          if (string.Equals(played.Context?.Type, "playlist"))
-          {
-            // Hack, reported at: https://github.com/spotify/web-api/issues/815
-            played.Context.Uri = null;
-          }
-
-          Available(new SpotifyPlayableResult
-          {
-            Title = $"'{played.Track.Name}' by {played.Track.Artists.FirstOrDefault()?.Name}",
-            Description = $"Last played {played.PlayedAt}",
-            ResourceUri = played.Track.Uri,
-            ContextUri = played.Context?.Uri
-          });
-        }
-
-        await foreverTask;
+        var foreverStreamTask = StreamCurrentlyPlayingAsync(ct);
+        await LoadRecentlyPlayedAsync(ct);
+        await foreverStreamTask;
       }
 
-      var search = await _client.SearchAsync(new SearchQuery{ Query = query.Argument, Type = SearchType.All, Limit = 5}, ct);
+      await SearchForTrackAsync(query.Argument, ct);
+    }
+
+    private async Task PromptForAuthorizationAsync(CancellationToken ct)
+    {
+      var authResult = new AuthorizationRequiredResult
+      {
+        Title = "Authentication required",
+        Description = "You need to give Wrido right to access you account"
+      };
+
+      Available(authResult);
+      await _accessTokenProvider.WaitUntilReadyAsync(ct);
+      Expired(authResult);
+    }
+
+    private async Task LoadRecentlyPlayedAsync(CancellationToken ct)
+    {
+      var recentlyPlayed = await _client.GetRecentlyPlayedAsync(RecentlyPlayedQuery.Default, ct);
+      foreach (var played in recentlyPlayed.Items)
+      {
+        if (played.Context != null && !string.Equals(played.Context?.Type, "album"))
+        {
+          // Hack, reported at: https://github.com/spotify/web-api/issues/815
+          played.Context.Uri = null;
+        }
+
+        Available(new SpotifyPlayableResult
+        {
+          Title = $"'{played.Track.Name}' by {played.Track.Artists.FirstOrDefault()?.Name}",
+          Description = $"Last played {played.PlayedAt}",
+          ResourceUri = played.Track.Uri,
+          ContextUri = played.Context?.Uri
+        });
+      }
+    }
+
+    private async Task StreamCurrentlyPlayingAsync(CancellationToken ct)
+    {
+      var currentPlayback = new SpotifyTogglePlaybackResult
+      {
+        Title = "Loading current play state..."
+      };
+
+      Available(currentPlayback);
+
+      while (true)
+      {
+        var playback = await _client.GetCurrentPlaybackAsync(ct);
+        if (playback == null)
+        {
+          currentPlayback.Title = "Nothing playing";
+        }
+        else
+        {
+          var duration = TimeSpan.FromMilliseconds(playback.ProgressMs ?? 0);
+          var action = playback.IsPlaying ? "Pause" : "Play";
+          currentPlayback.IsPlaying = playback.IsPlaying;
+          currentPlayback.Title = $"{action} '{playback.Item.Name}' on {playback.Device?.Name}";
+          currentPlayback.Description = $"{duration:mm\\:ss}";
+        }
+
+        Updated(currentPlayback);
+        await Task.Delay(TimeSpan.FromSeconds(1), ct);
+        ct.ThrowIfCancellationRequested();
+      }
+    }
+
+    public async Task SearchForTrackAsync(string query, CancellationToken ct)
+    {
+      var search = await _client.SearchAsync(new SearchQuery { Query = query, Type = SearchType.All, Limit = 5 }, ct);
+      ct.ThrowIfCancellationRequested();
       foreach (var track in search.Tracks.Items)
       {
         Available(new SpotifyPlayableResult

@@ -73,7 +73,7 @@ namespace Wrido.Plugin.Spotify
         .SingleInstance();
 
       builder
-        .RegisterType<ChangeSongExecuter>()
+        .RegisterType<ChangeTrackExecuter>()
         .AsImplementedInterfaces()
         .SingleInstance();
 

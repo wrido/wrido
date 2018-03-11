@@ -26,6 +26,9 @@ export const onInputChangeAction = createActionCreator('OnInputChange', value =>
 // Indicates that a previously available result has been updated with more information
 export const resultUpdated = createActionCreator('ResultUpdated', value => ({ value }));
 
+// Indicates that a previously available result has been updated with more information
+export const resultExpired = createActionCreator('ResultExpired', value => ({ value }));
+
 // Instructs the application to select the next result, if available
 export const selectNextResult =  createActionCreator('SelectNextResult', () => ({}));
 
