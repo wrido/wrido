@@ -30,7 +30,7 @@ namespace Wrido.Queries
     {
       var query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
-      using (_logger.Timed("Query {rawQuery}", rawQuery))
+      using (var fullQuery = _logger.Timed("Query {rawQuery}", rawQuery))
       {
         CancelOngoingQuery(out var currentCt);
 
@@ -43,20 +43,24 @@ namespace Wrido.Queries
         var providerTasks = providers
           .Select(async provider =>
           {
-            var operation = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
-            var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, operation.Cancel, operation.Complete);
+            var providerQuery = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
+            var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, providerQuery.Cancel, providerQuery.Complete);
             try
             {
+              currentCt.ThrowIfCancellationRequested();
               await provider.QueryAsync(query, providerObserver, currentCt);
             }
             catch (OperationCanceledException)
             {
-              _logger.Information("Query {rawQuery} has been cancelled for {queryProvider}", rawQuery, providerObserver.GetType().Name);
+              _logger.Information("Query {rawQuery} has been cancelled for {queryProvider}", rawQuery, provider.GetType().Name);
+              fullQuery.Cancel();
+              providerQuery.Cancel();
                /* Cancellation is OK */
             }
             catch (Exception e)
             {
               _logger.Information(e, "An unhandle exception was thrown.");
+              providerQuery.Cancel(e);
             }
             finally
             {

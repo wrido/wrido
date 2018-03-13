@@ -45,12 +45,17 @@ export const webSocketEpic = (action$) => {
   return Observable
     .create(o => recursiveConnect(o))
     .switchMap(connection => {
+
+      const inputChanged$ = action$
+        .ofType(actions.onInputChangeAction.type)
+        .debounceTime(300)
+        .do(action => connection.invoke('QueryAsync', action.value)
+        )
+        .filter(() => false);
+
       const invokeSignalR = action$
         .do(action => {
           switch (action.type) {
-            case (actions.onInputChangeAction.type):
-              connection.invoke('QueryAsync', action.value);
-              break;
             case (actions.clearQuery.type):
               connection.invoke('QueryAsync', '');
               break;
@@ -60,8 +65,6 @@ export const webSocketEpic = (action$) => {
             case (actions.executeResult.type):
               connection.invoke('ExecuteAsync', action.result);
               break;
-            default:
-              break;
           }
         })
         .filter(() => false);
@@ -69,6 +72,6 @@ export const webSocketEpic = (action$) => {
       const backendEvent$ = connection.stream('CreateResponseStream');
       const receiveSignalR = Observable.create(o => backendEvent$.subscribe(o));
 
-      return Observable.merge(invokeSignalR, receiveSignalR);
+      return Observable.merge(invokeSignalR, inputChanged$, receiveSignalR);
     });
 }
