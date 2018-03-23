@@ -29,6 +29,7 @@ namespace Wrido
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
         .Enrich.FromLogContext()
         .WriteTo.Console(outputTemplate: LogTemplates.Console)
+        .WriteTo.Elasticsearch()
         .CreateLogger();
       LogManager.LoggerFactory = type => new SerilogLogger(Log.ForContext(type));
 
