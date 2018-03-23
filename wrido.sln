@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.ServerSide", "src\Wri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wrido.Plugin.Spotify", "src\Wrido.Plugin.Spotify\Wrido.Plugin.Spotify.csproj", "{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.Everything", "src\Wrido.Plugin.Everything\Wrido.Plugin.Everything.csproj", "{A5F8DA50-84CB-4860-B5E2-969671D3C977}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,6 +172,18 @@ Global
 		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x64.Build.0 = Release|Any CPU
 		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x86.ActiveCfg = Release|Any CPU
 		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261}.Release|x86.Build.0 = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|x64.Build.0 = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +200,7 @@ Global
 		{62B363EE-6DB2-405B-85AF-DBED02AB99F1} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 		{F73A086E-6190-4BF2-A868-A33C40ED1817} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 		{0CA9FF14-91A1-49C9-9E6B-B34C0138F261} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
+		{A5F8DA50-84CB-4860-B5E2-969671D3C977} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0371E56C-FE2E-44B5-B4F3-21B72D3612F4}
