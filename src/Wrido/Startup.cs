@@ -24,7 +24,7 @@ namespace Wrido
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddConfiguredSignalR();
-      services.AddMvc();
+      services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
       services.AddCreateReactAppFiles();
     }
 
