@@ -30,7 +30,7 @@ namespace Wrido.Queries
     {
       var query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
-      using (var fullQuery = _logger.Timed("Query {rawQuery}", rawQuery))
+      using (_logger.Timed("Query {rawQuery}", rawQuery))
       {
         CancelOngoingQuery(out var currentCt);
 
@@ -41,32 +41,29 @@ namespace Wrido.Queries
         observer.OnNext(QueryExecuting.By(providers));
 
         var providerTasks = providers
-          .Select(async provider =>
-          {
-            var providerQuery = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
-            var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, providerQuery.Cancel, providerQuery.Complete);
-            try
+          .Select(provider =>
+            Task.Run(async () =>
             {
-              currentCt.ThrowIfCancellationRequested();
-              await provider.QueryAsync(query, providerObserver, currentCt);
-            }
-            catch (OperationCanceledException)
-            {
-              _logger.Information("Query {rawQuery} has been cancelled for {queryProvider}", rawQuery, provider.GetType().Name);
-              fullQuery.Cancel();
-              providerQuery.Cancel();
-               /* Cancellation is OK */
-            }
-            catch (Exception e)
-            {
-              _logger.Information(e, "An unhandle exception was thrown.");
-              providerQuery.Cancel(e);
-            }
-            finally
-            {
-              providerObserver.OnCompleted();
-            }
-          })
+              var operation = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
+              var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, operation.Cancel, operation.Complete);
+              try
+              {
+                await provider.QueryAsync(query, providerObserver, currentCt);
+              }
+              catch (OperationCanceledException)
+              {
+                _logger.Information("Query {rawQuery} has been cancelled for {queryProvider}", rawQuery, providerObserver.GetType().Name);
+                /* Cancellation is OK */
+              }
+              catch (Exception e)
+              {
+                _logger.Information(e, "An unhandle exception was thrown.");
+              }
+              finally
+              {
+                providerObserver.OnCompleted();
+              }
+            }, currentCt))
           .ToArray();
         await Task.WhenAll(providerTasks);
         observer.OnNext(new QueryCompleted(query.Id, null));
