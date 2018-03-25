@@ -16,6 +16,11 @@ namespace Wrido.Plugin.Everything
         .RegisterType<EverythingProvider>()
         .AsImplementedInterfaces()
         .InstancePerDependency();
+
+      builder
+        .RegisterType<EverythingExecutor>()
+        .AsImplementedInterfaces()
+        .InstancePerDependency();
     }
   }
 }

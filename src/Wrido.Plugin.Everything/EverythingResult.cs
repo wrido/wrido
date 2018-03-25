@@ -16,5 +16,7 @@ namespace Wrido.Plugin.Everything
     {
       Icon = everythingLogo;
     }
+
+    public string FullPath { get; set; }
   }
 }

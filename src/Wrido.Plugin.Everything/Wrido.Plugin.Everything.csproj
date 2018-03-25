@@ -5,15 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resource\Everything.png" />
+    <None Remove="Resources\Everything.png" />
+    <None Remove="Resources\FolderIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Everything.png" />
+    <EmbeddedResource Include="Resources\Everything.png" />
+    <EmbeddedResource Include="Resources\FolderIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Everything" Version="0.0.1-alpha1" />
+    <PackageReference Include="Everything" Version="0.0.1-alpha2" />
   </ItemGroup>
 
   <ItemGroup>
