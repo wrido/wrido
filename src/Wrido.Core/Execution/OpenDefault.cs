@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace Wrido.Execution
 {
-  public class OpenInBrowser
+  public class OpenDefault
   {
-    public static void Url(Uri uri) => Url(uri.ToString());
+    public static void Url(Uri uri) => PathOrUrl(uri.ToString());
 
-    public static void Url(string url)
+    public static void PathOrUrl(string url)
     {
       try
       {

@@ -15,7 +15,7 @@ namespace Wrido.Execution
     {
       if (result is WebResult webResult)
       {
-        OpenInBrowser.Url(webResult.Uri.AbsoluteUri);
+        OpenDefault.PathOrUrl(webResult.Uri.AbsoluteUri);
         return Task.CompletedTask;
       }
       return Task.FromCanceled(CancellationToken.None);
