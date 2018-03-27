@@ -27,7 +27,8 @@ namespace Wrido.Plugin.Everything
       _searchOption = new SearchOptions
       {
         RequestFlags = RequestFlags.FileName | RequestFlags.Path | RequestFlags.DateCreated | RequestFlags.DateAccessed | RequestFlags.DateModified | RequestFlags.Size,
-        MaxResult = 20
+        MaxResult = 20,
+        Sort = Sort.RunCountDescending
       };
     }
 

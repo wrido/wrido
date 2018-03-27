@@ -15,10 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Everything" Version="0.0.1-alpha2" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Everything\Everything.csproj" />
     <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
   </ItemGroup>
 
