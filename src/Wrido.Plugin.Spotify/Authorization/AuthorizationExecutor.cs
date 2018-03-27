@@ -46,7 +46,7 @@ namespace Wrido.Plugin.Spotify.Authorization
         {
           var authorizeCompletion = new TaskCompletionSource<SpotifyAccess>();
           await connection.StartAsync();
-          connection.On<string>(authorizeCallback, OpenInBrowser.Url);
+          connection.On<string>(authorizeCallback, OpenDefault.PathOrUrl);
           connection.On<string>(authorizeFailed, s => authorizeCompletion.TrySetException(new Exception($"Spotify authorization failed: {s}")));
           connection.On<SpotifyAccess>(authorizeSucceeded, access => authorizeCompletion.TrySetResult(access));
           await connection.SendAsync(startAuthorization);

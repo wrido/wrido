@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <LangVersion>7.1</LangVersion>
     <SpaRoot>ClientApp\</SpaRoot>
     <UserSecretsId>7339b112-12f2-4ec9-87ff-25b2272c0dad</UserSecretsId>
@@ -11,22 +11,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="electronnet.api" Version="0.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-preview2-30131" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="6.3.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-26216-02" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-    <DotNetCliToolReference Include="ElectronNET.CLI" Version="*" />
+    <DotNetCliToolReference Include="ElectronNET.CLI" Version="0.0.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wrido.Core\Wrido.Core.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Dummy\Wrido.Plugin.Dummy.csproj" />
+    <ProjectReference Include="..\Wrido.Plugin.Everything\Wrido.Plugin.Everything.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Spotify\Wrido.Plugin.Spotify.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj" />

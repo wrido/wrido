@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>A .NET Client for Voidtool's Everything.</Description>
+    <AssemblyTitle>Everything</AssemblyTitle>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix>alpha2</VersionSuffix>
+    <Authors>pardahlman</Authors>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>Everything</AssemblyName>
+    <PackageId>Everything</PackageId>
+    <PackageTags>search;voidtool;everything</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/pardahlman/everything/master/icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/pardahlman/everything</PackageProjectUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Everything64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <PackagePath>lib/netstandard2.0/Everything64.dll</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>

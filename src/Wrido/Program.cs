@@ -26,10 +26,12 @@ namespace Wrido
     {
       Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Verbose()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
         .Enrich.FromLogContext()
-        .WriteTo.Console(outputTemplate: LogTemplates.Console)
+        .WriteTo.Console(LogEventLevel.Information)
+        .WriteTo.Elasticsearch()
         .CreateLogger();
+
       LogManager.LoggerFactory = type => new SerilogLogger(Log.ForContext(type));
 
       Log.Information("Application started with {applicationArgs}", args);

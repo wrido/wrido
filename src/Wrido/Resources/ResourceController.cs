@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +36,22 @@ namespace Wrido.Resources
       }
 
       return Ok(new { _links = resourcesPaths.ToList()});
+    }
+
+    [HttpGet("icons/{*filePath}")]
+    public ActionResult GetIcon(string filePath)
+    {
+      if (!System.IO.File.Exists(filePath))
+      {
+        return NotFound();
+      }
+
+      using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(filePath))
+      using (var memoryStream = new MemoryStream())
+      {
+        icon.ToBitmap().Save(memoryStream, ImageFormat.Png);
+        return File(memoryStream.GetBuffer(), "image/png");
+      }
     }
 
     [HttpGet("resources/{*resourcePath}")]
