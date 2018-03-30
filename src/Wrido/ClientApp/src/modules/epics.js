@@ -7,7 +7,8 @@ const keyMap = {
   nextItem: 'ArrowDown',
   previousItem: 'ArrowUp',
   clearOrHide: 'Escape',
-  executeResult: 'Enter'
+  executeResult: 'Enter',
+  togglePreview: 'Tab'
 }
 
 export const keyPressEpic = (action$, store) => action$
@@ -28,6 +29,8 @@ export const keyPressEpic = (action$, store) => action$
         if (state.result.active) {
           return actions.executeResult(state.result.active);
         }
+      case keyMap.togglePreview:
+        return actions.togglePreview();
     }
   })
   .filter(action => action);

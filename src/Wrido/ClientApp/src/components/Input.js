@@ -16,7 +16,7 @@ const style = {
   }
 }
 
-const preventDefaultKeys = ['ArrowDown', 'ArrowUp'];
+const preventDefaultKeys = ['ArrowDown', 'ArrowUp', 'Tab'];
 
 class Input extends React.Component {
 

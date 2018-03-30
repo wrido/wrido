@@ -5,13 +5,14 @@ const style = {
   list: {
     display: 'flex',
     flexDirection: 'column',
-    borderTop: '1px solid #ccc',
+    borderTop: '1px solid #ccc'
   },
   item: {
     display: 'flex',
     alignItems: 'center',
     borderBottom: '1px solid #ccc',
     padding: '5px 15px',
+    overflow: 'hidden'
   },
   title: {
     paddingLeft: '10px',

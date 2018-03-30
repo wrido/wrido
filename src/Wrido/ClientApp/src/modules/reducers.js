@@ -58,5 +58,5 @@ export const result = reducer(
       return {active: state.items[currentIndex - 1]}
     }
   ],
-  [action.clearQuery, () => ({active: null})]
+  [action.togglePreview, (state) => ({previewEnabled: !state.previewEnabled})],
 );

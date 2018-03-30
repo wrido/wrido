@@ -45,3 +45,6 @@ export const hideShell =  createActionCreator('HideShell', () => ({}));
 export const executeResult =  createActionCreator('ExecuteResult', result => ({ result }));
 
 export const handleKeyPress =  createActionCreator('HandleKeyPress', key => ({ key }));
+
+// Instructs the application to show or hide the result preview
+export const togglePreview =  createActionCreator('TogglePreview', key => ({ key }));
