@@ -13,13 +13,15 @@ export const result = reducer(
     action.queryReceivedAction,
     (state, action) => ({
       currentQueryId: action.current.id,
-      items: []
+      items: [],
+      active: null
     })
   ],
   [
     action.resultAvailableAction,
     (state, action) => ({
-      items: state.items.concat(action.result)
+      items: state.items.concat(action.result),
+      active : state.active ? state.active : action.result
     })
   ],
   [
