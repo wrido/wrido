@@ -8,7 +8,7 @@ export const input = reducer(
 );
 
 export const result = reducer(
-  {currentQueryId: null, active: null, items: []},
+  {currentQueryId: null, active: null, previewEnabled: true, items: []},
   [
     action.queryReceivedAction,
     (state, action) => ({
