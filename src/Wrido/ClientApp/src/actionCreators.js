@@ -48,5 +48,3 @@ export const handleKeyPress =  createActionCreator('HandleKeyPress', key => ({ k
 
 // Instructs the application to show or hide the result preview
 export const togglePreview =  createActionCreator('TogglePreview', key => ({ key }));
-
-export const prepareRenderers =  createActionCreator('prepareRenderers', sources => ({ sources }));

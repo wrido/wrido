@@ -6,6 +6,5 @@ namespace Wrido.Queries
   public class WebResult : QueryResult
   {
     public System.Uri Uri { get; set; }
-    public System.Uri PreviewUri { get; set; }
   }
 }
