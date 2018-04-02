@@ -38,7 +38,7 @@ namespace Wrido.Plugin.Wikipedia.Common
     {
       var requestUrl = $"{_searchPath}{Encode(searchTerm)}";
       var searchResult = await GetResultAsync<SearchResult>(requestUrl, ct);
-      LoggerExtensions.Information(_logger, "The search phrase {term} resulted in {suggestionCount} suggestions.", searchResult.Term, searchResult.Suggestions.Count);
+      _logger.Information("The search phrase {term} resulted in {suggestionCount} suggestions.", searchResult.Term, searchResult.Suggestions.Count);
       return searchResult;
     }
 
@@ -82,7 +82,7 @@ namespace Wrido.Plugin.Wikipedia.Common
         }
         catch (Exception e)
         {
-          LoggerExtensions.Error(_logger, e, "An unhandled error occured when deserializing response.");
+          _logger.Error(e, "An unhandled error occured when deserializing response.");
           return default;
         }
         finally

@@ -25,7 +25,9 @@ namespace Wrido.Plugin.Spotify.Common
     Task<OperationResult> PlayAsync(PlaybackRequest request, CancellationToken ct = default);
     Task<CurrentPlayback> GetCurrentPlaybackAsync(CancellationToken ct = default);
     Task<Album> GetAlbumAsync(string albumId, CancellationToken ct);
+    Task<ArtistTopTracks> GetTopTracks(string artistId, string countryCode, CancellationToken ct);
     Task<OperationResult> PauseAsync(CancellationToken ct = default);
+    Task<TSpotifyResource> GetAsync<TSpotifyResource>(string queryUrl, CancellationToken ct);
   }
 
   public class SpotifyClient : ISpotifyClient
@@ -50,8 +52,14 @@ namespace Wrido.Plugin.Spotify.Common
 
     public Task<Album> GetAlbumAsync(string albumId, CancellationToken ct)
     {
-      var queryUrl = $"{ApiBaseUrl}/albums{albumId}";
+      var queryUrl = $"{ApiBaseUrl}/albums/{albumId}";
       return GetAsync<Album>(queryUrl, ct);
+    }
+
+    public Task<ArtistTopTracks> GetTopTracks(string artistId, string countryCode, CancellationToken ct)
+    {
+      var queryUrl = $"{ApiBaseUrl}/artists/{artistId}/top-tracks?country={countryCode}";
+      return GetAsync<ArtistTopTracks>(queryUrl, ct);
     }
 
     public Task<SearchResult> SearchAsync(SearchQuery query, CancellationToken ct = default)
@@ -107,7 +115,7 @@ namespace Wrido.Plugin.Spotify.Common
       return GetAsync<CurrentPlayback>(requestUrl, ct);
     }
 
-    private async Task<TSpotifyResource> GetAsync<TSpotifyResource>(string queryUrl, CancellationToken ct)
+    public async Task<TSpotifyResource> GetAsync<TSpotifyResource>(string queryUrl, CancellationToken ct)
     {
       if (string.IsNullOrWhiteSpace(_httpClient.DefaultRequestHeaders?.Authorization?.Parameter))
       {

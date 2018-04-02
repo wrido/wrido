@@ -9,7 +9,7 @@ namespace Wrido.Queries
     public string Title { get; set; }
     public string Description { get; set; }
     public Image Icon { get; set; }
-    public Script Renderer { get; set; }
+    public Uri PreviewUri { get; set; }
 
     public QueryResult()
     {

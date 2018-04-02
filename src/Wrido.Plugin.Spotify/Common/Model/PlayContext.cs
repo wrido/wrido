@@ -25,4 +25,16 @@ namespace Wrido.Plugin.Spotify.Common.Model
     /// </summary>
     public string Uri { get; set; }
   }
+
+  public static class PlayContextExtensions
+  {
+    private const string _playlist = "playlist";
+    private const string _album = "album";
+
+    public static bool IsPlaylist(this PlayContext context) =>
+      string.Equals(context?.Type, _playlist, StringComparison.InvariantCultureIgnoreCase);
+
+    public static bool IsAlbum(this PlayContext context) =>
+      string.Equals(context?.Type, _album, StringComparison.InvariantCultureIgnoreCase);
+  }
 }

@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Wrido.Plugin.Spotify.Authorization;
 using Wrido.Plugin.Spotify.Common;
+using Wrido.Plugin.Spotify.Common.Model;
+using Wrido.Plugin.Spotify.Common.Model.Full;
 using Wrido.Plugin.Spotify.Common.RecentlyPlayed;
 using Wrido.Plugin.Spotify.Common.Search;
 using Wrido.Plugin.Spotify.Playback;
+using Wrido.Plugin.Spotify.Resources;
 using Wrido.Queries;
 
 namespace Wrido.Plugin.Spotify
@@ -66,21 +70,60 @@ namespace Wrido.Plugin.Spotify
     private async Task LoadRecentlyPlayedAsync(CancellationToken ct)
     {
       var recentlyPlayed = await _client.GetRecentlyPlayedAsync(RecentlyPlayedQuery.Default, ct);
-      foreach (var played in recentlyPlayed.Items)
+      var playedByContext = recentlyPlayed.Items.GroupBy(i => i.Context?.Uri);
+
+      foreach (var playedItems in playedByContext)
       {
-        if (played.Context != null && !string.Equals(played.Context?.Type, "album"))
+        var playedResult = playedItems
+          .Select(played => new PlayableAlbumResult
+          {
+            Title = $"'{played.Track.Name}' by {played.Track.Artists.FirstOrDefault()?.Name}",
+            Description = $"Last played {played.PlayedAt}",
+            ResourceUris = new[] {played.Track.Uri},
+            ContextUri = played.Context?.Uri,
+            PreviewUri = PreviewUri.Track,
+            ArtistName = played.Track.Artists.FirstOrDefault()?.Name,
+            ActiveTrackName = played.Track.Name
+          })
+          .ToList();
+
+        Available(playedResult);
+
+        var sharedContext = playedItems.FirstOrDefault().Context;
+        if (sharedContext == null)
         {
-          // Hack, reported at: https://github.com/spotify/web-api/issues/815
-          played.Context.Uri = null;
+          continue;
         }
 
-        Available(new SpotifyPlayableResult
+        if (sharedContext.IsAlbum())
         {
-          Title = $"'{played.Track.Name}' by {played.Track.Artists.FirstOrDefault()?.Name}",
-          Description = $"Last played {played.PlayedAt}",
-          ResourceUri = played.Track.Uri,
-          ContextUri = played.Context?.Uri
-        });
+          // Bug reported at https://github.com/spotify/web-api/issues/836
+          if (sharedContext.Href.PathAndQuery.EndsWith("/null"))
+          {
+            var albumId = sharedContext.Uri.Split(':').LastOrDefault();
+            sharedContext.Href = new Uri($"{sharedContext.Href.Scheme}://{sharedContext.Href.Host}{sharedContext.Href.PathAndQuery.Replace("/null", $"/{albumId}")}");
+          }
+
+          var album = await _client.GetAsync<Album>(sharedContext.Href.ToString(), ct);
+          foreach (var result in playedResult)
+          {
+            result.AlbumName = album.Name;
+            result.CoverArt = album.Images.FirstOrDefault(i => i.Width == 300)?.Url ??
+                              album.Images.LastOrDefault()?.Url;
+            result.ReleaseDate = album.ReleaseDate;
+            Updated(result);
+          }
+        } else if (sharedContext.IsPlaylist())
+        {
+          var playlist = await _client.GetAsync<Playlist>(sharedContext.Href.ToString(), ct);
+          foreach (var result in playedResult)
+          {
+            result.AlbumName = playlist.Name;
+            result.CoverArt = playlist.Images.FirstOrDefault()?.Url;
+            result.ReleaseDate = playlist.Owner.Id;
+            Updated(result);
+          }
+        }
       }
     }
 
@@ -102,11 +145,21 @@ namespace Wrido.Plugin.Spotify
         }
         else
         {
-          var duration = TimeSpan.FromMilliseconds(playback.ProgressMs ?? 0);
+          var progress = TimeSpan.FromMilliseconds(playback.ProgressMs ?? 0);
+          var duration = TimeSpan.FromMilliseconds(playback.Item.DurationMs);
           var action = playback.IsPlaying ? "Pause" : "Play";
           currentPlayback.IsPlaying = playback.IsPlaying;
           currentPlayback.Title = $"{action} '{playback.Item.Name}' on {playback.Device?.Name}";
-          currentPlayback.Description = $"{duration:mm\\:ss}";
+          currentPlayback.Description = $"{progress:mm\\:ss}";
+          currentPlayback.PlaybackProgress = $"{progress:mm\\:ss}";
+          currentPlayback.TrackDuration = $"{duration:mm\\:ss}";
+          currentPlayback.AlbumName = playback.Item.Album.Name;
+          currentPlayback.ArtistName = playback.Item.Artists.FirstOrDefault()?.Name;
+          currentPlayback.ReleaseDate = playback.Item.Album.ReleaseDate;
+          currentPlayback.ActiveTrackName = playback.Item.Name;
+          currentPlayback.CoverArt = playback.Item.Album.Images.FirstOrDefault(i => i.Width == 300)?.Url ??
+                                     playback.Item.Album.Images.FirstOrDefault()?.Url;
+          currentPlayback.PreviewUri = PreviewUri.NowPlaying;
         }
 
         Updated(currentPlayback);
@@ -119,36 +172,53 @@ namespace Wrido.Plugin.Spotify
     {
       var search = await _client.SearchAsync(new SearchQuery { Query = query, Type = SearchType.All, Limit = 5 }, ct);
       ct.ThrowIfCancellationRequested();
-      foreach (var track in search.Tracks.Items)
+
+      var trackResults = search.Tracks.Items.Select(track => new PlayableAlbumResult
       {
-        Available(new SpotifyPlayableResult
+        Title = $"{track.Artists.FirstOrDefault()?.Name} - {track.Name}",
+        Description = $"{track.Album.Name}, {track.Album.ReleaseDate}",
+        ResourceUris = new[] { track.Uri },
+        ContextUri = track.Album?.Uri,
+        CoverArt = track.Album?.Images.Skip(1).FirstOrDefault().Url,
+        ArtistName = track.Artists.FirstOrDefault()?.Name,
+        ActiveTrackName = track.Name,
+        AlbumName = track.Album.Name,
+        ReleaseDate = track.Album.ReleaseDate,
+        PreviewUri = PreviewUri.Track
+      }).ToList();
+
+      Available(trackResults);
+
+      foreach (var album in search.Albums.Items)
+      {
+        var albumResult = new PlayableAlbumResult
         {
-          Title = $"Track '{track.Name}' by {track.Artists.FirstOrDefault()?.Name}",
-          Description = $"From {track.Album.Name}, {track.Album.ReleaseDate}",
-          ResourceUri = track.Uri,
-          ContextUri = track.Album?.Uri
-        });
+          Title = $"{album.Artists.FirstOrDefault()?.Name} - {album.Name}",
+          Description = $"{album.AlbumType}, {album.ReleaseDate}",
+          ContextUri = album.Uri,
+          AlbumName = album.Name,
+          ReleaseDate = album.ReleaseDate,
+          ArtistName = album.Artists.FirstOrDefault()?.Name,
+          CoverArt = album.Images.Skip(1).FirstOrDefault().Url,
+          PreviewUri = PreviewUri.Album
+        };
+        Available(albumResult);
       }
 
       foreach (var artist in search.Artists.Items)
       {
-        Available(new SpotifyPlayableResult
+        const string tempCountryCode = "se";
+        var topTracks = await _client.GetTopTracks(artist.Id, tempCountryCode, ct);
+        Available(new PlayableAlbumResult
         {
-          Title = $"Top songs for '{artist.Name}'",
-          Description = string.Join(" ", artist.Genres),
-          ContextUri = artist.Uri
+          Title = $"{artist.Name} - Top tracks",
+          Description = $"{topTracks.Tracks[0].Name} and 9 more",
+          CoverArt = artist.Images.FirstOrDefault(i => i.Width == 300)?.Url ?? artist.Images.LastOrDefault()?.Url,
+          ResourceUris = topTracks.Tracks.Select(t => t.Uri).ToList(),
+          PreviewUri = PreviewUri.Artist,
+          AlbumName = "Top tracks",
+          ArtistName = artist.Name,
         });
-      }
-
-      foreach (var album in search.Albums.Items)
-      {
-        var albumResult = new SpotifyPlayableResult
-        {
-          Title = $"Album '{album.Name}' by {album.Artists.FirstOrDefault()?.Name}",
-          Description = $"{album.AlbumType}, {album.ReleaseDate}",
-          ContextUri = album.Uri
-        };
-        Available(albumResult);
       }
     }
   }

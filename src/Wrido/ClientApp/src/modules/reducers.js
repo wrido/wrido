@@ -8,23 +8,28 @@ export const input = reducer(
 );
 
 export const result = reducer(
-  {currentQueryId: null, active: null, items: []},
+  {currentQueryId: null, active: null, previewEnabled: true, items: []},
   [
     action.queryReceivedAction,
     (state, action) => ({
       currentQueryId: action.current.id,
-      items: []
+      items: [],
+      active: null
     })
   ],
   [
     action.resultAvailableAction,
     (state, action) => ({
-      items: state.items.concat(action.result)
+      items: state.items.concat(action.result),
+      active : state.active ? state.active : action.result
     })
   ],
   [
     action.resultUpdated,
-    (state, action) => ({items: state.items.map(i => i.id === action.result.id ? action.result : i)})
+    (state, action) => ({
+      items: state.items.map(i => i.id === action.result.id ? action.result : i),
+      active: (state.active && state.active.id === action.result.id) ? action.result : state.active
+    })
   ],
   [
     action.resultExpired,
@@ -56,5 +61,5 @@ export const result = reducer(
       return {active: state.items[currentIndex - 1]}
     }
   ],
-  [action.clearQuery, () => ({active: null})]
+  [action.togglePreview, (state) => ({previewEnabled: !state.previewEnabled})],
 );

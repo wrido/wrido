@@ -28,6 +28,7 @@ namespace Wrido.Plugin.Wikipedia
           Title = suggestion.Title,
           Description = suggestion.Description,
           Uri = suggestion.Uri,
+          PreviewUri = new Uri($"https://en.m.wikipedia.org{suggestion.Uri.PathAndQuery}"),
           Icon = _wikiLogo
         };
       }

@@ -48,7 +48,7 @@ namespace Wrido.Plugin.Dummy
           Title = $"[{_name}][{i}]: {query.Raw}",
           Description = $"Delayed with {duration.TotalMilliseconds} ms.",
           Icon = _iconResource,
-          Renderer = new Script("/resources/wrido/plugin/dummy/resources/render.js")
+          PreviewUri = new Uri("/resources/wrido/plugin/dummy/resources/preview.htm", UriKind.Relative)
         };
         Available(result);
 

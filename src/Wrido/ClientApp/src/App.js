@@ -2,15 +2,30 @@ import React from 'react';
 import 'reset-css';
 import Input from './components/Input';
 import Result from './components/Result';
+import Preview from './components/Preview';
 
-export default props => (
+const flexCss = {
+  container : {
+    display: 'flex',
+  },
+  result: {
+    flex: '1'
+  }
+};
+
+export default props => {
+  return (
   <div>
     <style>
       {`
         .listItem{background-color: #eee}
       `}
     </style>
-    <Input />
-    <Result />
+    <div><Input /></div>
+    <div style={flexCss.container}>
+      <div style={flexCss.result}><Result /></div>
+      <Preview />
+    </div>
+
   </div>
-)
+)}

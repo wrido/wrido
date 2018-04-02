@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head />
+    <body>
+        This preview has been rendered for <span id="seconds">0</span> seconds. The title is <span id="title"></span>
+    <script>
+        var secondElement = document.getElementById('seconds');
+        var titleElement = document.getElementById('title');
+
+        window.onmessage = function (m) {
+            titleElement.innerHTML = m.data.title;
+        };
+
+        var secondsSinceRender = 0;
+
+        setInterval(function () {
+            secondsSinceRender++;
+            secondElement.innerHTML = secondsSinceRender;
+        }, 1000);
+    </script>
+    </body>
+</html>

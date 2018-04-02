@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        html, body, h1, h2 {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: #ddd;
+            color: #B3B3B3;
+            font-family: sans-serif;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%
+        }
+
+        .light {
+            color: #FFF;
+        }
+
+        .active {
+            color: #1DB954;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img id="cover-art" alt="Cover art" />
+    <h1 id="track-name" class="active"></h1>
+    <h2>By <span id="artist-name" class="light"></span> from <span id="album-name" class="light"></span>, <span id="release-date"></span></h2>
+</header>
+
+    <script>
+        function render(result) {
+            document.getElementById('cover-art').src = result.coverArt;
+            document.getElementById('track-name').innerHTML = result.activeTrackName;
+            document.getElementById('artist-name').innerHTML = result.artistName;
+            document.getElementById('album-name').innerHTML = result.albumName;
+            document.getElementById('release-date').innerHTML = result.releaseDate;
+        }
+
+        window.onmessage = function (msg) {
+            render(msg.data);
+        };
+    </script>
+</body>
+</html>

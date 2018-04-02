@@ -5,13 +5,14 @@ const style = {
   list: {
     display: 'flex',
     flexDirection: 'column',
-    borderTop: '1px solid #ccc',
+    borderTop: '1px solid #ccc'
   },
   item: {
     display: 'flex',
     alignItems: 'center',
     borderBottom: '1px solid #ccc',
     padding: '5px 15px',
+    overflow: 'hidden'
   },
   title: {
     paddingLeft: '10px',
@@ -22,7 +23,7 @@ const style = {
   }
 }
 
-const Result = ({ items, active }) => {
+const Result = ({ items, active, previewEnabled }) => {
   return (
     <div style={style.list}>
       {
@@ -32,7 +33,7 @@ const Result = ({ items, active }) => {
               <img src={item.icon.uri} alt={item.icon.alt} />
             </span>
             <span style={style.title}>{item.title}</span>
-            <span style={style.description}>({item.description})</span>
+            <span style={style.description}>{!previewEnabled ? item.description : null}</span>
           </div>
         ))
       }
