@@ -13,10 +13,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\album.htm" />
+    <None Remove="Resources\artist.htm" />
+    <None Remove="Resources\nowplaying.htm" />
     <None Remove="Resources\Spotify.png" />
+    <None Remove="Resources\track.htm" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\nowplaying.htm" />
+    <EmbeddedResource Include="Resources\artist.htm" />
+    <EmbeddedResource Include="Resources\track.htm" />
+    <EmbeddedResource Include="Resources\album.htm" />
     <EmbeddedResource Include="Resources\Spotify.png" />
   </ItemGroup>
 

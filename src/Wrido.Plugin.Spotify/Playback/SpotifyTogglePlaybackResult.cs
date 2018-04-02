@@ -7,6 +7,13 @@ namespace Wrido.Plugin.Spotify.Playback
   public class SpotifyTogglePlaybackResult : QueryResult
   {
     public bool IsPlaying { get; set; }
+    public string TrackDuration { get; set; }
+    public string PlaybackProgress { get; set; }
+    public string AlbumName { get; set; }
+    public string ReleaseDate { get; set; }
+    public string ArtistName { get; set; }
+    public string ActiveTrackName { get; set; }
+    public string CoverArt { get; set; }
 
     private static readonly Image SpotifyLogo = new Image
     {

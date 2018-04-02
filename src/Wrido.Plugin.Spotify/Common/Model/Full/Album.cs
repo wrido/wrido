@@ -32,6 +32,7 @@ namespace Wrido.Plugin.Spotify.Common.Model.Full
     /// Known external IDs for the album.
     /// </summary>
     public IDictionary<string, Uri> ExternalIds { get; set; }
+
     /// <summary>
     /// Known external URLs for this album.
     /// </summary>
@@ -87,7 +88,7 @@ namespace Wrido.Plugin.Spotify.Common.Model.Full
     /// <summary>
     /// The tracks of the album.
     /// </summary>
-    public IList<PaginationResult<Simplified.Track>> Tracks { get; set; }
+    public PaginationResult<Simplified.Track> Tracks { get; set; }
 
     /// <summary>
     /// The Spotify URI for the album.

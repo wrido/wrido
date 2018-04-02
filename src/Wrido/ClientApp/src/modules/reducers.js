@@ -26,7 +26,10 @@ export const result = reducer(
   ],
   [
     action.resultUpdated,
-    (state, action) => ({items: state.items.map(i => i.id === action.result.id ? action.result : i)})
+    (state, action) => ({
+      items: state.items.map(i => i.id === action.result.id ? action.result : i),
+      active: (state.active && state.active.id === action.result.id) ? action.result : state.active
+    })
   ],
   [
     action.resultExpired,

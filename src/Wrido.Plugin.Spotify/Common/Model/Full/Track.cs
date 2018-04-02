@@ -28,7 +28,7 @@ namespace Wrido.Plugin.Spotify.Common.Model.Full
     /// <summary>
     /// The track length derived from milliseconds.
     /// </summary>
-    public TimeSpan Duration { get; set; }
+    public long DurationMs { get; set; }
 
     /// <summary>
     /// Whether or not the track has explicit lyrics(true = yes it does; false = no it does not OR unknown). 
