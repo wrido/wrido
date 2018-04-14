@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everything", "src\Everythin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{E5F8272E-49FD-485D-BEB1-91DCA7E661FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrido.Plugin.Powershell", "src\Wrido.Plugin.Powershell\Wrido.Plugin.Powershell.csproj", "{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +204,18 @@ Global
 		{6E3FCEB0-646F-4EC0-9FC7-34353395BA18}.Release|x64.Build.0 = Release|Any CPU
 		{6E3FCEB0-646F-4EC0-9FC7-34353395BA18}.Release|x86.ActiveCfg = Release|Any CPU
 		{6E3FCEB0-646F-4EC0-9FC7-34353395BA18}.Release|x86.Build.0 = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|x64.Build.0 = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|x64.ActiveCfg = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|x64.Build.0 = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,6 +236,7 @@ Global
 		{124E188B-D8F4-4172-896F-6B50467B7ECE} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
 		{6E3FCEB0-646F-4EC0-9FC7-34353395BA18} = {124E188B-D8F4-4172-896F-6B50467B7ECE}
 		{E5F8272E-49FD-485D-BEB1-91DCA7E661FE} = {1B248AFD-69BC-4290-BB94-F63EA4A49513}
+		{9D2754D1-282C-4C8A-8B28-4A73BBFAEA6D} = {E5F8272E-49FD-485D-BEB1-91DCA7E661FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0371E56C-FE2E-44B5-B4F3-21B72D3612F4}
