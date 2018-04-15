@@ -50,7 +50,8 @@ namespace Wrido.Configuration
           _plugins.Add("Wrido.Plugin.Google", null);
           _plugins.Add("Wrido.Plugin.Wikipedia", null);
           _plugins.Add("Wrido.Plugin.Spotify", null);
-          _plugins.Add("Wrido.Plugin.Dummy", null);
+          _plugins.Add("Wrido.Plugin.Everything", null);
+          _plugins.Add("Wrido.Plugin.PowerShell", null);
           return;
         }
 

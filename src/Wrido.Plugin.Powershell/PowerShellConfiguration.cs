@@ -10,7 +10,8 @@ namespace Wrido.Plugin.Powershell
 
     public static PowerShellConfiguration Default => new PowerShellConfiguration
     {
-      Keyword = ":ps"
+      Keyword = ":ps",
+      Scripts = new List<RegisteredScript>()
     };
 
     public class RegisteredScript
