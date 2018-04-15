@@ -8,10 +8,12 @@ namespace Wrido.Plugin.Powershell
 {
   public class PowerShellExecutor : IResultExecuter
   {
+    private readonly IProcessStarter _processStarter;
     private readonly ILogger _logger;
 
-    public PowerShellExecutor(ILogger logger)
+    public PowerShellExecutor(IProcessStarter processStarter, ILogger logger)
     {
+      _processStarter = processStarter;
       _logger = logger;
     }
 
@@ -22,7 +24,7 @@ namespace Wrido.Plugin.Powershell
       switch (result)
       {
         case OpenPowerShellResult _:
-          OpenDefault.PathOrUrl("powershell -NoExit");
+          _processStarter.OpenApplication("powershell", "-NoExit");
           break;
         case PowerShellFileResult fileResult:
           if (fileResult.RunInExternalShell)
