@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wrido.Configuration;
 using Wrido.Electron;
+using Wrido.Execution;
 using Wrido.Logging;
 using Wrido.Plugin;
 using Wrido.Queries;
@@ -32,6 +33,7 @@ namespace Wrido
     {
       builder
         .RegisterModule<QueryModule>()
+        .RegisterModule<ProcessStarterModule>()
         .RegisterModule<LoggingModule>()
         .RegisterModule<ConfigurationModule>()
         .RegisterModule<ResourceAspNetModule>()

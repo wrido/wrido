@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Wrido.Configuration;
+using Wrido.Execution;
 using Wrido.Logging;
+using Wrido.Queries;
 using Wrido.Resources;
 
 namespace Wrido.Plugin
@@ -64,6 +66,7 @@ namespace Wrido.Plugin
                 plugin.Register(b);
                 b.RegisterResources(plugin);
                 b.RegisterModule<LoggingModule>();
+                b.RegisterModule<ProcessStarterModule>();
               }));
               break;
             }

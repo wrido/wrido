@@ -8,11 +8,11 @@ namespace Wrido.Execution
   {
     public static void Url(Uri uri) => PathOrUrl(uri.ToString());
 
-    public static void PathOrUrl(string url)
+    public static void PathOrUrl(string pathOrUrl)
     {
       try
       {
-        Process.Start(url);
+        Process.Start(pathOrUrl);
       }
       catch
       {
@@ -20,16 +20,16 @@ namespace Wrido.Execution
         // hack because of this: https://github.com/dotnet/corefx/issues/10361
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-          url = url.Replace("&", "^&");
-          Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+          pathOrUrl = pathOrUrl.Replace("&", "^&");
+          Process.Start(new ProcessStartInfo("cmd", $"/c start {pathOrUrl}") { CreateNoWindow = true });
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-          Process.Start("xdg-open", url);
+          Process.Start("xdg-open", pathOrUrl);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-          Process.Start("open", url);
+          Process.Start("open", pathOrUrl);
         }
         else
         {

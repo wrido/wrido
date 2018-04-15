@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Wrido.Plugin.Dummy\Wrido.Plugin.Dummy.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Everything\Wrido.Plugin.Everything.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Google\Wrido.Plugin.Google.csproj" />
+    <ProjectReference Include="..\Wrido.Plugin.Powershell\Wrido.Plugin.Powershell.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Spotify\Wrido.Plugin.Spotify.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.StackExchange\Wrido.Plugin.StackExchange.csproj" />
     <ProjectReference Include="..\Wrido.Plugin.Wikipedia\Wrido.Plugin.Wikipedia.csproj" />

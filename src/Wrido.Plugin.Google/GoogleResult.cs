@@ -10,7 +10,7 @@ namespace Wrido.Plugin.Google
     private static readonly Image googleLogo = new Image
     {
       Uri = new Uri("/resources/wrido/plugin/google/resources/google.png", UriKind.Relative),
-      Alt = "Google",
+      Alt = "Google"
     };
 
     public static GoogleResult Fallback => new GoogleResult
