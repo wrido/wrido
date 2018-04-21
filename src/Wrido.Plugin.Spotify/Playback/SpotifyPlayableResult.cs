@@ -21,10 +21,13 @@ namespace Wrido.Plugin.Spotify.Playback
       Alt = "Spotify"
     };
 
+    private const string _musicCategory = "Music";
+
     public SpotifyPlayableResult()
     {
       Icon = SpotifyLogo;
       PreviewUri = new Uri("/resources/wrido/plugin/spotify/resources/playable.htm", UriKind.Relative);
+      Category = _musicCategory;
     }
   }
 }

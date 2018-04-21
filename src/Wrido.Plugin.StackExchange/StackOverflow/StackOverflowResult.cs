@@ -11,9 +11,12 @@ namespace Wrido.Plugin.StackExchange.StackOverflow
       Alt = "StackOverflow"
     };
 
+    private const string _stackOverflow = "StackOverflow";
+
     public StackOverflowResult()
     {
       Icon = _wikiLogo;
+      Category = _stackOverflow;
     }
   }
 }

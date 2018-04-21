@@ -15,6 +15,8 @@ namespace Wrido.Plugin.Wikipedia
       Alt = "Wikipedia"
     };
 
+    private const string _wikipediaCategory = "Wikipedia";
+
     public string Extract { get; set; }
     public Image PageImage { get; set; }
     public long Views { get; set; }
@@ -29,7 +31,8 @@ namespace Wrido.Plugin.Wikipedia
           Description = suggestion.Description,
           Uri = suggestion.Uri,
           PreviewUri = new Uri($"https://en.m.wikipedia.org{suggestion.Uri.PathAndQuery}"),
-          Icon = _wikiLogo
+          Icon = _wikiLogo,
+          Category = _wikipediaCategory
         };
       }
     }
@@ -42,7 +45,8 @@ namespace Wrido.Plugin.Wikipedia
           Title = "Open Wikipedia in browser",
           Description = url,
           Uri = new Uri(url),
-          Icon = _wikiLogo
+          Icon = _wikiLogo,
+          Category = _wikipediaCategory
         });
     }
 
@@ -54,7 +58,8 @@ namespace Wrido.Plugin.Wikipedia
           Title = $"Search Wikipedia for '{term}'.",
           Description = $"{url}/wiki/{term}",
           Uri = new Uri(url),
-          Icon = _wikiLogo
+          Icon = _wikiLogo,
+          Category = _wikipediaCategory
         });
     }
   }

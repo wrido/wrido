@@ -13,12 +13,15 @@ namespace Wrido.Plugin.Google
       Alt = "Google"
     };
 
+    private const string _googleCategory = "Internet search";
+
     public static GoogleResult Fallback => new GoogleResult
     {
       Title = "Open Google in browser",
       Description = "https://www.google.com",
       Uri = new Uri("https://www.google.com"),
-      Icon = googleLogo
+      Icon = googleLogo,
+      Category = _googleCategory
     };
 
     public static GoogleResult SearchResult(string query)
@@ -29,7 +32,8 @@ namespace Wrido.Plugin.Google
         Title = $"Search Google for '{query}'",
         Description = googleUrl.AbsoluteUri,
         Uri = googleUrl,
-        Icon = googleLogo
+        Icon = googleLogo,
+        Category = _googleCategory
       };
     }
   }
