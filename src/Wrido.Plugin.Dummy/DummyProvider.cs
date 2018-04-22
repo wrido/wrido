@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Wrido.Queries;
@@ -13,6 +14,7 @@ namespace Wrido.Plugin.Dummy
     private readonly string _name;
     private readonly Random _random;
     private readonly Image _iconResource;
+    private readonly List<string> _categories = new List<string>{ "Application", "Executable", "Compressed Archieve", "Music" };
 
     public DummyProvider(TimeSpan minDuration, TimeSpan maxDuratin, string name, Uri iconUri)
     {
@@ -48,7 +50,8 @@ namespace Wrido.Plugin.Dummy
           Title = $"[{_name}][{i}]: {query.Raw}",
           Description = $"Delayed with {duration.TotalMilliseconds} ms.",
           Icon = _iconResource,
-          PreviewUri = new Uri("/resources/wrido/plugin/dummy/resources/preview.htm", UriKind.Relative)
+          PreviewUri = new Uri("/resources/wrido/plugin/dummy/resources/preview.htm", UriKind.Relative),
+          Category = _categories[_random.Next(0, _categories.Count -1)]
         };
         Available(result);
 

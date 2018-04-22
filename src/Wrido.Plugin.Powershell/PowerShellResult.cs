@@ -12,11 +12,14 @@ namespace Wrido.Plugin.Powershell
       Alt = "PowerShell"
     };
 
+    private const string _scriptCategory = "Script";
+
     public bool RunInExternalShell { get; set; }
 
     public PowerShellResult()
     {
       Icon = _icon;
+      Category = _scriptCategory;
     }
   }
 

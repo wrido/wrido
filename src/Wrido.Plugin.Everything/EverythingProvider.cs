@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,12 +16,16 @@ namespace Wrido.Plugin.Everything
   public class EverythingProvider : QueryProvider
   {
     private readonly IEverythingClient _everything;
+    private readonly ICategoryProvider _category;
+    private readonly EverythingConfiguration _config;
     private readonly ILogger _logger;
     private readonly SearchOptions _searchOption;
 
-    public EverythingProvider(IEverythingClient everything, ILogger logger)
+    public EverythingProvider(IEverythingClient everything, ICategoryProvider category, EverythingConfiguration config, ILogger logger)
     {
       _everything = everything;
+      _category = category;
+      _config = config;
       _logger = logger;
       _searchOption = new SearchOptions
       {
@@ -34,7 +37,7 @@ namespace Wrido.Plugin.Everything
 
     public override bool CanHandle(Query query)
     {
-      return !query?.Command?.StartsWith(":") ?? false;
+      return string.Equals(query?.Command, _config?.Keyword, StringComparison.CurrentCultureIgnoreCase);
     }
 
     protected override async Task QueryAsync(Query query, CancellationToken ct)
@@ -82,9 +85,9 @@ namespace Wrido.Plugin.Everything
       }
 
       SearchResult result;
-      using (_logger.Timed("Search everything for {rawQuery}", query.Raw))
+      using (_logger.Timed("Search everything for {rawQuery}", query.Argument))
       {
-        result = await _everything.SearchAsync(query.Raw, _searchOption, ct);
+        result = await _everything.SearchAsync(query.Argument, _searchOption, ct);
       }
 
       ct.ThrowIfCancellationRequested();
@@ -100,6 +103,7 @@ namespace Wrido.Plugin.Everything
         {
           Title = item.Name,
           Description = item.FullPath,
+          Category = _category.Get(item),
           FullPath = item.FullPath,
           Icon = new Image
           {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
@@ -59,6 +60,7 @@ namespace Wrido.Queries
         {
           var caller = Clients.Client(Context.ConnectionId);
           await _executionService.ExecuteAsync(caller, result);
+          await _windowServices.HideShellAsync(CancellationToken.None);
         }
         catch (Exception e)
         {

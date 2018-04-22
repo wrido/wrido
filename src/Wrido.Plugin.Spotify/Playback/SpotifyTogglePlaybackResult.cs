@@ -21,9 +21,12 @@ namespace Wrido.Plugin.Spotify.Playback
       Alt = "Spotify"
     };
 
+    private const string _musicCategory = "Music";
+
     public SpotifyTogglePlaybackResult()
     {
       Icon = SpotifyLogo;
+      Category = _musicCategory;
     }
   }
 }
