@@ -22,12 +22,12 @@ namespace Wrido.Plugin.Google
       _logger = logger;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {

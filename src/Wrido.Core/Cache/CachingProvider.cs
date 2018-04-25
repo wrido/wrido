@@ -25,7 +25,7 @@ namespace Wrido.Cache
       configProvider.ConfigurationUpdated += (sender, args) => _eventCache.Clear();
     }
 
-    public async Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
+    public async Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       if (_eventCache.TryGetValue(query.Argument, out var cachedStream))
       {
@@ -54,7 +54,7 @@ namespace Wrido.Cache
       }
     }
 
-    public bool CanHandle(Query query) => _actualProvider.CanHandle(query);
+    public bool CanHandle(IQuery query) => _actualProvider.CanHandle(query);
 
     private class RecordingObserver : IObserver<QueryEvent>
     {

@@ -28,7 +28,7 @@ namespace Wrido.Plugin.Spotify
       _accessTokenProvider = accessTokenProvider;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       if (query?.Command == null)
       {
@@ -37,7 +37,7 @@ namespace Wrido.Plugin.Spotify
       return query.Command.Equals(_config.Keyword, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (!_accessTokenProvider.IsReady)
       {

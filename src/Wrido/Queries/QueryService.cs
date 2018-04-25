@@ -28,7 +28,7 @@ namespace Wrido.Queries
 
     public async Task QueryAsync(string rawQuery, IObserver<QueryEvent> observer)
     {
-      var query = new Query(rawQuery);
+      IQuery query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
       using (_logger.Timed("Query {rawQuery}", rawQuery))
       {
@@ -37,6 +37,11 @@ namespace Wrido.Queries
         _logger.Verbose("Notifying observers that query is received.");
         observer.OnNext(new QueryReceived(query));
         var providers = GetProviders(query);
+        if (!providers.Any())
+        {
+          providers = _queryProviders.ToList();
+          query = new DefaultQuery(query);
+        }
         _logger.Verbose("Notifying observers that query will be handled by {providerCount} providers.", providers.Count);
         observer.OnNext(QueryExecuting.By(providers));
 
@@ -70,7 +75,7 @@ namespace Wrido.Queries
       }
     }
 
-    private IList<IQueryProvider> GetProviders(Query query)
+    private IList<IQueryProvider> GetProviders(IQuery query)
     {
       return _queryProviders.Where(q => q.CanHandle(query))
         .ToList()

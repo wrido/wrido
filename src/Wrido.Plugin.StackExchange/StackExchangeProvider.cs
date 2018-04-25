@@ -25,7 +25,7 @@ namespace Wrido.Plugin.StackExchange
       _descriptionFactory = descriptionFactory;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {
@@ -34,7 +34,7 @@ namespace Wrido.Plugin.StackExchange
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       var searchQuery = _queryParser.Bind(query.Argument, out var freeText);
       searchQuery.Site = Site;
@@ -59,7 +59,7 @@ namespace Wrido.Plugin.StackExchange
 
     protected abstract IEnumerable<TQueryResult> CreateFallbackResult(SearchQuery query);
 
-    protected virtual TQueryResult ConvertQuestion(Question question, Query query)
+    protected virtual TQueryResult ConvertQuestion(Question question, IQuery query)
     {
       return new TQueryResult
       {
