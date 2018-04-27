@@ -13,10 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\AskUbuntu.png" />
     <None Remove="Resources\StackOverflow.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\AskUbuntu.png" />
     <EmbeddedResource Include="Resources\StackOverflow.png" />
   </ItemGroup>
 

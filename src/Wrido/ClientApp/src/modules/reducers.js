@@ -17,6 +17,7 @@ export const result = reducer(
       active: null
     })
   ],
+  [ action.clearQuery, () => ({items: [], active: null}) ],
   [
     action.resultAvailableAction,
     (state, action) => ({

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Wrido.Configuration;
 using Wrido.Logging;
 using Wrido.Plugin.Wikipedia.Common;
 using Wrido.Queries;
-using Wrido.Resources;
 
 namespace Wrido.Plugin.Wikipedia
 {
@@ -45,8 +43,18 @@ namespace Wrido.Plugin.Wikipedia
       await Task.WhenAll(queryTasks);
       ct.ThrowIfCancellationRequested();
 
-      var results = queryTasks.SelectMany(q => q.Result.Suggestions).ToList();
-      if (!results.Any())
+      var results = queryTasks.SelectMany(q => q.Result.Suggestions);
+
+      if (query is DefaultQuery)
+      {
+        results = results.Take(3);
+      }
+
+      if (results.Any() || query is DefaultQuery)
+      {
+        Available(WikipediaResult.Create(results));
+      }
+      else
       {
         var searchResults = WikipediaResult.CreateSearch(Encode(query.Argument), _config.BaseUrls);
         Available(searchResults);
@@ -57,26 +65,6 @@ namespace Wrido.Plugin.Wikipedia
     {
       var searchResult = await client.SearchAsync(searchTerm, ct);
       _logger.Information("The search phrase {term} resulted in {suggestionCount} suggestions.", searchResult.Term, searchResult.Suggestions.Count);
-      var results = WikipediaResult.Create(searchResult).ToList();
-      Available(results);
-
-      var pageTitles = results.Select(r => r.Title);
-      var pages = await client.GetAsync(pageTitles, ct);
-      var pagesByTitle = pages.ToDictionary(page => page.Title, page => page);
-      foreach (var result in results)
-      {
-        if (!pagesByTitle.ContainsKey(result.Title))
-        {
-          _logger.Warning("Unable to find {pageTitle} in title dictionary", result.Title);
-          continue;
-        }
-        _logger.Verbose("Page {pageTitle} found. Enriching result", result.Title);
-        var pageResult = pagesByTitle[result.Title];
-        result.Extract = pageResult.Extract;
-        result.PageImage = new Image { Uri = pageResult.Original?.Source, Alt = result.Title };
-        result.Views = pageResult.PageViews.Values.FirstOrDefault() ?? 0;
-        Updated(result);
-      }
       return searchResult;
     }
 

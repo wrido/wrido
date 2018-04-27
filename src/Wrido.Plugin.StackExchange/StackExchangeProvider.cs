@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
 
@@ -51,6 +52,12 @@ namespace Wrido.Plugin.StackExchange
         }
         return;
       }
+
+      if (query is DefaultQuery)
+      {
+        questions = questions.Take(3).ToList();
+      }
+
       foreach (var queryResult in questions.Select(q => ConvertQuestion(q, query)))
       {
         Available(queryResult);
@@ -63,7 +70,7 @@ namespace Wrido.Plugin.StackExchange
     {
       return new TQueryResult
       {
-        Title = question.Title,
+        Title = HttpUtility.HtmlDecode(question.Title),
         Description = _descriptionFactory.Create(question),
         Uri = question.Link,
       };

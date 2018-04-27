@@ -28,6 +28,11 @@ namespace Wrido.Queries
 
     public async Task QueryAsync(string rawQuery, IObserver<QueryEvent> observer)
     {
+      if (string.IsNullOrWhiteSpace(rawQuery))
+      {
+        return;
+      }
+
       IQuery query = new Query(rawQuery);
       using (_logger.BeginScope(LogProperties.QueryId, query.Id))
       using (_logger.Timed("Query {rawQuery}", rawQuery))
