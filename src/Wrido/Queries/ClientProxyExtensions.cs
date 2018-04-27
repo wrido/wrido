@@ -9,7 +9,7 @@ namespace Wrido.Queries
   {
     private const string _eventMethod = "event";
 
-    public static Task SendAsync<TMessage>(this IClientProxy client, TMessage message, CancellationToken ct = default) where TMessage : QueryEvent
+    public static Task SendAsync<TMessage>(this IClientProxy client, TMessage message, CancellationToken ct = default) where TMessage : BackendEvent
     {
       return message == null
         ? Task.FromCanceled(ct)

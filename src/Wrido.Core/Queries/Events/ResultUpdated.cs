@@ -1,6 +1,6 @@
 ﻿namespace Wrido.Queries.Events
 {
-  public class ResultUpdated : QueryEvent
+  public class ResultUpdated : BackendEvent
   {
     public QueryResult Result { get; set; }
 

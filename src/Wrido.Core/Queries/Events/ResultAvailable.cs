@@ -1,6 +1,6 @@
 ﻿namespace Wrido.Queries.Events
 {
-  public class ResultAvailable : QueryEvent
+  public class ResultAvailable : BackendEvent
   {
     public ResultAvailable(QueryResult result)
     {

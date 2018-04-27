@@ -15,7 +15,7 @@ namespace Wrido.Cache
     private readonly IQueryProvider _actualProvider;
     private readonly TimeSpan _expires;
     private readonly ILogger _logger = LogManager.GetLogger<CachingQueryProvider>();
-    private static ConcurrentDictionary<string, List<QueryEvent>> _eventCache = new ConcurrentDictionary<string, List<QueryEvent>>();
+    private static ConcurrentDictionary<string, List<BackendEvent>> _eventCache = new ConcurrentDictionary<string, List<BackendEvent>>();
 
     public CachingQueryProvider(IQueryProvider actualProvider, IConfigurationProvider configProvider, TimeSpan expires, IEqualityComparer<string> comparer = default)
     {
@@ -25,7 +25,7 @@ namespace Wrido.Cache
       configProvider.ConfigurationUpdated += (sender, args) => _eventCache.Clear();
     }
 
-    public async Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct)
+    public async Task QueryAsync(IQuery query, IObserver<BackendEvent> observer, CancellationToken ct)
     {
       if (_eventCache.TryGetValue(query.Argument, out var cachedStream))
       {
@@ -56,21 +56,21 @@ namespace Wrido.Cache
 
     public bool CanHandle(IQuery query) => _actualProvider.CanHandle(query);
 
-    private class RecordingObserver : IObserver<QueryEvent>
+    private class RecordingObserver : IObserver<BackendEvent>
     {
-      public List<QueryEvent> Recorded { get; private set; }
-      private readonly IObserver<QueryEvent> _underlying;
+      public List<BackendEvent> Recorded { get; private set; }
+      private readonly IObserver<BackendEvent> _underlying;
 
-      public RecordingObserver(IObserver<QueryEvent> underlying)
+      public RecordingObserver(IObserver<BackendEvent> underlying)
       {
         _underlying = underlying;
-        Recorded = new List<QueryEvent>();
+        Recorded = new List<BackendEvent>();
       }
 
       public void OnCompleted() => _underlying.OnCompleted();
       public void OnError(Exception error) => _underlying.OnError(error);
 
-      public void OnNext(QueryEvent value)
+      public void OnNext(BackendEvent value)
       {
         if (value is ResultAvailable available)
         {

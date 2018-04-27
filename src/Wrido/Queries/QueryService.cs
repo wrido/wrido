@@ -11,7 +11,7 @@ namespace Wrido.Queries
 {
   public interface IQueryService
   {
-    Task QueryAsync(string rawQuery, IObserver<QueryEvent> observer);
+    Task QueryAsync(string rawQuery, IObserver<BackendEvent> observer);
   }
 
   public class QueryService : IQueryService
@@ -26,7 +26,7 @@ namespace Wrido.Queries
       _logger = logger;
     }
 
-    public async Task QueryAsync(string rawQuery, IObserver<QueryEvent> observer)
+    public async Task QueryAsync(string rawQuery, IObserver<BackendEvent> observer)
     {
       if (string.IsNullOrWhiteSpace(rawQuery))
       {
@@ -55,7 +55,7 @@ namespace Wrido.Queries
             Task.Run(async () =>
             {
               var operation = _logger.Timed("{queryProvider} provider", provider.GetType().Name);
-              var providerObserver = Observer.Create<QueryEvent>(observer.OnNext, operation.Cancel, operation.Complete);
+              var providerObserver = Observer.Create<BackendEvent>(observer.OnNext, operation.Cancel, operation.Complete);
               try
               {
                 await provider.QueryAsync(query, providerObserver, currentCt);

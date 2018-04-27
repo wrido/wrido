@@ -1,8 +1,8 @@
 ﻿namespace Wrido.Queries.Events
 {
-  public abstract class QueryEvent
+  public abstract class BackendEvent
   {
-    protected QueryEvent()
+    protected BackendEvent()
     {
       Type = GetType().Name;
     }

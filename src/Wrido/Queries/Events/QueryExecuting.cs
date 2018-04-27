@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Wrido.Queries.Events
 {
-  public class QueryExecuting : QueryEvent
+  public class QueryExecuting : BackendEvent
   {
     public IList<string> Providers { get; set; }
 

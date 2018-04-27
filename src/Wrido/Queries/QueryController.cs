@@ -20,8 +20,8 @@ namespace Wrido.Queries
     [HttpGet("api/query/{*rawQuery}")]
     public async Task<IActionResult> QueryAsync(string rawQuery)
     {
-      var events = new List<QueryEvent>();
-      var accumulater = Observer.Create<QueryEvent>(@event => events.Add(@event));
+      var events = new List<BackendEvent>();
+      var accumulater = Observer.Create<BackendEvent>(@event => events.Add(@event));
       await _queryService.QueryAsync(rawQuery, accumulater);
       return Ok(events);
     }
