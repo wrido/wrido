@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,12 +23,12 @@ namespace Wrido.Plugin.Google
       _logger = logger;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {
@@ -45,8 +46,9 @@ namespace Wrido.Plugin.Google
       }
 
       var data = await response.Content.ReadAsStringAsync();
-      var suggestions = JArray.Parse(data)[1]
-        .Where(x => x.Type == JTokenType.String).Select(x => x.Value<string>())
+      IEnumerable<string> suggestions = JArray.Parse(data)[1]
+        .Where(item => item.Type == JTokenType.String)
+        .Select(item => item.Value<string>())
         .ToList();
 
       if (!suggestions.Any())
@@ -54,7 +56,13 @@ namespace Wrido.Plugin.Google
         return;
       }
 
-      var googleSuggestions = suggestions.Select(GoogleResult.SearchResult);
+      if (query is DefaultQuery)
+      {
+        suggestions = suggestions.Take(3);
+      }
+
+      var googleSuggestions = suggestions.Select(s => new GoogleResult(s));
+
       Available(googleSuggestions);
     }
   }

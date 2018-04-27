@@ -7,10 +7,12 @@
 
   <ItemGroup>
     <None Remove="Resources\Google.png" />
+    <None Remove="Resources\Link.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Google.png" />
+    <EmbeddedResource Include="Resources\Link.png" />
   </ItemGroup>
 
   <ItemGroup>

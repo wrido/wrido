@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,12 +34,12 @@ namespace Wrido.Plugin.Everything
       };
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       return string.Equals(query?.Command, _config?.Keyword, StringComparison.CurrentCultureIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
       {
@@ -91,14 +90,10 @@ namespace Wrido.Plugin.Everything
       }
 
       ct.ThrowIfCancellationRequested();
-      
+
+
       foreach (var item in result.Items)
       {
-        if (item.FullPath.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
-        {
-          item.Name = Path.GetFileNameWithoutExtension(item.FullPath);
-        }
-
         Available(new EverythingResult
         {
           Title = item.Name,

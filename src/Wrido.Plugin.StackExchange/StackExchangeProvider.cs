@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Wrido.Plugin.StackExchange.Common;
 using Wrido.Queries;
 
@@ -25,7 +26,7 @@ namespace Wrido.Plugin.StackExchange
       _descriptionFactory = descriptionFactory;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       if (string.IsNullOrEmpty(query.Argument))
       {
@@ -34,7 +35,7 @@ namespace Wrido.Plugin.StackExchange
       return string.Equals(query.Command, Command, StringComparison.OrdinalIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       var searchQuery = _queryParser.Bind(query.Argument, out var freeText);
       searchQuery.Site = Site;
@@ -51,6 +52,12 @@ namespace Wrido.Plugin.StackExchange
         }
         return;
       }
+
+      if (query is DefaultQuery)
+      {
+        questions = questions.Take(3).ToList();
+      }
+
       foreach (var queryResult in questions.Select(q => ConvertQuestion(q, query)))
       {
         Available(queryResult);
@@ -59,11 +66,11 @@ namespace Wrido.Plugin.StackExchange
 
     protected abstract IEnumerable<TQueryResult> CreateFallbackResult(SearchQuery query);
 
-    protected virtual TQueryResult ConvertQuestion(Question question, Query query)
+    protected virtual TQueryResult ConvertQuestion(Question question, IQuery query)
     {
       return new TQueryResult
       {
-        Title = question.Title,
+        Title = HttpUtility.HtmlDecode(question.Title),
         Description = _descriptionFactory.Create(question),
         Uri = question.Link,
       };

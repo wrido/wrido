@@ -5,7 +5,7 @@ namespace Wrido.Plugin.StackExchange.StackOverflow
 {
   public class StackOverflowResult : StackExchangeResult
   {
-    private static readonly Image _wikiLogo = new Image
+    private static readonly Image _stackOverflowIcon = new Image
     {
       Uri = new Uri("/resources/wrido/plugin/stackexchange/resources/StackOverflow.png", UriKind.Relative),
       Alt = "StackOverflow"
@@ -15,7 +15,7 @@ namespace Wrido.Plugin.StackExchange.StackOverflow
 
     public StackOverflowResult()
     {
-      Icon = _wikiLogo;
+      Icon = _stackOverflowIcon;
       Category = _stackOverflow;
     }
   }

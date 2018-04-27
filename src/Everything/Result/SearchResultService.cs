@@ -90,7 +90,7 @@ namespace Everything.Result
 
       return new DirectoryResultItem
       {
-        Name = Path.GetDirectoryName(fullPath),
+        Name = Path.GetFileName(fullPath),
         FullPath = fullPath,
         Created = EverythingSdk.TryGetDateCreated(resultIndex, out var created) ? created : default,
         Modified = EverythingSdk.TryGetDateModified(resultIndex, out var modified) ? modified : default,

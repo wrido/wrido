@@ -10,8 +10,8 @@ namespace Wrido.Queries
 {
   public interface IQueryProvider
   {
-    Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct);
-    bool CanHandle(Query query);
+    Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct);
+    bool CanHandle(IQuery query);
   }
 
   public abstract class QueryProvider : IQueryProvider, IDisposable
@@ -78,14 +78,14 @@ namespace Wrido.Queries
       _isDisposed = true;
     }
 
-    public Task QueryAsync(Query query, IObserver<QueryEvent> observer, CancellationToken ct)
+    public Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct)
     {
       Observer = observer;
       return QueryAsync(query, ct);
     }
 
-    public abstract bool CanHandle(Query query);
+    public abstract bool CanHandle(IQuery query);
 
-    protected abstract Task QueryAsync(Query query, CancellationToken ct);
+    protected abstract Task QueryAsync(IQuery query, CancellationToken ct);
   }
 }

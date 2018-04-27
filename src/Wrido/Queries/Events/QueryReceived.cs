@@ -2,9 +2,9 @@
 {
   public class QueryReceived : QueryEvent
   {
-    public Query Current { get; }
+    public IQuery Current { get; }
 
-    public QueryReceived(Query query)
+    public QueryReceived(IQuery query)
     {
       Current = query;
     }

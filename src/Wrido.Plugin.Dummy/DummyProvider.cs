@@ -29,7 +29,7 @@ namespace Wrido.Plugin.Dummy
       };
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       if (string.IsNullOrEmpty(query?.Raw))
       {
@@ -38,7 +38,7 @@ namespace Wrido.Plugin.Dummy
       return !query?.Command?.StartsWith(":") ?? true;
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       var numberOfResults = _random.Next(1, 9);
       for (var i = 0; i < numberOfResults; i++)

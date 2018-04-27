@@ -16,10 +16,10 @@ namespace Wrido.Plugin.Powershell
       _config = config;
     }
 
-    public override bool CanHandle(Query query) =>
+    public override bool CanHandle(IQuery query) =>
       string.Equals(query.Command, _config.Keyword, StringComparison.CurrentCultureIgnoreCase);
 
-    protected override Task QueryAsync(Query query, CancellationToken ct)
+    protected override Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (string.IsNullOrWhiteSpace(query.Argument))
       {

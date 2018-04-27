@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Wrido.Plugin.Spotify.Authorization;
@@ -28,7 +27,7 @@ namespace Wrido.Plugin.Spotify
       _accessTokenProvider = accessTokenProvider;
     }
 
-    public override bool CanHandle(Query query)
+    public override bool CanHandle(IQuery query)
     {
       if (query?.Command == null)
       {
@@ -37,21 +36,30 @@ namespace Wrido.Plugin.Spotify
       return query.Command.Equals(_config.Keyword, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    protected override async Task QueryAsync(Query query, CancellationToken ct)
+    protected override async Task QueryAsync(IQuery query, CancellationToken ct)
     {
       if (!_accessTokenProvider.IsReady)
       {
         await PromptForAuthorizationAsync(ct);
       }
 
-      if (string.IsNullOrWhiteSpace(query.Argument))
+      var isDefault = query is DefaultQuery;
+
+      if (!string.IsNullOrWhiteSpace(query.Argument))
       {
-        var foreverStreamTask = StreamCurrentlyPlayingAsync(ct);
-        await LoadRecentlyPlayedAsync(ct);
-        await foreverStreamTask;
+        var numberOfResults = (ushort)(isDefault ? 1 : 5);
+        await SearchForTrackAsync(query.Argument, numberOfResults, ct);
+        return;
       }
 
-      await SearchForTrackAsync(query.Argument, ct);
+      if (isDefault)
+      {
+        return;
+      }
+
+      var foreverStreamTask = StreamCurrentlyPlayingAsync(ct);
+      await LoadRecentlyPlayedAsync(ct);
+      await foreverStreamTask;
     }
 
     private async Task PromptForAuthorizationAsync(CancellationToken ct)
@@ -168,9 +176,9 @@ namespace Wrido.Plugin.Spotify
       }
     }
 
-    public async Task SearchForTrackAsync(string query, CancellationToken ct)
+    public async Task SearchForTrackAsync(string query, ushort limit, CancellationToken ct)
     {
-      var search = await _client.SearchAsync(new SearchQuery { Query = query, Type = SearchType.All, Limit = 5 }, ct);
+      var search = await _client.SearchAsync(new SearchQuery { Query = query, Type = SearchType.All, Limit = limit }, ct);
       ct.ThrowIfCancellationRequested();
 
       var trackResults = search.Tracks.Items.Select(track => new PlayableAlbumResult

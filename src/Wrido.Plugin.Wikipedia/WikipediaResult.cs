@@ -17,13 +17,9 @@ namespace Wrido.Plugin.Wikipedia
 
     private const string _wikipediaCategory = "Wikipedia";
 
-    public string Extract { get; set; }
-    public Image PageImage { get; set; }
-    public long Views { get; set; }
-
-    public static IEnumerable<WikipediaResult> Create(SearchResult result)
+    public static IEnumerable<WikipediaResult> Create(IEnumerable<SearchResult.WikipediaSuggestion> suggestions)
     {
-      foreach (var suggestion in result.Suggestions)
+      foreach (var suggestion in suggestions)
       {
         yield return new WikipediaResult
         {

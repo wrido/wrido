@@ -3,12 +3,20 @@ using System.Linq;
 
 namespace Wrido.Queries
 {
-  public class Query
+  public interface IQuery
+  {
+    string Command { get; }
+    string Argument { get; }
+    string Raw { get; }
+    Guid Id { get; }
+  }
+
+  public class Query : IQuery
   {
     public string Command { get; }
     public string Argument { get; }
     public string Raw { get; }
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
     public Query(string query)
     {
@@ -21,5 +29,20 @@ namespace Wrido.Queries
     }
 
     public override string ToString() => Raw;
+  }
+
+  public class DefaultQuery : IQuery
+  {
+    public string Command => string.Empty;
+    public string Argument { get; }
+    public string Raw { get; }
+    public Guid Id { get; }
+
+    public DefaultQuery(IQuery query)
+    {
+      Argument = query.Raw;
+      Raw = query.Raw;
+      Id = query.Id;
+    }
   }
 }
