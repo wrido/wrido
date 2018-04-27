@@ -10,14 +10,14 @@ namespace Wrido.Queries
 {
   public interface IQueryProvider
   {
-    Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct);
+    Task QueryAsync(IQuery query, IObserver<BackendEvent> observer, CancellationToken ct);
     bool CanHandle(IQuery query);
   }
 
   public abstract class QueryProvider : IQueryProvider, IDisposable
   {
     private bool _isDisposed;
-    private IObserver<QueryEvent> _observer;
+    private IObserver<BackendEvent> _observer;
     private readonly ILogger _logger = LogManager.GetLogger<QueryProvider>();
 
     protected void Available(IEnumerable<QueryResult> results) => Available(results.ToArray());
@@ -38,7 +38,7 @@ namespace Wrido.Queries
       NotifyObservers(results.Select(r => new ResultExpired{ResultId = r.Id}));
     }
 
-    private void NotifyObservers(IEnumerable<QueryEvent> events)
+    private void NotifyObservers(IEnumerable<BackendEvent> events)
     {
       foreach (var @event in events)
       {
@@ -46,7 +46,7 @@ namespace Wrido.Queries
       }
     }
 
-    protected IObserver<QueryEvent> Observer
+    protected IObserver<BackendEvent> Observer
     {
       get
       {
@@ -78,7 +78,7 @@ namespace Wrido.Queries
       _isDisposed = true;
     }
 
-    public Task QueryAsync(IQuery query, IObserver<QueryEvent> observer, CancellationToken ct)
+    public Task QueryAsync(IQuery query, IObserver<BackendEvent> observer, CancellationToken ct)
     {
       Observer = observer;
       return QueryAsync(query, ct);

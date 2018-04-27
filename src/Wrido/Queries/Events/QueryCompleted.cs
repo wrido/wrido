@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Wrido.Queries.Events
 {
-  public sealed class QueryCompleted : QueryEvent
+  public sealed class QueryCompleted : BackendEvent
   {
     public QueryCompleted(Guid queryId, IEnumerable<QueryResult> results)
     {

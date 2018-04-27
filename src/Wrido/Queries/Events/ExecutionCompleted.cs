@@ -1,6 +1,6 @@
 ﻿namespace Wrido.Queries.Events
 {
-  public class ExecutionCompleted : QueryEvent
+  public class ExecutionCompleted : BackendEvent
   {
   }
 }

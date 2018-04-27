@@ -5,7 +5,7 @@ using System.Linq;
 namespace Wrido.Queries.Events
 {
   [Obsolete("Use the 'ResultAvailable' class instead")]
-  public class ResultsAvailable : QueryEvent
+  public class ResultsAvailable : BackendEvent
   {
     public ResultsAvailable(Guid queryId, IEnumerable<QueryResult> results)
     {

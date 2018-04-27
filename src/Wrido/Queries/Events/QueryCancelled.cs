@@ -2,7 +2,7 @@
 
 namespace Wrido.Queries.Events
 {
-  public class QueryCancelled : QueryEvent
+  public class QueryCancelled : BackendEvent
   {
     public QueryCancelled(Guid queryId)
     {

@@ -73,8 +73,9 @@ export const webSocketEpic = (action$) => {
         .filter(() => false);
 
       const backendEvent$ = connection.stream('CreateResponseStream');
-      const receiveSignalR = Observable.create(o => backendEvent$.subscribe(o));
+      const receiveObservableSignalR = Observable.create(o => backendEvent$.subscribe(o));
+      const receiveEventSignalR = Observable.create(o => connection.on("event", e => o.next(e)));
 
-      return Observable.merge(invokeSignalR, inputChanged$, receiveSignalR);
+      return Observable.merge(invokeSignalR, inputChanged$, receiveObservableSignalR, receiveEventSignalR);
     });
 }

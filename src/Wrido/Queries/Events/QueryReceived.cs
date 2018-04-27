@@ -1,6 +1,6 @@
 ﻿namespace Wrido.Queries.Events
 {
-  public class QueryReceived : QueryEvent
+  public class QueryReceived : BackendEvent
   {
     public IQuery Current { get; }
 

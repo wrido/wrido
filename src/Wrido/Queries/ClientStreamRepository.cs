@@ -7,24 +7,24 @@ namespace Wrido.Queries
 {
   public interface IClientStreamRepository
   {
-    IObservable<QueryEvent> GetOrAdd(string connectionId);
-    bool TryGetObserver(string connectionId, out IObserver<QueryEvent> obsever);
+    IObservable<BackendEvent> GetOrAdd(string connectionId);
+    bool TryGetObserver(string connectionId, out IObserver<BackendEvent> obsever);
   }
 
   public class ClientStreamRepository : IClientStreamRepository
   {
-    private readonly ConcurrentDictionary<string, ISubject<QueryEvent>> _subjects;
+    private readonly ConcurrentDictionary<string, ISubject<BackendEvent>> _subjects;
 
     public ClientStreamRepository()
     {
-      _subjects = new ConcurrentDictionary<string, ISubject<QueryEvent>>();
+      _subjects = new ConcurrentDictionary<string, ISubject<BackendEvent>>();
     }
 
-    public IObservable<QueryEvent> GetOrAdd(string connectionId)
-      => _subjects.GetOrAdd(connectionId, id => new Subject<QueryEvent>());
+    public IObservable<BackendEvent> GetOrAdd(string connectionId)
+      => _subjects.GetOrAdd(connectionId, id => new Subject<BackendEvent>());
     
 
-    public bool TryGetObserver(string connectionId, out IObserver<QueryEvent> obsever)
+    public bool TryGetObserver(string connectionId, out IObserver<BackendEvent> obsever)
     {
       var succecss =_subjects.TryGetValue(connectionId, out var subject);
       if (succecss == false)
